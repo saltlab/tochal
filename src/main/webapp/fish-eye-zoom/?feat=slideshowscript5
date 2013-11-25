@@ -1,13 +1,0 @@
-ss_pid 	= new Array();
-ss_ttl 	= new Array();
-ss_date 	= new Array();
-ss_src 	= new Array();
-ss_desc 	= new Array();
-	 ss_pid [0] = '5'; 	 ss_date[0] = 'Wednesday, Apr 28th o 2010'; 	 ss_src [0] = 'images/000005_ieaui_9.jpg'; 	 ss_ttl [0] = 'clem6'; 	 ss_desc[0] = ''; 
-	 ss_pid [1] = '4'; 	 ss_date[1] = 'Monday, Aug 12th o 2013'; 	 ss_src [1] = 'images/000004_jgvju_9.jpg'; 	 ss_ttl [1] = 'clem5'; 	 ss_desc[1] = ''; 
-	 ss_pid [2] = '3'; 	 ss_date[2] = 'Wednesday, Jul 31st o 2013'; 	 ss_src [2] = 'images/000003_aygqj_9.jpg'; 	 ss_ttl [2] = 'clem4'; 	 ss_desc[2] = ''; 
-	 ss_pid [3] = '2'; 	 ss_date[3] = 'Wednesday, Jul 31st o 2013'; 	 ss_src [3] = 'images/000002_nrnvg_9.jpg'; 	 ss_ttl [3] = 'clem2'; 	 ss_desc[3] = ''; 
-	 ss_pid [4] = '1'; 	 ss_date[4] = 'Wednesday, Jul 31st o 2013'; 	 ss_src [4] = 'images/000001_jhaum_9.jpg'; 	 ss_ttl [4] = 'clem1'; 	 ss_desc[4] = ''; 
-	ss_update();
-	setTimeout(ss_slideshow, 10000);
-
