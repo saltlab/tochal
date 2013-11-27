@@ -143,7 +143,7 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 			System.out.println(input);
 			System.setOut(oldOut);
 
-			PrintStream output_visual =
+/*			PrintStream output_visual =
 			        new PrintStream("src/main/webapp/fish-eye-zoom/" + getFilename());
 			System.out.println("MOEEEEE" +
 			        "src/main/webapp/fish-eye-zoom/" + getFilename());
@@ -151,7 +151,7 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 			System.setOut(output_visual);
 			System.out.println(input);
 			System.setOut(oldOut2_visual);
-
+*/
 			AstRoot ast = null;
 
 			/* initialize JavaScript context */

@@ -1,6 +1,7 @@
 package com.proteus.core.interactiongraph;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
@@ -13,6 +14,7 @@ import com.proteus.core.interactiongraph.edge.SendXhrWrite;
 import com.proteus.core.interactiongraph.edge.WriteAccess;
 import com.proteus.core.interactiongraph.node.DomElement;
 import com.proteus.core.interactiongraph.node.Function;
+import com.proteus.core.interactiongraph.node.InteractionNode;
 import com.proteus.core.interactiongraph.node.XmlHttpRequest;
 
 public class InteractionGraph {
@@ -45,7 +47,8 @@ public class InteractionGraph {
 	 */
 	public void handleDomRelations(String domRelations) {
 		extractDomRelations(domRelations);
-		// TODO extractDomJsPaths();
+		
+		findImpactPaths(); // TODO 	SHOULD BE CALLED AT STATIC PHASE, NOT HERE
 	}
 	
 	/**
@@ -300,6 +303,33 @@ public class InteractionGraph {
 			System.out.println(xhrsById.toString());
 		}
 
+	}
+	
+	public void findImpactPaths() {
+		Collection<Function> functions = functionsByName.values();
+		
+		for (Function f : functions) {
+			dfsFindImpactPath(f, 0);
+			// Reset visited flags after traversal for each function
+		}
+	}
+	
+	protected void dfsFindImpactPath(InteractionNode node, int levelCounter) {
+		if (node == null) // necessary?
+			return;
+		
+		for (InteractionEdge e : node.getOutput()) {
+			if (!e.isVisited()) {
+				InteractionNode next = e.getOutput();
+				if (next != null && !next.isVisited()) {
+					e.setVisited(true);
+					dfsFindImpactPath(next, levelCounter ++);
+				}
+			}
+		}
+		
+		node.setVisited(true);
+		System.out.println(">>> " + levelCounter + " <<<");
 	}
 
 }

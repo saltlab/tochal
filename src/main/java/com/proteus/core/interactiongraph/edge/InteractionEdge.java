@@ -5,9 +5,12 @@ import com.proteus.core.interactiongraph.node.InteractionNode;
 public class InteractionEdge {
 	private InteractionNode input;
 	private InteractionNode output;
+	private boolean visited;
 	
-	// TODO constructor
-	
+	public InteractionEdge() {
+		this.visited = false;
+	}
+
 	public InteractionNode getInput() {
 		return input;
 	}
@@ -22,5 +25,13 @@ public class InteractionEdge {
 	
 	public void setOutput(InteractionNode output) {
 		this.output = output;
+	}
+
+	public boolean isVisited() {
+		return visited;
+	}
+
+	public void setVisited(boolean visited) {
+		this.visited = visited;
 	}
 }

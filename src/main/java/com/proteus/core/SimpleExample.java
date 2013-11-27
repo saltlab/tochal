@@ -58,27 +58,9 @@ public class SimpleExample {
 
 			// Add necessary files from resources
 
-///////////////			s.setFileNameToAttach("/esprima.js");
-///////////////			s.setFileNameToAttach("/esmorph.js");
-			// s.setFileNameToAttach("/toolbar.html");
-
-			// s.setFileNameToAttach("/jquery-1.9.1.js");
-			// s.setFileNameToAttach("/jquery-ui-1.10.2.custom.js");
-			// s.setFileNameToAttach("/jquery.tipsy.js");
-			// s.setFileNameToAttach("/trial_toolbar.js");
-			// s.setFileNameToAttach("/toolbar2.js");
-///////////////			s.setFileNameToAttach("/addvariable.js");
-///////////////			s.setFileNameToAttach("/asyncLogger.js");
-///////////////			s.setFileNameToAttach("/applicationView.js");
-///////////////			s.setFileNameToAttach("/eventlistenersMirror.js");
-///////////////			s.setFileNameToAttach("/jsonml-dom.js");
-///////////////			s.setFileNameToAttach("/domMutations.js");
-///////////////			s.setFileNameToAttach("/mutation_summary.js");
-//////////////////////////////			s.instrumentDOMModifications();
-			
-			s.setFileNameToAttach("/2-domAccessWrapper.js");
-			s.setFileNameToAttach("/2-domAccessWrapper_send.js");
-			s.setFileNameToAttach("/2-xhrAccessWrapper.js");
+			s.setFileNameToAttach("/domAccessWrapper.js");
+			s.setFileNameToAttach("/domAccessWrapper_send.js");
+			s.setFileNameToAttach("/xhrAccessWrapper.js");
 
 			// Interface for Ast traversal
 			JSModifyProxyPlugin p = new JSModifyProxyPlugin(s);
