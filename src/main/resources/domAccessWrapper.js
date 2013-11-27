@@ -24,7 +24,8 @@ Element.prototype.getAttribute = function (attrName) {
 	var caller = arguments.callee.caller;
 	var callerName = "null";
 	if (caller != null)
-		callerName = arguments.callee.caller.name;
+		if (caller.name != "") // TODO
+			callerName = arguments.callee.caller.name;
 		
 	var accessType = getAccessType(this); // ???
 	var accessFunction = getAccessFunction(this); // ???

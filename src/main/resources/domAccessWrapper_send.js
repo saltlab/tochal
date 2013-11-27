@@ -78,7 +78,7 @@ function sendXhrLog() {
 
 }
 
-setInterval(sendDomElementAccesses, 10000);
+setInterval(sendDomElementAccesses, 5000);
 
 
 

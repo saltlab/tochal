@@ -100,10 +100,14 @@ public class InteractionGraph {
 		
 		// Extract string representations of functions
 		tokenizer = new StringTokenizer(accessFunctionList);
+		System.out.println("** " + accessFunctionList);
 		if (tokenizer.hasMoreTokens())
 			tokenizer.nextToken(":");
-		while (tokenizer.hasMoreTokens())
-			accessFunctions.add(tokenizer.nextToken(",:"));
+		while (tokenizer.hasMoreTokens()) {
+			String tkn = tokenizer.nextToken(",:");
+			System.out.println("* " + tkn);
+			accessFunctions.add(tkn);
+		}
 				
 		// Create accessType objects for DOM relations
 		ArrayList<InteractionEdge> domAccessTypeObjects = new ArrayList<InteractionEdge>();
