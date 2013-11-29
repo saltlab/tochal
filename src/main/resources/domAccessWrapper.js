@@ -50,7 +50,8 @@ Element.prototype.setAttribute = function (attr, value) {
 	var caller = arguments.callee.caller;
 	var callerName = "null";
 	if (caller != null)
-		callerName = arguments.callee.caller.name;
+		if (caller.name != "")
+			callerName = arguments.callee.caller.name;
 		
 	var accessType = getAccessType(this); // ???
 	var accessFunction = getAccessFunction(this); // ???
@@ -70,7 +71,8 @@ Element.prototype.removeAttribute = function (attr) {
 	var caller = arguments.callee.caller;
 	var callerName = "null";
 	if (caller != null)
-		callerName = arguments.callee.caller.name;
+		if (caller.name != "")
+			callerName = arguments.callee.caller.name;
 	
 	var accessType = getAccessType(this); // ???
 	var accessFunction = getAccessFunction(this); // ???
@@ -96,7 +98,8 @@ Document.prototype.getElementById = function (id) {
 	var caller = arguments.callee.caller;
 	var callerName = "null";
 	if (caller != null)
-		callerName = arguments.callee.caller.name;
+		if (caller.name != "")
+			callerName = arguments.callee.caller.name;
 		
 	var accessType = getAccessType(element);
 	var accessFunction = getAccessFunction(element);
