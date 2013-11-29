@@ -5,6 +5,7 @@ var ACCESS_TYPE_ENUM = {
 	GETELEMENTBYNAME	:	"GetElementByName",
 	GETELEMENTBYTAGNAME	:	"GetElementByTagName",
 	GETELEMENTBYCLASSNAME:	"GetElementByClassName",
+	CREATEELEMENT		:	"CreateElement",
 	GETATTRIBUTE		:	"GetAttribute",
 	SETATTRIBUTE		:	"GetAttribute",
 	REMOVEATTRIBUTE		:	"RemoveAttribute",
@@ -191,19 +192,32 @@ Document.prototype.getElementsByClassName = function (className) {
 
 	return element;
 }
-/*
+
 ////////// CREATE ELEMENTS //////////
 
 var createElement_original = Document.prototype.createElement;
 
 Document.prototype.createElement = function (tagName) {
 	var element = createElement_original.call(this, tagName);
-	console.log("createElement, " + tagName + " -> " + element);
+
 	var caller = arguments.callee.caller;
-//	console.log("caller: " + caller);
+	var callerName = "null";
+	if (caller != null)
+		if (caller.name != "")
+			callerName = arguments.callee.caller.name;
+		
+	var accessType = getAccessType(element);
+	var accessFunction = getAccessFunction(element);
+	
+	accessType += ACCESS_TYPE_ENUM.CREATEELEMENT;
+	accessFunction += callerName;
+
+	setAttribute_original.call(element, ACCESS_TYPE_LABEL, accessType);
+	setAttribute_original.call(element, ACCESS_FUNCTION_LABEL, accessFunction);
+
 	return element;
 }
-*/
+
 /**************
 **   NODES   **
 **************/
