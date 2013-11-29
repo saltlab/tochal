@@ -2,6 +2,9 @@ var ACCESS_TYPE_LABEL = "access_type";
 var ACCESS_FUNCTION_LABEL = "access_function";
 var ACCESS_TYPE_ENUM = {
 	GETELEMENTBYID		:	"GetElementById",
+	GETELEMENTBYNAME	:	"GetElementByName",
+	GETELEMENTBYTAGNAME	:	"GetElementByTagName",
+	GETELEMENTBYCLASSNAME:	"GetElementByClassName",
 	GETATTRIBUTE		:	"GetAttribute",
 	SETATTRIBUTE		:	"GetAttribute",
 	REMOVEATTRIBUTE		:	"RemoveAttribute",
@@ -119,14 +122,27 @@ Document.prototype.getElementById = function (id) {
 
 	return element;
 }
-/*
+
 var getElementsByName_original = Document.prototype.getElementsByName;
 
 Document.prototype.getElementsByName = function (name) {
 	var element = getElementsByName_original.call(this, name);
-	console.log("getElementsByName, " + name + " -> " + element);
+
 	var caller = arguments.callee.caller;
-//	console.log("caller: " + caller);
+	var callerName = "null";
+	if (caller != null)
+		if (caller.name != "")
+			callerName = arguments.callee.caller.name;
+		
+	var accessType = getAccessType(element);
+	var accessFunction = getAccessFunction(element);
+	
+	accessType += ACCESS_TYPE_ENUM.GETELEMENTBYNAME;
+	accessFunction += callerName;
+
+	setAttribute_original.call(element, ACCESS_TYPE_LABEL, accessType);
+	setAttribute_original.call(element, ACCESS_FUNCTION_LABEL, accessFunction);
+
 	return element;
 }
 
@@ -134,9 +150,22 @@ var getElementsByTagName_original = Document.prototype.getElementsByTagName;
 
 Document.prototype.getElementsByTagName = function (tagName) {
 	var element = getElementsByTagName_original.call(this, tagName);
-	console.log("getElementsByTagName, " + tagName + " -> " + element);
+
 	var caller = arguments.callee.caller;
-//	console.log("caller: " + caller);
+	var callerName = "null";
+	if (caller != null)
+		if (caller.name != "")
+			callerName = arguments.callee.caller.name;
+		
+	var accessType = getAccessType(element);
+	var accessFunction = getAccessFunction(element);
+	
+	accessType += ACCESS_TYPE_ENUM.GETELEMENTBYTAGNAME;
+	accessFunction += callerName;
+
+	setAttribute_original.call(element, ACCESS_TYPE_LABEL, accessType);
+	setAttribute_original.call(element, ACCESS_FUNCTION_LABEL, accessFunction);
+
 	return element;
 }
 
@@ -144,12 +173,25 @@ var getElementsByClassName_original = Document.prototype.getElementsByClassName;
 
 Document.prototype.getElementsByClassName = function (className) {
 	var element = getElementsByClassName_original.call(this, className);
-	console.log("getElementsByClassName, " + className + " -> " + element);
+
 	var caller = arguments.callee.caller;
-//	console.log("caller: " + caller);
+	var callerName = "null";
+	if (caller != null)
+		if (caller.name != "")
+			callerName = arguments.callee.caller.name;
+		
+	var accessType = getAccessType(element);
+	var accessFunction = getAccessFunction(element);
+	
+	accessType += ACCESS_TYPE_ENUM.GETELEMENTBYCLASSNAME;
+	accessFunction += callerName;
+
+	setAttribute_original.call(element, ACCESS_TYPE_LABEL, accessType);
+	setAttribute_original.call(element, ACCESS_FUNCTION_LABEL, accessFunction);
+
 	return element;
 }
-
+/*
 ////////// CREATE ELEMENTS //////////
 
 var createElement_original = Document.prototype.createElement;
