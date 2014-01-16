@@ -7,7 +7,7 @@ var ACCESS_TYPE_ENUM = {
 	GETELEMENTBYCLASSNAME:	"GetElementByClassName",
 	CREATEELEMENT		:	"CreateElement",
 	GETATTRIBUTE		:	"GetAttribute",
-	SETATTRIBUTE		:	"GetAttribute",
+	SETATTRIBUTE		:	"SetAttribute",
 	REMOVEATTRIBUTE		:	"RemoveAttribute",
 	GETELEMENTBYNAME	:	"GetElementByName"
 };
@@ -31,6 +31,7 @@ Element.prototype.getAttribute = function (attrName) {
 		if (caller.name != "") // TODO
 			callerName = arguments.callee.caller.name;
 		
+	console.log("1");
 	var accessType = getAccessType(this); // ???
 	var accessFunction = getAccessFunction(this); // ???
 	
@@ -57,6 +58,7 @@ Element.prototype.setAttribute = function (attr, value) {
 		if (caller.name != "")
 			callerName = arguments.callee.caller.name;
 		
+	console.log("2");
 	var accessType = getAccessType(this); // ???
 	var accessFunction = getAccessFunction(this); // ???
 	
@@ -78,6 +80,7 @@ Element.prototype.removeAttribute = function (attr) {
 		if (caller.name != "")
 			callerName = arguments.callee.caller.name;
 	
+	console.log("3");
 	var accessType = getAccessType(this); // ???
 	var accessFunction = getAccessFunction(this); // ???
 	
@@ -105,6 +108,7 @@ Document.prototype.getElementById = function (id) {
 		if (caller.name != "")
 			callerName = arguments.callee.caller.name;
 		
+	console.log("4");
 	var accessType = getAccessType(element);
 	var accessFunction = getAccessFunction(element);
 	
@@ -127,7 +131,7 @@ Document.prototype.getElementById = function (id) {
 var getElementsByName_original = Document.prototype.getElementsByName;
 
 Document.prototype.getElementsByName = function (name) {
-	var element = getElementsByName_original.call(this, name);
+	var elements = getElementsByName_original.call(this, name);
 
 	var caller = arguments.callee.caller;
 	var callerName = "null";
@@ -135,22 +139,28 @@ Document.prototype.getElementsByName = function (name) {
 		if (caller.name != "")
 			callerName = arguments.callee.caller.name;
 		
-	var accessType = getAccessType(element);
-	var accessFunction = getAccessFunction(element);
-	
-	accessType += ACCESS_TYPE_ENUM.GETELEMENTBYNAME;
-	accessFunction += callerName;
+	console.log("5");
+	var accessType = "";
+	var accessFunction = "";
 
-	setAttribute_original.call(element, ACCESS_TYPE_LABEL, accessType);
-	setAttribute_original.call(element, ACCESS_FUNCTION_LABEL, accessFunction);
+	for (var i = 0; i < elements.length; i ++) {
+		accessType = getAccessType(elements[i]);
+		accessFunction = getAccessFunction(elements[i]);
+		
+		accessType += ACCESS_TYPE_ENUM.GETELEMENTBYTAGNAME;
+		accessFunction += callerName;
 
-	return element;
+		setAttribute_original.call(elements[i], ACCESS_TYPE_LABEL, accessType);
+		setAttribute_original.call(elements[i], ACCESS_FUNCTION_LABEL, accessFunction);
+	}
+
+	return elements;
 }
 
 var getElementsByTagName_original = Document.prototype.getElementsByTagName;
 
 Document.prototype.getElementsByTagName = function (tagName) {
-	var element = getElementsByTagName_original.call(this, tagName);
+	var elements = getElementsByTagName_original.call(this, tagName);
 
 	var caller = arguments.callee.caller;
 	var callerName = "null";
@@ -158,22 +168,28 @@ Document.prototype.getElementsByTagName = function (tagName) {
 		if (caller.name != "")
 			callerName = arguments.callee.caller.name;
 		
-	var accessType = getAccessType(element);
-	var accessFunction = getAccessFunction(element);
-	
-	accessType += ACCESS_TYPE_ENUM.GETELEMENTBYTAGNAME;
-	accessFunction += callerName;
+	console.log("6");
+	var accessType = "";
+	var accessFunction = "";
 
-	setAttribute_original.call(element, ACCESS_TYPE_LABEL, accessType);
-	setAttribute_original.call(element, ACCESS_FUNCTION_LABEL, accessFunction);
+	for (var i = 0; i < elements.length; i ++) {
+		accessType = getAccessType(elements[i]);
+		accessFunction = getAccessFunction(elements[i]);
+		
+		accessType += ACCESS_TYPE_ENUM.GETELEMENTBYTAGNAME;
+		accessFunction += callerName;
 
-	return element;
+		setAttribute_original.call(elements[i], ACCESS_TYPE_LABEL, accessType);
+		setAttribute_original.call(elements[i], ACCESS_FUNCTION_LABEL, accessFunction);
+	}
+
+	return elements;
 }
 
 var getElementsByClassName_original = Document.prototype.getElementsByClassName;
 
 Document.prototype.getElementsByClassName = function (className) {
-	var element = getElementsByClassName_original.call(this, className);
+	var elements = getElementsByClassName_original.call(this, className);
 
 	var caller = arguments.callee.caller;
 	var callerName = "null";
@@ -181,16 +197,22 @@ Document.prototype.getElementsByClassName = function (className) {
 		if (caller.name != "")
 			callerName = arguments.callee.caller.name;
 		
-	var accessType = getAccessType(element);
-	var accessFunction = getAccessFunction(element);
-	
-	accessType += ACCESS_TYPE_ENUM.GETELEMENTBYCLASSNAME;
-	accessFunction += callerName;
+	console.log("7");
+	var accessType = "";
+	var accessFunction = "";
 
-	setAttribute_original.call(element, ACCESS_TYPE_LABEL, accessType);
-	setAttribute_original.call(element, ACCESS_FUNCTION_LABEL, accessFunction);
+	for (var i = 0; i < elements.length; i ++) {
+		accessType = getAccessType(elements[i]);
+		accessFunction = getAccessFunction(elements[i]);
+		
+		accessType += ACCESS_TYPE_ENUM.GETELEMENTBYTAGNAME;
+		accessFunction += callerName;
 
-	return element;
+		setAttribute_original.call(elements[i], ACCESS_TYPE_LABEL, accessType);
+		setAttribute_original.call(elements[i], ACCESS_FUNCTION_LABEL, accessFunction);
+	}
+
+	return elements;
 }
 
 ////////// CREATE ELEMENTS //////////
@@ -206,6 +228,7 @@ Document.prototype.createElement = function (tagName) {
 		if (caller.name != "")
 			callerName = arguments.callee.caller.name;
 		
+	console.log("8");
 	var accessType = getAccessType(element);
 	var accessFunction = getAccessFunction(element);
 	
@@ -249,6 +272,7 @@ Element.prototype.removeChild = function (child) {
 
 function getAccessType (element) {
 //	var accessType = element.getAttribute(ACCESS_TYPE_LABEL);
+	console.log("getAccessType->element: " + element);
 	var accessType = getAttribute_original.call(element, ACCESS_TYPE_LABEL);
 	if (accessType != null)
 		accessType += ",";

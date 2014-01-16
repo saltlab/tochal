@@ -25,7 +25,10 @@ public class SimpleExample {
 //	private static final String URL = "http://localhost:8080/same-game/same-game.html";
 	// private static final String URL = "http://localhost:8080/example_webapplication/index.html";
 
-	private static final String URL = "http://localhost:8080/study_application/index.html";
+//	private static final String URL = "http://localhost:8080/study_application/index.html";
+//	private static final String URL = "http://localhost:8080/wymeditor/";
+	
+	
 //	private static final String URL = "http://www.live.com";
 //	private static final String URL = "http://www.qq.com";
 //	private static final String URL = "http://www.linkedin.com";
@@ -35,6 +38,9 @@ public class SimpleExample {
 //	private static final String URL = "http://www.sina.com.cn";
 	
 	//	private static final String URL = "http://localhost:8888/phormer331/index.php";
+	
+//	private static final String URL = "http://localhost:8080/same-game/same-game.html";
+	private static final String URL = "http://localhost:8080/study_application/index.html";
 
 	private static String outputFolder = "";
 	private static WebDriver driver;
@@ -61,9 +67,12 @@ public class SimpleExample {
 
 			// Add necessary files from resources
 
+//			s.setFileNameToAttach("/temp.js");
+			
 			s.setFileNameToAttach("/domAccessWrapper.js");
 			s.setFileNameToAttach("/domAccessWrapper_send.js");
 			s.setFileNameToAttach("/xhrAccessWrapper.js");
+		
 
 			// Interface for Ast traversal
 			JSModifyProxyPlugin p = new JSModifyProxyPlugin(s);

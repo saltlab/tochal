@@ -1,3 +1,12 @@
+
+
+var script = document.createElement('script');
+script.src = 'https://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js';
+script.type = 'text/javascript';
+document.getElementsByTagName('head')[0].appendChild(script);
+
+
+
 //document.write('<script type="text/javascript" src="toolbar/trial.js"></script>');
 var submissionFinalized = false;
 var numOfClicksOnEntry = 0;
@@ -13,11 +22,15 @@ document.getElementById("agreementCheckbox").addEventListener('click', agreement
 function agreementHandler() {
 	var value = document.getElementById("agreementCheckbox").value;
 	if (value == "yes") {
-		document.getElementById("agreementCheckbox").value = "no";
+//		document.getElementById("agreementCheckbox").value = "no";
+		$("#agreementCheckbox").val("FALSE");
+		console.log("jquery getelementbyid");
 		deactivateContestEnter();
 	}
 	else {
-		document.getElementById("agreementCheckbox").value = "yes";
+//		document.getElementById("agreementCheckbox").value = "yes";
+		$("#agreementCheckbox").val("TRUE");
+		console.log("jquery getelementbyid");
 		activateContestEnter();
 	}
 /*	var checkbox = document.getElementById("agreementCheckbox");

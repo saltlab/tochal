@@ -105,7 +105,7 @@ public class InteractionGraph {
 			tokenizer.nextToken(":");
 		while (tokenizer.hasMoreTokens()) {
 			String tkn = tokenizer.nextToken(",:");
-			System.out.println("* " + tkn);
+//			System.out.println("* " + tkn);
 			accessFunctions.add(tkn);
 		}
 				

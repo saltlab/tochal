@@ -137,7 +137,7 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 			Helper.directoryCheck(getOutputFolder());
 			setFileName(scopename);
 			PrintStream output = new PrintStream(getOutputFolder() + getFilename());
-			System.out.println("MOEEEEE" + getOutputFolder() + getFilename());
+//			System.out.println("MOEEEEE" + getOutputFolder() + getFilename());
 			PrintStream oldOut = System.out;
 			System.setOut(output);
 			System.out.println(input);
@@ -175,6 +175,7 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 
 			/****************************/
 			// todo todo todo do not instrument again if visited before
+			/*
 			System.out.println("--------------------------------");
 			StringTokenizer tokenizer = new StringTokenizer(scopename, "?");
 			String newBaseUrl = "";
@@ -190,7 +191,8 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 				boolean baseUrlExists = false;
 				for (String str : visitedBaseUrls) {
 					System.out.print(str);
-					if (/* str.startsWith(newBaseUrl) || */str.equals(newBaseUrl)) {
+//					if (str.startsWith(newBaseUrl) || str.equals(newBaseUrl)) {
+					if (str.equals(newBaseUrl)) {
 						System.out.println(" -> exists");
 						// System.setOut(oldOut2);
 						baseUrlExists = true;
@@ -207,7 +209,7 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+			*/
 			System.out.println("--------------------------------");
 			/***************************/
 
