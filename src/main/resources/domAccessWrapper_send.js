@@ -39,7 +39,10 @@ function sendDomElementAccesses() {
 	console.log("---8");
 	*/
 	
-	var allElements = document.getElementsByTagName("*");
+//	var allElements = document.getElementsByTagName("*");
+	console.log("++");
+	console.log(window.document);
+	var allElements = getElementsByTagName_original.call(window.document, "*"); /////??????????????????????????????
 	console.log(allElements.length);
 
 	for (var i = 0; i < allElements.length; i++) {
