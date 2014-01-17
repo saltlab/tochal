@@ -20,8 +20,12 @@ function addOption(select, label, value) {
 document.getElementById("agreementCheckbox").addEventListener('click', agreementHandler, false);
 
 function agreementHandler() {
-	var value = document.getElementById("agreementCheckbox").value;
-	if (value == "yes") {
+/*	var value = document.getElementById("agreementCheckbox").value;
+*/	console.log("===================");
+	var val = $(".agreementClass").val();
+	alert(val);
+	console.log("===================");
+/*	if (value == "yes") {
 //		document.getElementById("agreementCheckbox").value = "no";
 		$("#agreementCheckbox").val("FALSE");
 		console.log("jquery getelementbyid");
@@ -33,6 +37,7 @@ function agreementHandler() {
 		console.log("jquery getelementbyid");
 		activateContestEnter();
 	}
+*/
 /*	var checkbox = document.getElementById("agreementCheckbox");
 	checkboxId = checkbox.getAttribute("id");
 	checkbox.setAttribute("id", checkboxId);

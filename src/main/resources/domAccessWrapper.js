@@ -9,10 +9,79 @@ var ACCESS_TYPE_ENUM = {
 	GETATTRIBUTE		:	"GetAttribute",
 	SETATTRIBUTE		:	"SetAttribute",
 	REMOVEATTRIBUTE		:	"RemoveAttribute",
-	GETELEMENTBYNAME	:	"GetElementByName"
+	GETELEMENTBYNAME	:	"GetElementByName",
+	QUERYSELECTOR		:	"QuerySelector",
+	QUERYSELECTORALL	:	"QuerySelectorAll"
 };
 
+/*********************
+**					**
+**  QUERY SELECTOR	**
+**					**
+*********************/
+
+var querySelector_original = Document.prototype.querySelector;
+
+Document.prototype.querySelector = function(selector) {
+	alert("querySelector");
+	var result = querySelector_original.call(this, selector);
 	
+	var caller = arguments.callee.caller;
+	var callerName = "null";
+	if (caller != null)
+		if (caller.name != "") // TODO
+			callerName = arguments.callee.caller.name;
+	
+	var accessType = "";
+	var accessFunction = "";
+
+	for (var i = 0; i < result.length; i ++) {
+		var element = result[i];
+		accessType = getAccessType(element); // ???
+		accessFunction = getAccessFunction(element); // ???
+		
+		accessType += ACCESS_TYPE_ENUM.QUERYSELECTOR;
+		accessFunction += callerName;
+		
+		setAttribute_original.call(element, ACCESS_TYPE_LABEL, accessType); // ???
+		setAttribute_original.call(element, ACCESS_FUNCTION_LABEL, accessFunction); // ???
+
+	}
+	
+	return result;
+}
+
+var querySelectorAll_original = Document.prototype.querySelectorAll;
+
+Document.prototype.querySelectorAll = function(selector) {
+	alert("querySelectorAll");
+	var result = querySelectorAll_original.call(this, selector);
+	
+	var caller = arguments.callee.caller;
+	var callerName = "null";
+	if (caller != null)
+		if (caller.name != "") // TODO
+			callerName = arguments.callee.caller.name;
+	
+	var accessType = "";
+	var accessFunction = "";
+
+	for (var i = 0; i < result.length; i ++) {
+		var element = result[i];
+		accessType = getAccessType(element); // ???
+		accessFunction = getAccessFunction(element); // ???
+		
+		accessType += ACCESS_TYPE_ENUM.QUERYSELECTORALL;
+		accessFunction += callerName;
+		
+		setAttribute_original.call(element, ACCESS_TYPE_LABEL, accessType); // ???
+		setAttribute_original.call(element, ACCESS_FUNCTION_LABEL, accessFunction); // ???
+
+	}
+	
+	return result;
+}
+
 /***************
 ** ATTRIBUTES **
 ***************/
@@ -101,6 +170,9 @@ var getElementById_original = Document.prototype.getElementById;
 
 Document.prototype.getElementById = function (id) {
 	var element = getElementById_original.call(this, id);
+	
+	if (element == null)
+		return element;
 	
 	var caller = arguments.callee.caller;
 	var callerName = "null";
@@ -337,3 +409,4 @@ var PseudoGuXHRid = new (function() {
 //    	return (fourChars() + fourChars() + "-" + fourChars() + "-" + fourChars() + "-" + fourChars() + "-" + fourChars() + fourChars() + fourChars());
     };
 })();
+
