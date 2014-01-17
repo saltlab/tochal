@@ -95,8 +95,12 @@ public class InteractionGraph {
 		tokenizer = new StringTokenizer(accessTypeList);
 		if (tokenizer.hasMoreTokens())
 			tokenizer.nextToken(":");
-		while (tokenizer.hasMoreTokens())
-			accessTypes.add(tokenizer.nextToken(",:"));
+		while (tokenizer.hasMoreTokens()) {
+			String tkn = tokenizer.nextToken(",:");
+			accessTypes.add(tkn);
+			System.out.println("-" + tkn + "-");
+//			accessTypes.add(tokenizer.nextToken(",:"));
+		}
 		
 		// Extract string representations of functions
 		tokenizer = new StringTokenizer(accessFunctionList);
@@ -107,6 +111,7 @@ public class InteractionGraph {
 			String tkn = tokenizer.nextToken(",:");
 //			System.out.println("* " + tkn);
 			accessFunctions.add(tkn);
+			System.out.println("-" + tkn + "-");
 		}
 				
 		// Create accessType objects for DOM relations
@@ -142,13 +147,7 @@ public class InteractionGraph {
 				e.printStackTrace();
 			}
 		}
-		
-		tokenizer = new StringTokenizer(accessFunctionList);
-		if (tokenizer.hasMoreTokens())
-			tokenizer.nextToken(":");
-		while (tokenizer.hasMoreTokens())
-			accessFunctions.add(tokenizer.nextToken(",:"));
-		
+
 		// Create accessFunction objects
 //		ArrayList<Integer> redundanctFunctions = new ArrayList<Integer>(); // TODO
 		ArrayList<Function> accessFunctionObjects = new ArrayList<Function>();
