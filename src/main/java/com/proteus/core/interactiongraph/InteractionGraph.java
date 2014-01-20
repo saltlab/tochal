@@ -3,6 +3,9 @@ package com.proteus.core.interactiongraph;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import com.proteus.core.interactiongraph.edge.InteractionEdge;
@@ -48,7 +51,41 @@ public class InteractionGraph {
 	public void handleDomRelations(String domRelations) {
 		extractDomRelations(domRelations);
 		
+		// Answering the motivating challenge, we want to see if this is a real problem.
+		// We want to see if in fact, there are nodes that are written to, and read from
+		// If the size of inputs and outputs are greater or equal to one, we can say that there are read and write accesses made to that node
+		int numOfDomElementsOnDynamicPath = findDynamicDOMPaths();
+		System.out.println(">>>>>>>>>>>>>numOfDomElementsOnDynamicPath: " + numOfDomElementsOnDynamicPath);
+		
 		findImpactPaths(); // TODO 	SHOULD BE CALLED AT STATIC PHASE, NOT HERE
+	}
+	
+	protected int findDynamicDOMPaths() {
+		int numOfDomElementsOnDynamicPath = 0;
+		
+		for (Map.Entry<String, DomElement> entry : domElementsById.entrySet()) {
+			DomElement el = entry.getValue();
+/*			ArrayList<InteractionEdge> inputs = el.getInput();
+			ArrayList<InteractionEdge> outputs = el.getOutput();
+*/
+			System.out.println("^^^^^^^^^^^ " + "ID: " + entry.getKey() + ", INPUTS: " + el.getInput().toString() + ", OUTPUTS: " + el.getOutput().toString() + "^^^^^^^^^^^");
+
+			if (el.getInput().size() >= 1 && el.getOutput().size() >= 1) {
+				numOfDomElementsOnDynamicPath ++;
+				System.out.println("^^^^^^^^^^^ " + "DYNAMIC DOM PATH" + "^^^^^^^^^^^");
+				System.out.println("^^^^^^^^^^^ " + "ID: " + entry.getKey() + ", INPUTS: " + el.getInput().toString() + ", OUTPUTS: " + el.getOutput().toString() + "^^^^^^^^^^^");
+				System.out.println("^^^^^^^^^^^ " + "" + "^^^^^^^^^^^");
+			}
+		}
+		
+/*		Iterator it = domElementsById.keySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry pairs = (Map.Entry)it.next();
+			
+		}
+		*/
+		
+		return numOfDomElementsOnDynamicPath;
 	}
 	
 	/**
@@ -95,24 +132,16 @@ public class InteractionGraph {
 		tokenizer = new StringTokenizer(accessTypeList);
 		if (tokenizer.hasMoreTokens())
 			tokenizer.nextToken(":");
-		while (tokenizer.hasMoreTokens()) {
-			String tkn = tokenizer.nextToken(",:");
-			accessTypes.add(tkn);
-			System.out.println("-" + tkn + "-");
-//			accessTypes.add(tokenizer.nextToken(",:"));
-		}
+		while (tokenizer.hasMoreTokens())
+			accessTypes.add(tokenizer.nextToken(",:"));
 		
 		// Extract string representations of functions
 		tokenizer = new StringTokenizer(accessFunctionList);
 		System.out.println("** " + accessFunctionList);
 		if (tokenizer.hasMoreTokens())
 			tokenizer.nextToken(":");
-		while (tokenizer.hasMoreTokens()) {
-			String tkn = tokenizer.nextToken(",:");
-//			System.out.println("* " + tkn);
-			accessFunctions.add(tkn);
-			System.out.println("-" + tkn + "-");
-		}
+		while (tokenizer.hasMoreTokens())
+			accessFunctions.add(tokenizer.nextToken(",:"));
 				
 		// Create accessType objects for DOM relations
 		ArrayList<InteractionEdge> domAccessTypeObjects = new ArrayList<InteractionEdge>();
@@ -170,22 +199,43 @@ public class InteractionGraph {
 			System.err.println("ERROR: InteractionGraph::makeAccessRelations -> number of access types and functions does not match");
 			return; //
 		}
+		
+		System.out.println("==========SIZES: " + domAccessTypeObjects.size() + " " + accessFunctionObjects.size());
 
 		ArrayList<InteractionEdge> accessTypeObjectsTrimmed = new ArrayList<InteractionEdge>();
 		ArrayList<Function> accessFunctionObjectsTrimmed = new ArrayList<Function>();
-		
-		for (int i = 0; i < domAccessTypeObjects.size() - 1; i ++) {
+
+		for (int i = 0; i < domAccessTypeObjects.size(); i ++) {
 			boolean redundantRelation = false;
-			for (int j = i + 1; j < domAccessTypeObjects.size(); j ++) {
-				if (accessFunctionObjects.get(i).getStrId().equals(accessFunctionObjects.get(j).getStrId()) &&
-					domAccessTypeObjects.get(i).getClass().equals(domAccessTypeObjects.get(j).getClass()))
+			for (int j = 0; j < accessTypeObjectsTrimmed.size(); j ++) {
+				if (domAccessTypeObjects.get(i).getClass().equals(accessTypeObjectsTrimmed.get(j).getClass()) &&
+						accessFunctionObjects.get(i).getStrId().equals(accessFunctionObjectsTrimmed.get(j).getStrId())) {
 					redundantRelation = true;
+				}
 			}
 			if (!redundantRelation) {
 				accessTypeObjectsTrimmed.add(domAccessTypeObjects.get(i));
 				accessFunctionObjectsTrimmed.add(accessFunctionObjects.get(i));
 			}
 		}
+		
+/*		for (int i = 0; i < domAccessTypeObjects.size() - 1; i ++) {
+			boolean redundantRelation = false;
+			for (int j = i + 1; j < domAccessTypeObjects.size(); j ++) {
+					if (accessFunctionObjects.get(i).getStrId().equals(accessFunctionObjects.get(j).getStrId()) &&
+						domAccessTypeObjects.get(i).getClass().equals(domAccessTypeObjects.get(j).getClass()))
+						redundantRelation = true;
+			}
+			if (!redundantRelation) {
+				accessTypeObjectsTrimmed.add(domAccessTypeObjects.get(i));
+				accessFunctionObjectsTrimmed.add(accessFunctionObjects.get(i));
+			}
+		}
+*/		
+		System.out.println("============");
+		System.out.println("accessTypeObjectsTrimmed.size(): " + accessTypeObjectsTrimmed.size());
+		System.out.println("dom relations: " + domRelations);
+		System.out.println("============");
 		
 		for (int i = 0; i < accessTypeObjectsTrimmed.size(); i ++) {
 			InteractionEdge da = accessTypeObjectsTrimmed.get(i);
@@ -201,17 +251,28 @@ public class InteractionGraph {
 //			da.setFunction(f);
 //			f.getDomAccesses().add(da);
 			
+			System.out.println("------------------------------------------------------------");
+			System.out.println("domAccess: " + da.getClass());
+			
 			if (da instanceof WriteAccess) {
 				da.setInput(f);
 				da.setOutput(domElement);
 				domElement.addInput(da);
 				f.addOutput(da);
+				
+				System.out.println("write access");
+				System.out.println("input from function: " + f.getStrId());
+				System.out.println("output to dom element: " + domElement.getStrId());
 			}
 			else if (da instanceof ReadAccess) {
 				da.setInput(domElement);
 				da.setOutput(f);
 				domElement.addOutput(da);
 				f.addInput(da);
+				
+				System.out.println("read access");
+				System.out.println("output to function: " + f.getStrId());
+				System.out.println("input from dom element: " + domElement.getStrId());
 			}
 		}
 	}

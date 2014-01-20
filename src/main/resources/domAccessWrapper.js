@@ -23,7 +23,6 @@ var ACCESS_TYPE_ENUM = {
 var querySelector_original = Document.prototype.querySelector;
 
 Document.prototype.querySelector = function(selector) {
-	alert("querySelector");
 	var result = querySelector_original.call(this, selector);
 	
 	var caller = arguments.callee.caller;
@@ -54,7 +53,6 @@ Document.prototype.querySelector = function(selector) {
 var querySelectorAll_original = Document.prototype.querySelectorAll;
 
 Document.prototype.querySelectorAll = function(selector) {
-	alert("querySelectorAll");
 	var result = querySelectorAll_original.call(this, selector);
 	
 	var caller = arguments.callee.caller;

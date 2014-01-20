@@ -42,6 +42,12 @@ function agreementHandler() {
 	checkboxId = checkbox.getAttribute("id");
 	checkbox.setAttribute("id", checkboxId);
 	*/
+
+	foo();	
+}
+
+function foo() {
+	$(".agreementClass").val() = "true";
 }
 
 document.getElementById("enterContestButton").addEventListener('click', enterContest, false);

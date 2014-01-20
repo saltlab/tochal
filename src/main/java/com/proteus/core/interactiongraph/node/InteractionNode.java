@@ -25,7 +25,9 @@ public class InteractionNode {
 	}
 
 	public ArrayList<InteractionEdge> getInput() {
-		return (ArrayList<InteractionEdge>) Collections.unmodifiableList(this.input);
+		return new ArrayList<InteractionEdge>(Collections.unmodifiableList(this.input));
+		
+///////////////		return (ArrayList<InteractionEdge>) Collections.unmodifiableList(this.input);
 	}
 
 	public void setInput(ArrayList<InteractionEdge> input) {
@@ -34,6 +36,8 @@ public class InteractionNode {
 
 	public ArrayList<InteractionEdge> getOutput() {
 		return new ArrayList<InteractionEdge>(Collections.unmodifiableList(this.output));
+///////////////		return new ArrayList<InteractionEdge>(Collections.unmodifiableList(this.output));
+		
 //		return this.output; // TODO
 		
 //		ImmutableList<InteractionEdge> list = ImmutableList.copyOf(this.output);
