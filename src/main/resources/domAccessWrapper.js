@@ -11,7 +11,10 @@ var ACCESS_TYPE_ENUM = {
 	REMOVEATTRIBUTE		:	"RemoveAttribute",
 	GETELEMENTBYNAME	:	"GetElementByName",
 	QUERYSELECTOR		:	"QuerySelector",
-	QUERYSELECTORALL	:	"QuerySelectorAll"
+	QUERYSELECTORALL	:	"QuerySelectorAll",
+	CREATETEXTNODE		:	"CreateTextNode",
+	APPENDCHILD			:	"AppendChild",
+	REMOVECHILD			:	"RemoveChild"
 };
 
 /*********************
@@ -334,7 +337,7 @@ Element.prototype.appendChild = function (child) {
 	var accessType = getAccessType(element);
 	var accessFunction = getAccessFunction(element);
 	
-	accessType += ACCESS_TYPE_ENUM.GETELEMENTBYID;
+	accessType += ACCESS_TYPE_ENUM.APPENDCHILD;
 	accessFunction += callerName;
 	
 	setAttribute_original.call(element, ACCESS_TYPE_LABEL, accessType);
@@ -359,13 +362,41 @@ Element.prototype.removeChild = function (child) {
 	var accessType = getAccessType(element);
 	var accessFunction = getAccessFunction(element);
 	
-	accessType += ACCESS_TYPE_ENUM.GETELEMENTBYID;
+	accessType += ACCESS_TYPE_ENUM.REMOVECHILD;
 	accessFunction += callerName;
 	
 	setAttribute_original.call(element, ACCESS_TYPE_LABEL, accessType);
 	setAttribute_original.call(element, ACCESS_FUNCTION_LABEL, accessFunction);
 
 	return element;
+}
+
+//////// Text Nodes ///////////
+
+var createTextNode_original = Document.prototype.createTextNode;
+
+Document.prototype.createTextNode = function(text) {
+	var node = createTextNode_original.call(this, text);
+	
+	if (node == null)
+		return node;
+	
+	var caller = arguments.callee.caller;
+	var callerName = "null";
+	if (caller != null)
+		if (caller.name != "")
+			callerName = arguments.callee.caller.name;
+
+	var accessType = getAccessType(node);
+	var accessFunction = getAccessFunction(node);
+	
+	accessType += ACCESS_TYPE_ENUM.CREATETEXTNODE;
+	accessFunction += callerName;
+	
+	setAttribute_original.call(node, ACCESS_TYPE_LABEL, accessType);
+	setAttribute_original.call(node, ACCESS_FUNCTION_LABEL, accessFunction);
+
+	return node;
 }
 
 /********************
