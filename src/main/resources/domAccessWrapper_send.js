@@ -19,7 +19,7 @@ setInterval(sendReally, 8000); // ?
 */
 
 function sendDomElementAccesses() {
-	alert("sendDomElementAccesses");
+///////////////////////////////	alert("sendDomElementAccesses");
 //////////////////	console.log(document);
 	/*
 	console.log("---1");

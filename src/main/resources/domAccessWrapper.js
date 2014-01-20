@@ -314,16 +314,32 @@ Document.prototype.createElement = function (tagName) {
 /**************
 **   NODES   **
 **************/
-////////// NODES //////////
 
 ////////// ADD / REMOVE CHILD //////////
-/*
+
 var appendChild_original = Document.prototype.appendChild;
 
 Element.prototype.appendChild = function (child) {
 	var element = appendChild_original.call(this, child);
-	console.log("appendChild, " + child + " -> " + element);
+
+	if (element == null)
+		return element;
+	
 	var caller = arguments.callee.caller;
+	var callerName = "null";
+	if (caller != null)
+		if (caller.name != "")
+			callerName = arguments.callee.caller.name;
+
+	var accessType = getAccessType(element);
+	var accessFunction = getAccessFunction(element);
+	
+	accessType += ACCESS_TYPE_ENUM.GETELEMENTBYID;
+	accessFunction += callerName;
+	
+	setAttribute_original.call(element, ACCESS_TYPE_LABEL, accessType);
+	setAttribute_original.call(element, ACCESS_FUNCTION_LABEL, accessFunction);
+
 	return element;
 }
 
@@ -331,11 +347,27 @@ var removeChild_original = Document.prototype.removeChild;
 
 Element.prototype.removeChild = function (child) {
 	var element = removeChild_original.call(this, child);
-	console.log("removeChild, " + child + " -> " + element);
+	if (element == null)
+		return element;
+	
 	var caller = arguments.callee.caller;
+	var callerName = "null";
+	if (caller != null)
+		if (caller.name != "")
+			callerName = arguments.callee.caller.name;
+
+	var accessType = getAccessType(element);
+	var accessFunction = getAccessFunction(element);
+	
+	accessType += ACCESS_TYPE_ENUM.GETELEMENTBYID;
+	accessFunction += callerName;
+	
+	setAttribute_original.call(element, ACCESS_TYPE_LABEL, accessType);
+	setAttribute_original.call(element, ACCESS_FUNCTION_LABEL, accessFunction);
+
 	return element;
 }
-*/
+
 /********************
 
 ********************/

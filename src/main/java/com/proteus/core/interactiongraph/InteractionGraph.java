@@ -68,14 +68,14 @@ public class InteractionGraph {
 /*			ArrayList<InteractionEdge> inputs = el.getInput();
 			ArrayList<InteractionEdge> outputs = el.getOutput();
 */
-			System.out.println("^^^^^^^^^^^ " + "ID: " + entry.getKey() + ", INPUTS: " + el.getInput().toString() + ", OUTPUTS: " + el.getOutput().toString() + "^^^^^^^^^^^");
-
+/*			System.out.println("^^^^^^^^^^^ " + "ID: " + entry.getKey() + ", INPUTS: " + el.getInput().toString() + ", OUTPUTS: " + el.getOutput().toString() + "^^^^^^^^^^^");
+*/
 			if (el.getInput().size() >= 1 && el.getOutput().size() >= 1) {
 				numOfDomElementsOnDynamicPath ++;
-				System.out.println("^^^^^^^^^^^ " + "DYNAMIC DOM PATH" + "^^^^^^^^^^^");
+/*				System.out.println("^^^^^^^^^^^ " + "DYNAMIC DOM PATH" + "^^^^^^^^^^^");
 				System.out.println("^^^^^^^^^^^ " + "ID: " + entry.getKey() + ", INPUTS: " + el.getInput().toString() + ", OUTPUTS: " + el.getOutput().toString() + "^^^^^^^^^^^");
 				System.out.println("^^^^^^^^^^^ " + "" + "^^^^^^^^^^^");
-			}
+*/			}
 		}
 		
 /*		Iterator it = domElementsById.keySet().iterator();
@@ -130,6 +130,7 @@ public class InteractionGraph {
 
 		// Extract string representations of accessTypes (interactionEdges)
 		tokenizer = new StringTokenizer(accessTypeList);
+		System.out.println("** " + accessTypeList);
 		if (tokenizer.hasMoreTokens())
 			tokenizer.nextToken(":");
 		while (tokenizer.hasMoreTokens())
@@ -200,8 +201,8 @@ public class InteractionGraph {
 			return; //
 		}
 		
-		System.out.println("==========SIZES: " + domAccessTypeObjects.size() + " " + accessFunctionObjects.size());
-
+/*		System.out.println("==========SIZES: " + domAccessTypeObjects.size() + " " + accessFunctionObjects.size());
+*/
 		ArrayList<InteractionEdge> accessTypeObjectsTrimmed = new ArrayList<InteractionEdge>();
 		ArrayList<Function> accessFunctionObjectsTrimmed = new ArrayList<Function>();
 
@@ -219,26 +220,13 @@ public class InteractionGraph {
 			}
 		}
 		
-/*		for (int i = 0; i < domAccessTypeObjects.size() - 1; i ++) {
-			boolean redundantRelation = false;
-			for (int j = i + 1; j < domAccessTypeObjects.size(); j ++) {
-					if (accessFunctionObjects.get(i).getStrId().equals(accessFunctionObjects.get(j).getStrId()) &&
-						domAccessTypeObjects.get(i).getClass().equals(domAccessTypeObjects.get(j).getClass()))
-						redundantRelation = true;
-			}
-			if (!redundantRelation) {
-				accessTypeObjectsTrimmed.add(domAccessTypeObjects.get(i));
-				accessFunctionObjectsTrimmed.add(accessFunctionObjects.get(i));
-			}
-		}
-*/		
-		System.out.println("============");
+/*		System.out.println("============");
 		System.out.println("accessTypeObjectsTrimmed.size(): " + accessTypeObjectsTrimmed.size());
 		System.out.println("dom relations: " + domRelations);
 		System.out.println("trimmed accessTypeObjectsTrimmed: " + accessTypeObjectsTrimmed.toString());
 		System.out.println("trimmed accessFunctionObjectsTrimmed: " + accessFunctionObjectsTrimmed.toString());
 		System.out.println("============");
-		
+*/		
 		for (int i = 0; i < accessTypeObjectsTrimmed.size(); i ++) {
 			InteractionEdge da = accessTypeObjectsTrimmed.get(i);
 			Function f = accessFunctionObjectsTrimmed.get(i);
@@ -253,33 +241,33 @@ public class InteractionGraph {
 //			da.setFunction(f);
 //			f.getDomAccesses().add(da);
 			
-			System.out.println("------------------------------------------------------------");
+/*			System.out.println("------------------------------------------------------------");
 			System.out.println("domAccess: " + da.getClass());
-			
+*/			
 			if (da instanceof WriteAccess) {
 				da.setInput(f);
 				da.setOutput(domElement);
 				domElement.addInput(da);
 				f.addOutput(da);
 				
-				System.out.println("write access");
+/*				System.out.println("write access");
 				System.out.println("input from function: " + f.getStrId());
 				System.out.println("all f outputs: " + f.getOutput().toString());
 				System.out.println("output to dom element: " + domElement.getStrId());
 				System.out.println("all dom el inputs: " + domElement.getInput().toString());
-			}
+*/			}
 			else if (da instanceof ReadAccess) {
 				da.setInput(domElement);
 				da.setOutput(f);
 				domElement.addOutput(da);
 				f.addInput(da);
 				
-				System.out.println("read access");
+/*				System.out.println("read access");
 				System.out.println("output to function: " + f.getStrId());
 				System.out.println("all f inputs: " + f.getInput().toString());
 				System.out.println("input from dom element: " + domElement.getStrId());
 				System.out.println("all dom el outputs: " + domElement.getOutput().toString());
-			}
+*/			}
 		}
 	}
 	

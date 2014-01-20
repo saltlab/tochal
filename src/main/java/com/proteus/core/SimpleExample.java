@@ -39,9 +39,9 @@ public class SimpleExample {
 	
 	//	private static final String URL = "http://localhost:8888/phormer331/index.php";
 	
-//	private static final String URL = "http://localhost:8080/same-game/same-game.html"; -> works, not dom paths though
-//	private static final String URL = "http://arcade.christianmontoya.com/tunnel/";
-	private static final String URL = "http://localhost:8080/study_application/index.html";
+//	private static final String URL = "http://localhost:8080/same-game/same-game.html"; // works
+	private static final String URL = "http://arcade.christianmontoya.com/tunnel/";
+//	private static final String URL = "http://localhost:8080/study_application/index.html";
 	
 	private static String outputFolder = "";
 	private static WebDriver driver;
