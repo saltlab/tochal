@@ -47,7 +47,14 @@ function agreementHandler() {
 }
 
 function foo() {
-	$(".agreementClass").val() = "true";
+//	$(".agreementClass").val() = "yes";
+//	$(".agreementClass")[0].setAtrribute("value", "yes");
+	
+	var cb = $(".agreementClass")[0];
+	console.log("=======+++++=======");
+	console.log(cb);
+	cb.setAttribute("value", "yes");
+//	cb.val('TRUE');
 }
 
 document.getElementById("enterContestButton").addEventListener('click', enterContest, false);

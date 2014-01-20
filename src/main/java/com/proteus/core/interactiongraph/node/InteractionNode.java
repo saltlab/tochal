@@ -54,7 +54,7 @@ public class InteractionNode {
 	}
 
 	public void addOutput(InteractionEdge newOutput) {
-		input.add(newOutput);
+		output.add(newOutput);
 	}
 	
 	public String getStrId() {

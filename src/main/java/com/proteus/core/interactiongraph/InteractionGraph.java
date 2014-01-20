@@ -235,6 +235,8 @@ public class InteractionGraph {
 		System.out.println("============");
 		System.out.println("accessTypeObjectsTrimmed.size(): " + accessTypeObjectsTrimmed.size());
 		System.out.println("dom relations: " + domRelations);
+		System.out.println("trimmed accessTypeObjectsTrimmed: " + accessTypeObjectsTrimmed.toString());
+		System.out.println("trimmed accessFunctionObjectsTrimmed: " + accessFunctionObjectsTrimmed.toString());
 		System.out.println("============");
 		
 		for (int i = 0; i < accessTypeObjectsTrimmed.size(); i ++) {
@@ -262,7 +264,9 @@ public class InteractionGraph {
 				
 				System.out.println("write access");
 				System.out.println("input from function: " + f.getStrId());
+				System.out.println("all f outputs: " + f.getOutput().toString());
 				System.out.println("output to dom element: " + domElement.getStrId());
+				System.out.println("all dom el inputs: " + domElement.getInput().toString());
 			}
 			else if (da instanceof ReadAccess) {
 				da.setInput(domElement);
@@ -272,7 +276,9 @@ public class InteractionGraph {
 				
 				System.out.println("read access");
 				System.out.println("output to function: " + f.getStrId());
+				System.out.println("all f inputs: " + f.getInput().toString());
 				System.out.println("input from dom element: " + domElement.getStrId());
+				System.out.println("all dom el outputs: " + domElement.getOutput().toString());
 			}
 		}
 	}
