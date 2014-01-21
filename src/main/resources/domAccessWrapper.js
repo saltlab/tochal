@@ -320,9 +320,9 @@ Document.prototype.createElement = function (tagName) {
 
 ////////// ADD / REMOVE CHILD //////////
 
-var appendChild_original = Document.prototype.appendChild;
+var appendChild_original = Node.prototype.appendChild;
 
-Element.prototype.appendChild = function (child) {
+Node.prototype.appendChild = function (child) {
 	var element = appendChild_original.call(this, child);
 
 	if (element == null)
@@ -346,9 +346,9 @@ Element.prototype.appendChild = function (child) {
 	return element;
 }
 
-var removeChild_original = Document.prototype.removeChild;
+var removeChild_original = Node.prototype.removeChild;
 
-Element.prototype.removeChild = function (child) {
+Node.prototype.removeChild = function (child) {
 	var element = removeChild_original.call(this, child);
 	if (element == null)
 		return element;
@@ -397,6 +397,36 @@ Document.prototype.createTextNode = function(text) {
 	setAttribute_original.call(node, ACCESS_FUNCTION_LABEL, accessFunction);
 
 	return node;
+}
+
+/**************
+***   CSS   ***
+**************/
+
+// Reading CSS properties
+
+var style = window.getComputedStyle;
+
+window.getComputedStyle = function(node) {
+/*	
+	console.log("-----------------", node);
+	var result = style.call(this, node);
+	
+	console.log("caller: ", arguments.callee.caller.name);
+
+	if (arguments == null)
+		console.log("null");
+	else if (arguments == "undefined")
+		console.log("undefined");
+	else if (arguments == "")
+		console.log("empty");
+	else {
+		console.log("has ", arguments.length, " args");
+		console.log("args: ", arguments);
+	}
+	
+	return result;
+*/
 }
 
 /********************
