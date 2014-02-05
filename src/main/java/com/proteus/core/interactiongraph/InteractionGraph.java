@@ -29,7 +29,6 @@ public class InteractionGraph {
 	private HashMap<String, XmlHttpRequest> xhrsById;
 	
 	//private ArrayList<InteractionEdge> edges; // TODO is this needed? do we also need a list of all nodes?
-	
 
 	// Private constructor for singleton
 	private InteractionGraph() {
@@ -53,11 +52,79 @@ public class InteractionGraph {
 		
 		// Answering the motivating challenge, we want to see if this is a real problem.
 		// We want to see if in fact, there are nodes that are written to, and read from
+		
+		// Gather statistical/topological information about the structure of captured dom relations
+		gatherStatInfo();
+		
 		// If the size of inputs and outputs are greater or equal to one, we can say that there are read and write accesses made to that node
 		int numOfDomElementsOnDynamicPath = findDynamicDOMPaths();
 		System.out.println(">>>>>>>>>>>>>numOfDomElementsOnDynamicPath: " + numOfDomElementsOnDynamicPath);
+		System.out.println(">>>>>>>>>>>>>numOfDomElementsAccess: " + domElementsById.size());
 		
 		findImpactPaths(); // TODO 	SHOULD BE CALLED AT STATIC PHASE, NOT HERE
+	}
+	
+	protected void gatherStatInfo() {
+		ArrayList<InteractionEdge> sortedHybridList = new ArrayList<InteractionEdge>();
+
+		int numOfReadOnlyDomElements = 0;	
+		int numOfWriteOnlyDomElements = 0;
+		int numOfReadWriteElements = 0;
+
+		for (Map.Entry<String, DomElement> entry : domElementsById.entrySet()) {
+			DomElement el = entry.getValue();
+			if (el.getInput().size() == 0)
+				numOfReadOnlyDomElements ++;
+			else if (el.getOutput().size() == 0)
+				numOfWriteOnlyDomElements ++;
+			else {
+				// Create a list of all inputs and outputs sorted by the counter
+				numOfReadWriteElements ++;
+				ArrayList<InteractionEdge> input = el.getInput();
+				ArrayList<InteractionEdge> output = el.getOutput();
+				// sort interaction edges based on time
+//				ArrayList<InteractionEdge> sortedHybridList = new ArrayList<InteractionEdge>();
+				
+				int inputIndex = 0;
+				int outputIndex = 0;
+				
+				while (true) {
+					if (input.get(inputIndex).getCounter() <= output.get(outputIndex).getCounter()) {
+						sortedHybridList.add(input.get(inputIndex));
+						inputIndex ++;
+					}
+					else {
+						sortedHybridList.add(output.get(outputIndex));
+						outputIndex ++;
+					}
+					if (inputIndex >= (input.size() - 1)) {
+						for (int i = outputIndex; i < output.size(); i ++)
+							sortedHybridList.add(output.get(i));
+						break;
+					}
+					else if (outputIndex >= (output.size() - 1)) {
+						for (int i = inputIndex; i < input.size(); i ++)
+							sortedHybridList.add(input.get(i));
+						break;
+					}
+				}
+				System.out.println("------------------DOM Element id: " + el.getStrId());
+				for (int i = 0; i < sortedHybridList.size(); i ++) {
+					InteractionEdge e = sortedHybridList.get(i);
+					if (e instanceof ReadAccess)
+						System.out.println("F: " + sortedHybridList.get(i).getOutput().getStrId() + " + READ: " + sortedHybridList.get(i).getClass().getSimpleName());
+					else
+						System.out.println("F: " + sortedHybridList.get(i).getInput().getStrId() + " + WRITE: " + sortedHybridList.get(i).getClass().getSimpleName());
+				}
+			}
+			
+
+		}
+		
+		System.out.println("+*+*+*+ numOfReadOnlyDomElements: " + numOfReadOnlyDomElements);
+		System.out.println("+*+*+*+ numOfWriteOnlyDomElements: " + numOfWriteOnlyDomElements);
+		System.out.println("+*+*+*+ numOfReadWriteElements: " + numOfReadWriteElements);
+		
 	}
 	
 	protected int findDynamicDOMPaths() {
@@ -104,17 +171,17 @@ public class InteractionGraph {
 		
 		StringTokenizer tokenizer = new StringTokenizer(domRelations);
 		if (tokenizer.hasMoreTokens())
-			domElementId = tokenizer.nextToken(".");
+			domElementId = tokenizer.nextToken("*");
 		if (tokenizer.hasMoreElements())
-			accessTypeList = tokenizer.nextToken(".");
+			accessTypeList = tokenizer.nextToken("*");
 		if (tokenizer.hasMoreTokens())
-			accessFunctionList = tokenizer.nextToken(".");
+			accessFunctionList = tokenizer.nextToken("*");
 		
 		tokenizer = new StringTokenizer(domElementId);
 		String str = "";
 		for (int i = 0; i < 2; i ++)
 			if (tokenizer.hasMoreTokens())
-				str = tokenizer.nextToken(":");
+				str = tokenizer.nextToken("@");
 		if (!str.isEmpty()) {
 			// Check if the element already exists
 			if (domElementsById.containsKey(str))
@@ -132,17 +199,17 @@ public class InteractionGraph {
 		tokenizer = new StringTokenizer(accessTypeList);
 		System.out.println("** " + accessTypeList);
 		if (tokenizer.hasMoreTokens())
-			tokenizer.nextToken(":");
+			tokenizer.nextToken("@");
 		while (tokenizer.hasMoreTokens())
-			accessTypes.add(tokenizer.nextToken(",:"));
+			accessTypes.add(tokenizer.nextToken(",@"));
 		
 		// Extract string representations of functions
 		tokenizer = new StringTokenizer(accessFunctionList);
 		System.out.println("** " + accessFunctionList);
 		if (tokenizer.hasMoreTokens())
-			tokenizer.nextToken(":");
+			tokenizer.nextToken("@");
 		while (tokenizer.hasMoreTokens())
-			accessFunctions.add(tokenizer.nextToken(",:"));
+			accessFunctions.add(tokenizer.nextToken(",@"));
 				
 		// Create accessType objects for DOM relations
 		ArrayList<InteractionEdge> domAccessTypeObjects = new ArrayList<InteractionEdge>();

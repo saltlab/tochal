@@ -56,7 +56,8 @@ function sendDomElementAccesses() {
 			continue;
 		}
 
-		var msg = "ID:" + id + ". ACCESST_TYPES:" + accessType + ". ACCESS_FUNCTIONS:" + accessFunction;
+//		var msg = "ID:" + id + ". ACCESST_TYPES:" + accessType + ". ACCESS_FUNCTIONS:" + accessFunction;
+		var msg = "ID@" + id + "* ACCESST_TYPES@" + accessType + "* ACCESS_FUNCTIONS@" + accessFunction;
 		
     	window.xhr.open('POST', document.location.href + '?DOMACCESSLOG', false);
     	window.xhr.send(msg.toString());

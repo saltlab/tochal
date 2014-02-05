@@ -39,8 +39,27 @@ public class SimpleExample {
 	
 	//	private static final String URL = "http://localhost:8888/phormer331/index.php";
 	
-//	private static final String URL = "http://localhost:8080/same-game/same-game.html"; // works
-	private static final String URL = "http://arcade.christianmontoya.com/tunnel/";
+	//////////////// PROTEUS
+	private static final String URL = "http://localhost:8080/same-game/same-game.html"; // works
+//	private static final String URL = "http://arcade.christianmontoya.com/tunnel/"; // works somehow, no dynamic paths
+//	private static final String URL = "http://10k.aneventapart.com/2/Uploads/657/"; // GhostBusters
+//	private static final String URL = "http://localhost:8080/GhostBusters/index-cheat.html"; // GhostBusters, works WITH CHEATING in instrumentation!
+//	private static final String URL = "http://localhost:8080/GhostBusters/index.html"; // GhostBusters, does not instrument
+//	private static final String URL = "http://www.cccontheweb.org/peggame.htm"; // Peg -> does not work
+//	private static final String URL = "http://localhost:8080/peggame/peggame.htm"; // Peg -> WITH CHEAT
+//	private static final String URL = "http://www.themaninblue.com/experiment/BunnyHunt/"; // BunnyHunt -> does not work 
+//	private static final String URL = "http://localhost:8080/jquery-tabs/demo/"; // works WITH CHEAT
+//	private static final String URL = "http://www.narrowdesign.com/"; // does not work!
+//	private static final String URL = "http://www.jointlondon.com/"; // does not work. does not instrument
+//	private static final String URL = "http://localhost:8080/canopy/"; // works a little with cheat. exception. no results
+//	private static final String URL = "http://localhost:8080/Listo/"; // with cheat!
+//	private static final String URL = "http://localhost:8080/SunCalc/"; // with cheat! but results : 0.
+//	private static final String URL = "http://localhost:8080/mojule/"; // with cheat!
+//	private static final String URL = "http://localhost:8080/whiteboard/"; // with cheat. doesn't work after a while. error in app? 
+//	private static final String URL = "http://localhost:8080/SonaReader/"; //  
+	// TODO CHECK UFO
+	
+
 //	private static final String URL = "http://localhost:8080/study_application/index.html";
 	
 	private static String outputFolder = "";
@@ -72,8 +91,8 @@ public class SimpleExample {
 			
 			s.setFileNameToAttach("/domAccessWrapper.js");
 			s.setFileNameToAttach("/domAccessWrapper_send.js");
-			s.setFileNameToAttach("/xhrAccessWrapper.js");
-		
+//			s.setFileNameToAttach("/xhrAccessWrapper.js");
+
 
 			// Interface for Ast traversal
 			JSModifyProxyPlugin p = new JSModifyProxyPlugin(s);

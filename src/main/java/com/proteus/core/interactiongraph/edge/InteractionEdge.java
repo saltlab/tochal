@@ -7,8 +7,19 @@ public class InteractionEdge {
 	private InteractionNode output;
 	private boolean visited;
 	
+	// TODO
+	public static int edgeCounter = 0;
+	private int counter;
+	
 	public InteractionEdge() {
 		this.visited = false;
+		// TODO
+		this.counter = InteractionEdge.edgeCounter ++;
+	}
+	
+	// TODO
+	public int getCounter() {
+		return this.counter;
 	}
 
 	public InteractionNode getInput() {
