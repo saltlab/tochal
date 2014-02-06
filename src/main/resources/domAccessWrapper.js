@@ -55,6 +55,9 @@ function getCallerFunctionName(argumens) {
 			var arrayOfStrings = latestFunction.split("/");
 //			console.log("||||||||||| ", arrayOfStrings[arrayOfStrings.length - 1]);
 			callerName = callerName + "+" + arrayOfStrings[arrayOfStrings.length - 1];
+			
+			if (callerName.length > 1)
+				callerName = callerName.substring(0, callerName.length - 1);
 		}
 	}
 	

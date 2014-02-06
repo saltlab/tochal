@@ -1,13 +1,20 @@
 package com.proteus.core;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.owasp.webscarab.model.Preferences;
@@ -78,7 +85,9 @@ public class SimpleExample {
 			*************************/
 
 			// Create a new instance of the firefox driver
-			FirefoxProfile profile = new FirefoxProfile();
+//////////////			FirefoxProfile profile = new FirefoxProfile();
+//			ChromeDriverService profile = new ChromeDriverService(null, 0, null, null); // TODO 
+			
 			// Instantiate proxy components
 			ProxyConfiguration prox = new ProxyConfiguration();
 
@@ -114,11 +123,12 @@ public class SimpleExample {
 			proxy.run();
 
 			if (prox != null) {
-				profile.setPreference("network.proxy.http", prox.getHostname());
-				profile.setPreference("network.proxy.http_port", prox.getPort());
-				profile.setPreference("network.proxy.type", prox.getType().toInt());
+				// TODO
+//				profile.setPreference("network.proxy.http", prox.getHostname());
+//				profile.setPreference("network.proxy.http_port", prox.getPort());
+//				profile.setPreference("network.proxy.type", prox.getType().toInt());
 				/* use proxy for everything, including localhost */
-				profile.setPreference("network.proxy.no_proxies_on", "");
+//				profile.setPreference("network.proxy.no_proxies_on", "");
 			}
 
 			/*
@@ -127,13 +137,26 @@ public class SimpleExample {
 			 */
 			// File file = new
 			// File("/Users/.../Library/Application Support/Firefox/Profiles/zga73n4v.default/extensions/firebug@software.joehewitt.com.xpi");
-		
+/*		
 			File file = new File("/Users/Saba/Library/Application Support/Firefox/Profiles/b0dzzwrl.default/extensions/firebug@software.joehewitt.com.xpi");
 			profile.addExtension(file);
 			profile.setPreference("extensions.firebug.currentVersion", "1.8.1"); // Avoid startup
-			// screen
+*/			// screen
 
-			driver = new FirefoxDriver(profile);
+			System.setProperty("webdriver.chrome.driver", "lib/chromedriver"); // TODO
+		
+			
+//			driver = new FirefoxDriver(profile); // TODO
+//			driver = new RemoteWebDriver(DesiredCapabilities.chrome());
+			
+			ChromeOptions optionsChrome = new ChromeOptions();
+		
+			optionsChrome.addArguments("--proxy-server=http://"
+			+ prox.getHostname() + ":"
+			+ prox.getPort());
+			
+			driver = new ChromeDriver(optionsChrome);
+			
 			WebDriverWait wait = new WebDriverWait(driver, 10);
 			boolean sessionOver = false;
 
