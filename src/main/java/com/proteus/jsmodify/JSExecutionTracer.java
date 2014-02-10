@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import com.crawljax.util.Helper;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.proteus.core.interactiongraph.InteractionGraph;
 
 /**
  * Reads an instrumentation array from the webbrowser and saves the contents in a JSON trace file.
@@ -145,6 +146,13 @@ public class JSExecutionTracer {
 	}
 
 	public static void postCrawling() {
+		
+		// TODO 
+		
+		InteractionGraph.getInstance().handleGraphAfterTermination();
+
+
+		/*
 		try {
 			// Add closing bracket
 			PrintStream oldOut = System.out;
@@ -153,12 +161,13 @@ public class JSExecutionTracer {
 			System.out.println("}");
 			System.setOut(oldOut);
 
-			/* close the output file */
+			// close the output file
 			output.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 
 	/**

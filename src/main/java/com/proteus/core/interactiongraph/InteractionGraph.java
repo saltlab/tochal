@@ -84,13 +84,16 @@ public class InteractionGraph {
 	}
 	
 	protected void gatherStatInfo() {
-		ArrayList<InteractionEdge> sortedHybridList = new ArrayList<InteractionEdge>();
+		HashMap<DomElement, ArrayList<InteractionEdge>> domElementsWithSortedAcesses = new HashMap<DomElement, ArrayList<InteractionEdge>>();
+		ArrayList<InteractionEdge> sortedHybridList;// = new ArrayList<InteractionEdge>();
 
 		int numOfReadOnlyDomElements = 0;	
 		int numOfWriteOnlyDomElements = 0;
 		int numOfReadWriteElements = 0;
 
 		for (Map.Entry<String, DomElement> entry : domElementsById.entrySet()) {
+			sortedHybridList = new ArrayList<InteractionEdge>();
+			
 			DomElement el = entry.getValue();
 			if (el.getInput().size() == 0)
 				numOfReadOnlyDomElements ++;
@@ -127,7 +130,7 @@ public class InteractionGraph {
 						break;
 					}
 				}
-				System.out.println("------------------DOM Element id: " + el.getStrId());
+/*				System.out.println("------------------DOM Element id: " + el.getStrId());
 				for (int i = 0; i < sortedHybridList.size(); i ++) {
 					InteractionEdge e = sortedHybridList.get(i);
 					if (e instanceof ReadAccess)
@@ -135,11 +138,32 @@ public class InteractionGraph {
 					else
 						System.out.println("F: " + sortedHybridList.get(i).getInput().getStrId() + " + WRITE: ");// + sortedHybridList.get(i).getClass().getSimpleName());
 				}
-			}
+*/			}
 			
+			domElementsWithSortedAcesses.put(el, sortedHybridList); // TODO
 
 		}
-		
+
+		Iterator it = domElementsWithSortedAcesses.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<DomElement, ArrayList<InteractionEdge>> pairs = (Map.Entry<DomElement, ArrayList<InteractionEdge>>)it.next();
+			DomElement e = pairs.getKey();
+			ArrayList<InteractionEdge> sortedAccesses = pairs.getValue();
+			
+			System.out.println("========================== DOM Element: " + e.getStrId());
+			for (int i = 0; i < sortedAccesses.size(); i ++) {
+				InteractionEdge access = sortedAccesses.get(i);
+				if (access instanceof WriteAccess)
+					System.out.print("<W, " + access.getInput().getStrId() + "> ");
+				else
+					System.out.print("<R, " + access.getOutput().getStrId() + "> ");
+			}
+			System.out.println();
+			
+			it.remove(); // TODO
+		}
+
+
 		System.out.println("+*+*+*+ numOfReadOnlyDomElements: " + numOfReadOnlyDomElements);
 		System.out.println("+*+*+*+ numOfWriteOnlyDomElements: " + numOfWriteOnlyDomElements);
 		System.out.println("+*+*+*+ numOfReadWriteElements: " + numOfReadWriteElements);
@@ -179,8 +203,6 @@ public class InteractionGraph {
 	 * @param domRelations
 	 */
 	protected void extractDomRelations(String domRelations) {
-		System.out.println("+++++++++++++++++++++");
-		System.out.println("+++++++++++++++++++++");
 		System.out.println("+++++++++++++++++++++");
 		
 		String domElementId = "", accessTypeList = "", accessFunctionList = "";

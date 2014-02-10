@@ -179,8 +179,7 @@ public class SimpleExample {
 					sessionOver = false;
 				}
 			}
-			/*************************
-			*************************/
+
 			tracer.postCrawling();
 
 		} catch (Exception e) {
