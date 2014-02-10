@@ -42,6 +42,20 @@ public class InteractionGraph {
 		return INSTANCE;
 	}
 	
+	// TODO this method will be accessed from outside to traverse the graph and find info about dynamic paths
+	public void handleGraphAfterTermination() {
+		// Gather statistical/topological information about the structure of captured dom relations
+		gatherStatInfo();
+		
+		// If the size of inputs and outputs are greater or equal to one, we can say that there are read and write accesses made to that node
+		int numOfDomElementsOnDynamicPath = findDynamicDOMPaths();
+		System.out.println(">>>>>>>>>>>>>numOfDomElementsOnDynamicPath: " + numOfDomElementsOnDynamicPath);
+		System.out.println(">>>>>>>>>>>>>numOfDomElementsAccess: " + domElementsById.size());
+		
+		findImpactPaths(); // TODO 	SHOULD BE CALLED AT STATIC PHASE, NOT HERE
+
+	}
+	
 	/**
 	 * Creates the relations between DOM elements and JavaScript functions
 	 * Extracts the paths // TODO
@@ -53,6 +67,9 @@ public class InteractionGraph {
 		// Answering the motivating challenge, we want to see if this is a real problem.
 		// We want to see if in fact, there are nodes that are written to, and read from
 		
+		/**************************
+		 THIS PART IS MOVED TO THE FOLLOWING FUNCTION handleGraphAfterTermination
+		
 		// Gather statistical/topological information about the structure of captured dom relations
 		gatherStatInfo();
 		
@@ -62,6 +79,8 @@ public class InteractionGraph {
 		System.out.println(">>>>>>>>>>>>>numOfDomElementsAccess: " + domElementsById.size());
 		
 		findImpactPaths(); // TODO 	SHOULD BE CALLED AT STATIC PHASE, NOT HERE
+		
+		**************************/
 	}
 	
 	protected void gatherStatInfo() {
@@ -112,9 +131,9 @@ public class InteractionGraph {
 				for (int i = 0; i < sortedHybridList.size(); i ++) {
 					InteractionEdge e = sortedHybridList.get(i);
 					if (e instanceof ReadAccess)
-						System.out.println("F: " + sortedHybridList.get(i).getOutput().getStrId() + " + READ: " + sortedHybridList.get(i).getClass().getSimpleName());
+						System.out.println("F: " + sortedHybridList.get(i).getOutput().getStrId() + " + READ: ");//) + sortedHybridList.get(i).getClass().getSimpleName());
 					else
-						System.out.println("F: " + sortedHybridList.get(i).getInput().getStrId() + " + WRITE: " + sortedHybridList.get(i).getClass().getSimpleName());
+						System.out.println("F: " + sortedHybridList.get(i).getInput().getStrId() + " + WRITE: ");// + sortedHybridList.get(i).getClass().getSimpleName());
 				}
 			}
 			
@@ -454,7 +473,7 @@ public class InteractionGraph {
 		}
 		
 		node.setVisited(true);
-		System.out.println(">>> " + levelCounter + " <<<");
+///////		System.out.println(">>> " + levelCounter + " <<<");
 	}
 
 }

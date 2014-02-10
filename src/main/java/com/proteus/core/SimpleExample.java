@@ -77,8 +77,8 @@ public class SimpleExample {
 
 			outputFolder = Helper.addFolderSlashIfNeeded("clematis-output");
 
-			/*************************
 			JSExecutionTracer tracer = new JSExecutionTracer("function.trace");
+			/*************************
 			tracer.setOutputFolder(outputFolder + "ftrace");
 			// config.addPlugin(tracer);
 			tracer.preCrawling();
@@ -180,8 +180,8 @@ public class SimpleExample {
 				}
 			}
 			/*************************
-			tracer.postCrawling();
 			*************************/
+			tracer.postCrawling();
 
 		} catch (Exception e) {
 			e.printStackTrace();
