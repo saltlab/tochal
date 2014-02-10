@@ -45,15 +45,62 @@ public class InteractionGraph {
 	// TODO this method will be accessed from outside to traverse the graph and find info about dynamic paths
 	public void handleGraphAfterTermination() {
 		// Gather statistical/topological information about the structure of captured dom relations
-		gatherStatInfo();
+		HashMap<DomElement, ArrayList<InteractionEdge>> elementSortedAccessMap = getSortedAccessesForElements();//gatherStatInfo();
+		int numOfDomElementsWithUniqueWR = findUniqueFunctionAccess(elementSortedAccessMap); // TODO
+
 		
 		// If the size of inputs and outputs are greater or equal to one, we can say that there are read and write accesses made to that node
 		int numOfDomElementsOnDynamicPath = findDynamicDOMPaths();
-		System.out.println(">>>>>>>>>>>>>numOfDomElementsOnDynamicPath: " + numOfDomElementsOnDynamicPath);
+//		System.out.println(">>>>>>>>>>>>>numOfDomElementsOnDynamicPath: " + numOfDomElementsOnDynamicPath);
+		System.out.println(">>>>>>>>>>>>>numOfDomElementsWithUniqueWR: " + numOfDomElementsWithUniqueWR);
 		System.out.println(">>>>>>>>>>>>>numOfDomElementsAccess: " + domElementsById.size());
 		
 		findImpactPaths(); // TODO 	SHOULD BE CALLED AT STATIC PHASE, NOT HERE
 
+	}
+	
+	protected int findUniqueFunctionAccess(HashMap<DomElement, ArrayList<InteractionEdge>> elementSortedAccessMap) {
+		int numOfDomElementsWithUniqueWR = 0;
+		
+		for (DomElement el : elementSortedAccessMap.keySet()) {
+			ArrayList<InteractionEdge> accesses = elementSortedAccessMap.get(el);
+			ArrayList<Integer> readerFunctions = new ArrayList<Integer>(); // TDOO index of the function based on sorted accesses
+			ArrayList<Integer> writerFunctions = new ArrayList<Integer>(); // TDOO index of the function based on sorted accesses
+			boolean [][]directedFunctionAccesses = new boolean[accesses.size()][accesses.size()];
+			
+			for (int i = 0; i < accesses.size(); i ++) {
+				InteractionEdge access = accesses.get(i);
+				if (access instanceof ReadAccess)
+					readerFunctions.add(i);
+				else
+					writerFunctions.add(i);
+			}
+			
+			for (int i = 0; i < writerFunctions.size(); i ++)
+				for (int j = 0; j < readerFunctions.size(); j ++)
+					directedFunctionAccesses[i][j] = true;
+			
+			int numOfWRPairs = 0;
+			int numOfWRPairsDiffFunctions = 0;
+			
+			for (int i = 0; i < accesses.size(); i ++)
+				for (int j = 0; j < accesses.size(); j ++)
+					if (directedFunctionAccesses[i][j]) {
+						numOfWRPairs ++;
+						if (i != j)
+							numOfWRPairsDiffFunctions ++;
+					}
+			
+			if (numOfWRPairsDiffFunctions > 0)
+				numOfDomElementsWithUniqueWR ++;
+			
+			System.out.println("++++++++++++++++");
+			System.out.println("DOM Element: " + el.getStrId());
+			System.out.println("numOfWRPairs: " + numOfWRPairs);
+			System.out.println("numOfWRPairsDiffFunctions " + numOfWRPairsDiffFunctions);
+		}
+		
+		return numOfDomElementsWithUniqueWR;
 	}
 	
 	/**
@@ -83,7 +130,7 @@ public class InteractionGraph {
 		**************************/
 	}
 	
-	protected void gatherStatInfo() {
+	protected HashMap<DomElement, ArrayList<InteractionEdge>> getSortedAccessesForElements() {
 		HashMap<DomElement, ArrayList<InteractionEdge>> domElementsWithSortedAcesses = new HashMap<DomElement, ArrayList<InteractionEdge>>();
 		ArrayList<InteractionEdge> sortedHybridList;// = new ArrayList<InteractionEdge>();
 
@@ -140,6 +187,7 @@ public class InteractionGraph {
 				}
 */			}
 			
+/////////////////////			System.out.println("33333333333 " + el.getStrId() + " 33333333333 " + sortedHybridList.toString());
 			domElementsWithSortedAcesses.put(el, sortedHybridList); // TODO
 
 		}
@@ -160,7 +208,7 @@ public class InteractionGraph {
 			}
 			System.out.println();
 			
-			it.remove(); // TODO
+////////////////////////			it.remove(); // TODO
 		}
 
 
@@ -168,6 +216,7 @@ public class InteractionGraph {
 		System.out.println("+*+*+*+ numOfWriteOnlyDomElements: " + numOfWriteOnlyDomElements);
 		System.out.println("+*+*+*+ numOfReadWriteElements: " + numOfReadWriteElements);
 		
+		return domElementsWithSortedAcesses;
 	}
 	
 	protected int findDynamicDOMPaths() {
