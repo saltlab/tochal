@@ -66,7 +66,7 @@ public class InteractionGraph {
 			ArrayList<InteractionEdge> accesses = elementSortedAccessMap.get(el);
 			ArrayList<Integer> readerFunctions = new ArrayList<Integer>(); // TDOO index of the function based on sorted accesses
 			ArrayList<Integer> writerFunctions = new ArrayList<Integer>(); // TDOO index of the function based on sorted accesses
-			boolean [][]directedFunctionAccesses = new boolean[accesses.size()][accesses.size()];
+			int [][]directedFunctionAccesses = new int[accesses.size()][accesses.size()];
 			
 			for (int i = 0; i < accesses.size(); i ++) {
 				InteractionEdge access = accesses.get(i);
@@ -78,14 +78,15 @@ public class InteractionGraph {
 			
 			for (int i = 0; i < writerFunctions.size(); i ++)
 				for (int j = 0; j < readerFunctions.size(); j ++)
-					directedFunctionAccesses[i][j] = true;
+					directedFunctionAccesses[writerFunctions.get(i)][readerFunctions.get(j)] = 1;
+				//					directedFunctionAccesses[i][j] = 1;
 			
 			int numOfWRPairs = 0;
 			int numOfWRPairsDiffFunctions = 0;
 			
 			for (int i = 0; i < accesses.size(); i ++)
 				for (int j = 0; j < accesses.size(); j ++)
-					if (directedFunctionAccesses[i][j]) {
+					if (directedFunctionAccesses[i][j] == 1) {
 						numOfWRPairs ++;
 						if (i != j)
 							numOfWRPairsDiffFunctions ++;
@@ -98,9 +99,30 @@ public class InteractionGraph {
 			System.out.println("DOM Element: " + el.getStrId());
 			System.out.println("numOfWRPairs: " + numOfWRPairs);
 			System.out.println("numOfWRPairsDiffFunctions " + numOfWRPairsDiffFunctions);
+
+			for (int i = 0; i < accesses.size(); i ++) {
+				for (int j = 0; j < accesses.size(); j ++)
+					System.out.print(directedFunctionAccesses[i][j] + " ");
+				System.out.println();
+			}
+			
+			for (int i = 0; i < accesses.size(); i ++)
+				for (int j = 0; j < accesses.size(); j ++)
+					if (directedFunctionAccesses[i][j] == 1 && i != j) {
+						findPaths(accesses, directedFunctionAccesses, i, j, accesses.get(i).getStrId(), accesses.get(i).getFunctionNode().getStrId());
+					}
 		}
 		
 		return numOfDomElementsWithUniqueWR;
+	}
+	
+	protected void findPaths(ArrayList<InteractionEdge> accesses, int [][]directedFunctionAccesses, int i, int j, String pathAccesses, String pathFunctions) {
+		for (int a = 0; a < accesses.size(); a ++)
+			if (directedFunctionAccesses[j][a] == 1 && a != j)
+				findPaths(accesses, directedFunctionAccesses, j, a, pathAccesses + "," + accesses.get(j).getStrId(), pathFunctions + "," + accesses.get(j).getFunctionNode().getStrId());
+		directedFunctionAccesses[i][j] = 2;
+		System.out.println("================ pathAccesses:: " + pathAccesses);
+		System.out.println("================ pathFunctions:: " + pathFunctions);
 	}
 	
 	/**

@@ -1,5 +1,7 @@
 package com.proteus.core.interactiongraph.edge;
 
+import java.util.StringTokenizer;
+
 import com.proteus.core.interactiongraph.node.InteractionNode;
 
 public class InteractionEdge {
@@ -33,6 +35,24 @@ public class InteractionEdge {
 	public InteractionNode getOutput() {
 		return output;
 	}
+	
+	public InteractionNode getFunctionNode() { // TODO TODO TODO
+		if (this instanceof WriteAccess)
+			return this.input;
+		else if (this instanceof ReadAccess)
+			return this.output;
+		else
+			return null; // TODO TODO TODO
+	}
+	
+	public String getStrId() { // TODO TODO TODO
+		String classFullName = this.getClass().toString();
+		StringTokenizer tokenizer = new StringTokenizer(classFullName, ".");
+		String className = "";
+		while (tokenizer.hasMoreTokens())
+			className = tokenizer.nextToken();
+		return className;
+	} // TODO TODO TODO
 	
 	public void setOutput(InteractionNode output) {
 		this.output = output;
