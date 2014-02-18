@@ -59,6 +59,7 @@ public class SimpleExample {
 //	private static final String URL = "http://www.narrowdesign.com/"; // does not work!
 //	private static final String URL = "http://www.jointlondon.com/"; // does not work. does not instrument
 //	private static final String URL = "http://localhost:8080/canopy/"; // works a little with cheat. exception. no results
+//	private static final String URL = "http://localhost:8080/simplecart-js/test/"; // with cheat! ???
 //	private static final String URL = "http://localhost:8080/Listo/"; // with cheat!
 //	private static final String URL = "http://localhost:8080/SunCalc/"; // with cheat! but results : 0.
 //	private static final String URL = "http://localhost:8080/mojule/"; // with cheat!
