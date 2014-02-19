@@ -30,8 +30,6 @@ public class InteractionGraph {
 	
 	private ArrayList<InteractionEdge> edges; // TODO
 	
-	//private ArrayList<InteractionEdge> edges; // TODO is this needed? do we also need a list of all nodes?
-
 	// Private constructor for singleton
 	private InteractionGraph() {
 		functionsByName = new HashMap<String, Function>();
@@ -63,6 +61,7 @@ public class InteractionGraph {
 
 	}
 	
+	// TODO TODO TODO
 	protected int findUniqueFunctionAccess(HashMap<DomElement, ArrayList<InteractionEdge>> elementSortedAccessMap) {
 		int numOfDomElementsWithUniqueWR = 0;
 		
@@ -104,12 +103,13 @@ public class InteractionGraph {
 			System.out.println("numOfWRPairs: " + numOfWRPairs);
 			System.out.println("numOfWRPairsDiffFunctions " + numOfWRPairsDiffFunctions);
 ***********/
+			/*
 			for (int i = 0; i < accesses.size(); i ++) {
 				for (int j = 0; j < accesses.size(); j ++)
 					System.out.print(directedFunctionAccesses[i][j] + " ");
 				System.out.println();
 			}
-			
+			*/
 			for (int i = 0; i < accesses.size(); i ++)
 				for (int j = 0; j < accesses.size(); j ++)
 					if (directedFunctionAccesses[i][j] == 1 && i != j) {
@@ -125,9 +125,11 @@ public class InteractionGraph {
 			if (directedFunctionAccesses[j][a] == 1 && a != j)
 				findPaths(accesses, directedFunctionAccesses, j, a, pathAccesses + "," + accesses.get(j).getStrId(), pathFunctions + "," + accesses.get(j).getFunctionNode().getStrId(), numOfAccesses + 1);
 		directedFunctionAccesses[i][j] = 2;
+/*
 		System.out.println("================ numOfAccesses:: " + numOfAccesses);
 		System.out.println("================ pathAccesses:: " + pathAccesses);
 		System.out.println("================ pathFunctions:: " + pathFunctions);
+		*/
 	}
 	
 	/**
@@ -400,6 +402,23 @@ public class InteractionGraph {
 					redundantRelation = true;
 				}
 			}
+			// TODO TODO TODO
+			// check redundancy in element's inputs
+			for (int k = 0; k < domElement.getInput().size(); k ++) {
+				if (domAccessTypeObjects.get(i).getClass().equals(domElement.getInput().get(k).getClass()) &&
+						accessFunctionObjects.get(i).getStrId().equals(domElement.getInput().get(k).getInput().getStrId())) {
+					redundantRelation = true;
+				}
+			}
+			// check redundancy in element's outputs
+			// TODO TODO TODO
+			for (int l = 0; l < domElement.getOutput().size(); l ++) {
+				if (domAccessTypeObjects.get(i).getClass().equals(domElement.getOutput().get(l).getClass()) &&
+						accessFunctionObjects.get(i).getStrId().equals(domElement.getOutput().get(l).getOutput().getStrId())) {
+					redundantRelation = true;
+				}
+			}
+
 			if (!redundantRelation) {
 				accessTypeObjectsTrimmed.add(domAccessTypeObjects.get(i));
 				accessFunctionObjectsTrimmed.add(accessFunctionObjects.get(i));
@@ -454,19 +473,16 @@ public class InteractionGraph {
 				System.out.println("input from dom element: " + domElement.getStrId());
 				System.out.println("all dom el outputs: " + domElement.getOutput().toString());
 */			}
-			else {
-				System.err.println("###########################");
-			}
 		}
 
-		edges.addAll(accessTypeObjectsTrimmed); // TODO TODO TODO
-		
+		edges.addAll(accessTypeObjectsTrimmed); // TODO
+/*		
 		System.out.println("########################");
 		for (InteractionEdge e : edges) {
-			System.out.println("<" + e.getStrId() + ">" + " from " + "<" + e.getInput() + "> to <" + e.getOutput() + ">");
+			System.out.println("<" + e.getStrId() + ">" + " from " + "<" + e.getInput().getStrId() + "> to <" + e.getOutput().getStrId() + ">");
 		}
 		System.out.println("########################");
-
+*/
 	}
 	
 	/**
@@ -579,8 +595,16 @@ public class InteractionGraph {
 			// Reset visited flags after traversal for each function
 			resetVisitedFlags();
 		}
-		/*
-		System.out.println("((((((((((((()))))))))))))");
+		
+		System.out.println("numOfEdges: " + edges.size());
+		System.out.println("numOfElements: " + domElementsById.size());
+		System.out.println("numOfFunctions: " + functionsByName.size());
+
+		for (InteractionEdge e : edges)
+			System.out.println(e.getStrId() + " from " + e.getInput().getStrId() + " to " + e.getOutput().getStrId());
+		
+		
+/*		System.out.println("((((((((((((()))))))))))))");
 		System.out.println(allPaths.size());
 		StringTokenizer tokenizer;
 		int functionCounter = 0;
@@ -600,13 +624,14 @@ public class InteractionGraph {
 				System.out.println("has " + nodeCounter + " nodes");
 			}
 			System.out.println("--------------------");
-		}*/
+		}
+		*/
 		/*
 		for (String s : allPaths) {
 			System.out.println(allPaths);
 		}
 		*/
-		System.out.println("((((((((((((()))))))))))))");
+//		System.out.println("((((((((((((()))))))))))))");
 	}
 	
 	protected String dfsFindImpactPath(InteractionNode node, String paths) {
