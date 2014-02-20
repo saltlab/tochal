@@ -57,8 +57,16 @@ public class InteractionGraph {
 		System.out.println(">>>>>>>>>>>>>numOfDomElementsWithUniqueWR: " + numOfDomElementsWithUniqueWR);
 		System.out.println(">>>>>>>>>>>>>numOfDomElementsAccess: " + domElementsById.size());
 		
-		findImpactPaths(); // TODO 	SHOULD BE CALLED AT STATIC PHASE, NOT HERE
+		// TODO TODO TODO TODO
+		// TODO TODO TODO TODO
+		// TODO TODO TODO TODO
+		// TODO TODO TODO TODO
+		// ###################
+		// ###################
+		// ###################
+///////////////////		findImpactPaths(); // TODO 	SHOULD BE CALLED AT STATIC PHASE, NOT HERE
 
+		findPathsBetweenFunctionPairs();
 	}
 	
 	// TODO TODO TODO
@@ -97,19 +105,12 @@ public class InteractionGraph {
 			
 			if (numOfWRPairsDiffFunctions > 0)
 				numOfDomElementsWithUniqueWR ++;
-/*********			
+/*			
 			System.out.println("++++++++++++++++");
 			System.out.println("DOM Element: " + el.getStrId());
 			System.out.println("numOfWRPairs: " + numOfWRPairs);
 			System.out.println("numOfWRPairsDiffFunctions " + numOfWRPairsDiffFunctions);
-***********/
-			/*
-			for (int i = 0; i < accesses.size(); i ++) {
-				for (int j = 0; j < accesses.size(); j ++)
-					System.out.print(directedFunctionAccesses[i][j] + " ");
-				System.out.println();
-			}
-			*/
+*/
 			for (int i = 0; i < accesses.size(); i ++)
 				for (int j = 0; j < accesses.size(); j ++)
 					if (directedFunctionAccesses[i][j] == 1 && i != j) {
@@ -125,11 +126,6 @@ public class InteractionGraph {
 			if (directedFunctionAccesses[j][a] == 1 && a != j)
 				findPaths(accesses, directedFunctionAccesses, j, a, pathAccesses + "," + accesses.get(j).getStrId(), pathFunctions + "," + accesses.get(j).getFunctionNode().getStrId(), numOfAccesses + 1);
 		directedFunctionAccesses[i][j] = 2;
-/*
-		System.out.println("================ numOfAccesses:: " + numOfAccesses);
-		System.out.println("================ pathAccesses:: " + pathAccesses);
-		System.out.println("================ pathFunctions:: " + pathFunctions);
-		*/
 	}
 	
 	/**
@@ -206,17 +202,8 @@ public class InteractionGraph {
 						break;
 					}
 				}
-/*				System.out.println("------------------DOM Element id: " + el.getStrId());
-				for (int i = 0; i < sortedHybridList.size(); i ++) {
-					InteractionEdge e = sortedHybridList.get(i);
-					if (e instanceof ReadAccess)
-						System.out.println("F: " + sortedHybridList.get(i).getOutput().getStrId() + " + READ: ");//) + sortedHybridList.get(i).getClass().getSimpleName());
-					else
-						System.out.println("F: " + sortedHybridList.get(i).getInput().getStrId() + " + WRITE: ");// + sortedHybridList.get(i).getClass().getSimpleName());
-				}
-*/			}
+			}
 			
-/////////////////////			System.out.println("33333333333 " + el.getStrId() + " 33333333333 " + sortedHybridList.toString());
 			domElementsWithSortedAcesses.put(el, sortedHybridList); // TODO
 
 		}
@@ -237,7 +224,7 @@ public class InteractionGraph {
 			}
 			System.out.println();
 			
-////////////////////////			it.remove(); // TODO
+//			it.remove();
 		}
 
 
@@ -403,7 +390,6 @@ public class InteractionGraph {
 				}
 			}
 			// TODO TODO TODO
-			// check redundancy in element's inputs
 			for (int k = 0; k < domElement.getInput().size(); k ++) {
 				if (domAccessTypeObjects.get(i).getClass().equals(domElement.getInput().get(k).getClass()) &&
 						accessFunctionObjects.get(i).getStrId().equals(domElement.getInput().get(k).getInput().getStrId())) {
@@ -411,7 +397,6 @@ public class InteractionGraph {
 				}
 			}
 			// check redundancy in element's outputs
-			// TODO TODO TODO
 			for (int l = 0; l < domElement.getOutput().size(); l ++) {
 				if (domAccessTypeObjects.get(i).getClass().equals(domElement.getOutput().get(l).getClass()) &&
 						accessFunctionObjects.get(i).getStrId().equals(domElement.getOutput().get(l).getOutput().getStrId())) {
@@ -425,64 +410,31 @@ public class InteractionGraph {
 			}
 		}
 		
-/*		System.out.println("============");
-		System.out.println("accessTypeObjectsTrimmed.size(): " + accessTypeObjectsTrimmed.size());
-		System.out.println("dom relations: " + domRelations);
-		System.out.println("trimmed accessTypeObjectsTrimmed: " + accessTypeObjectsTrimmed.toString());
-		System.out.println("trimmed accessFunctionObjectsTrimmed: " + accessFunctionObjectsTrimmed.toString());
-		System.out.println("============");
-*/		
 		for (int i = 0; i < accessTypeObjectsTrimmed.size(); i ++) {
 			InteractionEdge da = accessTypeObjectsTrimmed.get(i);
 			Function f = accessFunctionObjectsTrimmed.get(i);
 			if (functionsByName.containsKey(f.getStrId())) {
 				f = functionsByName.get(f.getStrId());
-//				Iterator itr = functionsByName.get(f.getName()).iterator();
-//				f = (Function) itr.next();
 			}
 			else {
 				functionsByName.put(f.getStrId(), f);
 			}
-//			da.setFunction(f);
-//			f.getDomAccesses().add(da);
-			
-/*			System.out.println("------------------------------------------------------------");
-			System.out.println("domAccess: " + da.getClass());
-*/			
+
 			if (da instanceof WriteAccess) {
 				da.setInput(f);
 				da.setOutput(domElement);
 				domElement.addInput(da);
-				f.addOutput(da);
-				
-/*				System.out.println("write access");
-				System.out.println("input from function: " + f.getStrId());
-				System.out.println("all f outputs: " + f.getOutput().toString());
-				System.out.println("output to dom element: " + domElement.getStrId());
-				System.out.println("all dom el inputs: " + domElement.getInput().toString());
-*/			}
+				f.addOutput(da);				
+			}
 			else if (da instanceof ReadAccess) {
 				da.setInput(domElement);
 				da.setOutput(f);
 				domElement.addOutput(da);
 				f.addInput(da);
-				
-/*				System.out.println("read access");
-				System.out.println("output to function: " + f.getStrId());
-				System.out.println("all f inputs: " + f.getInput().toString());
-				System.out.println("input from dom element: " + domElement.getStrId());
-				System.out.println("all dom el outputs: " + domElement.getOutput().toString());
-*/			}
+			}
 		}
 
 		edges.addAll(accessTypeObjectsTrimmed); // TODO
-/*		
-		System.out.println("########################");
-		for (InteractionEdge e : edges) {
-			System.out.println("<" + e.getStrId() + ">" + " from " + "<" + e.getInput().getStrId() + "> to <" + e.getOutput().getStrId() + ">");
-		}
-		System.out.println("########################");
-*/
 	}
 	
 	/**
@@ -599,19 +551,19 @@ public class InteractionGraph {
 		System.out.println("numOfEdges: " + edges.size());
 		System.out.println("numOfElements: " + domElementsById.size());
 		System.out.println("numOfFunctions: " + functionsByName.size());
-
+/*
 		for (InteractionEdge e : edges)
 			System.out.println(e.getStrId() + " from " + e.getInput().getStrId() + " to " + e.getOutput().getStrId());
+*/		
 		
-		
-/*		System.out.println("((((((((((((()))))))))))))");
+		System.out.println("((((((((((((()))))))))))))");
 		System.out.println(allPaths.size());
 		StringTokenizer tokenizer;
 		int functionCounter = 0;
 		for (String s : allPaths) {
 			System.out.println("function #: " + functionCounter ++);
 			int pathCounter = 0;
-			tokenizer = new StringTokenizer(s, ":");
+			tokenizer = new StringTokenizer(s, "/");
 			while (tokenizer.hasMoreTokens()) {
 				System.out.println("path #: " + pathCounter ++);
 				String path = tokenizer.nextToken();
@@ -623,9 +575,11 @@ public class InteractionGraph {
 				}
 				System.out.println("has " + nodeCounter + " nodes");
 			}
+			System.out.println(s);
 			System.out.println("--------------------");
+			break; // TODO
 		}
-		*/
+		
 		/*
 		for (String s : allPaths) {
 			System.out.println(allPaths);
@@ -636,7 +590,7 @@ public class InteractionGraph {
 	
 	protected String dfsFindImpactPath(InteractionNode node, String paths) {
 		if (node == null || node.isVisited()) // necessary?
-			return paths;
+			return "";//paths;
 		
 		String newPaths = paths;
 		
@@ -645,7 +599,7 @@ public class InteractionGraph {
 				InteractionNode next = e.getOutput();
 				if (next != null && !next.isVisited()) {
 					e.setVisited(true);
-					newPaths = newPaths + ":" + dfsFindImpactPath(next, paths + "," + next.getStrId());
+					newPaths = newPaths + "/" + dfsFindImpactPath(next, paths + "," + next.getStrId());
 				}
 			}
 		}
@@ -656,12 +610,101 @@ public class InteractionGraph {
 	}
 	
 	protected void resetVisitedFlags() {
+		// TODO
 		for (InteractionEdge e : edges)
 			e.setVisited(false);
 		for (Function f : functionsByName.values())
 			f.setVisited(false);
 		for (DomElement el : domElementsById.values())
 			el.setVisited(false);
+	}
+	
+	protected void findPathsBetweenFunctionPairs() {
+		for (Function f : functionsByName.values()) {
+			foo(f, "");
+			resetVisitedFlags();
+		}
+		/*
+		for (Function n1 : functionsByName.values()) {
+			for (Function n2 : functionsByName.values()) {
+				if (!n1.getStrId().equals(n2.getStrId())) {
+				System.out.println(n1.getStrId() + " ------------ " + n2.getStrId());
+				ArrayList<Integer> counters = new ArrayList<Integer>();
+				ArrayList<String> paths = new ArrayList<String>();
+				findMaxPath(n1, n2, 0, "", counters, paths);
+				System.out.println("--=========-------------========--");
+				String maxPath = "";
+				int maxCounter = 0;
+				for (int i = 0; i < counters.size(); i ++) {
+					if (counters.get(i) > maxCounter) {
+						maxCounter = counters.get(i);
+						maxPath = paths.get(i);
+					}
+				}
+				System.out.println("max path between <" + n1.getStrId() + "> and <" + n2.getStrId() + "> is: " + maxPath);
+				}
+			}
+		}
+		*/
+		
+	}
+	
+	protected void foo(InteractionNode n1, String str) {
+		if (n1.isVisited()) {
+			System.out.println("* " + str);
+			return;
+		}
+		n1.setVisited(true);
+		for (InteractionEdge e : n1.getOutput()) {
+			InteractionNode next = e.getOutput();
+//			if (!next.isVisited()) {
+				foo(next, str + "," + next.getStrId());
+//			}
+//			else
+//				System.out.println("* " + str);
+		}
+//		n1.setVisited(true);
+		
+/*		if (n1 == null || n1.isVisited()) {
+			System.out.println("+++ " + str);
+			return;
+		}
+		for (InteractionEdge e : n1.getOutput()) {
+			InteractionNode next = e.getOutput();
+			foo(next, str + next.getStrId());
+		}
+		n1.setVisited(true);
+		*/
+	}
+	
+	protected void findMaxPath(InteractionNode n1, InteractionNode n2, int counter, String path, ArrayList<Integer> allCounters, ArrayList<String> allPaths) {
+		/*
+		if (n1 == null || n1.isVisited())
+			return; // TODO
+		System.out.println("1 " + n1.getStrId());
+		if (n1.getStrId().equals(n2.getStrId())) {
+			allCounters.add(counter);
+			allPaths.add(path);
+			return;
+		}
+		for (InteractionEdge e : n1.getOutput()) {
+			InteractionNode next = e.getOutput();
+			System.out.println("2 " + next.getStrId());
+			if (next.getStrId().equals(n2.getStrId())) {
+				System.out.println("3 " + n2.getStrId());
+				allCounters.add(++ counter);
+				allPaths.add(path + next.getStrId());
+//				return;
+			}
+			else {
+				if (!next.isVisited()) {
+					System.out.println("4 " + next.getStrId());
+					findMaxPath(next, n2, ++ counter, path + next.getStrId(), allCounters, allPaths);
+					next.setVisited(true);
+				}
+			}
+		}
+		*/
 	}
 
 }
