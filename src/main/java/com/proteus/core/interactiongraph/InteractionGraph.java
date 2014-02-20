@@ -57,14 +57,7 @@ public class InteractionGraph {
 		System.out.println(">>>>>>>>>>>>>numOfDomElementsWithUniqueWR: " + numOfDomElementsWithUniqueWR);
 		System.out.println(">>>>>>>>>>>>>numOfDomElementsAccess: " + domElementsById.size());
 		
-		// TODO TODO TODO TODO
-		// TODO TODO TODO TODO
-		// TODO TODO TODO TODO
-		// TODO TODO TODO TODO
-		// ###################
-		// ###################
-		// ###################
-///////////////////		findImpactPaths(); // TODO 	SHOULD BE CALLED AT STATIC PHASE, NOT HERE
+/////////		findImpactPaths(); // TODO 	SHOULD BE CALLED AT STATIC PHASE, NOT HERE
 
 		findPathsBetweenFunctionPairs();
 	}
@@ -621,7 +614,11 @@ public class InteractionGraph {
 	
 	protected void findPathsBetweenFunctionPairs() {
 		for (Function f : functionsByName.values()) {
-			foo(f, "");
+			ArrayList<String> paths = new ArrayList<String>();
+			findAllPaths(f, f.getStrId(), paths);
+			for (String st : paths)
+				System.out.println(st);
+			System.out.println("-----------------");
 			resetVisitedFlags();
 		}
 		/*
@@ -649,16 +646,17 @@ public class InteractionGraph {
 		
 	}
 	
-	protected void foo(InteractionNode n1, String str) {
+	protected void findAllPaths(InteractionNode n1, String str, ArrayList<String> paths) {
 		if (n1.isVisited()) {
-			System.out.println("* " + str);
+//			System.out.println("* " + str);
+			paths.add(str);
 			return;
 		}
 		n1.setVisited(true);
 		for (InteractionEdge e : n1.getOutput()) {
 			InteractionNode next = e.getOutput();
 //			if (!next.isVisited()) {
-				foo(next, str + "," + next.getStrId());
+				findAllPaths(next, str + "," + next.getStrId(), paths);
 //			}
 //			else
 //				System.out.println("* " + str);
