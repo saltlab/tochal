@@ -46,6 +46,10 @@ public class InteractionGraph {
 	
 	// TODO this method will be accessed from outside to traverse the graph and find info about dynamic paths
 	public void handleGraphAfterTermination() {
+		
+		System.out.println("1) " + domElementsById.size());
+		System.out.println("2) " + functionsByName.size());
+		
 		// Gather statistical/topological information about the structure of captured dom relations
 		HashMap<DomElement, ArrayList<InteractionEdge>> elementSortedAccessMap = getSortedAccessesForElements();//gatherStatInfo();
 		int numOfDomElementsWithUniqueWR = findUniqueFunctionAccess(elementSortedAccessMap); // TODO
@@ -60,6 +64,43 @@ public class InteractionGraph {
 /////////		findImpactPaths(); // TODO 	SHOULD BE CALLED AT STATIC PHASE, NOT HERE
 
 		findPathsBetweenFunctionPairs();
+		
+		findTopologicalGraphCharacteristics();
+	}
+	
+	// TODO TODO TODO TODO TODO
+	protected void findTopologicalGraphCharacteristics() {
+		System.out.println("DOM element input sizes");
+		int avgDomInputSize = 0;
+		for (DomElement el : domElementsById.values()) {
+			System.out.print(el.getInput().size() + ", ");
+			avgDomInputSize += el.getInput().size();
+		}
+		System.out.println("AVG: " + (double)avgDomInputSize / domElementsById.values().size());
+		
+		System.out.println("DOM element output sizes");
+		int avgDomOutputSize = 0;
+		for (DomElement el : domElementsById.values()) {
+			System.out.print(el.getOutput().size() + ", ");
+			avgDomOutputSize += el.getOutput().size();
+		}
+		System.out.println("AVG: " + (double)avgDomOutputSize / domElementsById.values().size());
+		
+		System.out.println("Function input sizes");
+		int avgFuncInputSize = 0;
+		for (Function f : functionsByName.values()) {
+			System.out.print(f.getInput().size() + ", ");
+			avgFuncInputSize += f.getInput().size();
+		}
+		System.out.println("AVG: " + (double)avgFuncInputSize / functionsByName.values().size());
+		
+		System.out.println("Function output sizes");
+		int avgFuncOutputSize = 0;
+		for (Function f : functionsByName.values()) {
+			System.out.print(f.getOutput().size() + ", ");
+			avgFuncOutputSize += f.getOutput().size();
+		}
+		System.out.println("AVG: " + (double)avgFuncOutputSize / functionsByName.values().size());
 	}
 	
 	// TODO TODO TODO
@@ -128,6 +169,11 @@ public class InteractionGraph {
 	 */
 	public void handleDomRelations(String domRelations) {
 		extractDomRelations(domRelations);
+		
+		
+		for (InteractionEdge e : edges)
+			System.out.println(e.getStrId());
+
 		
 		// Answering the motivating challenge, we want to see if this is a real problem.
 		// We want to see if in fact, there are nodes that are written to, and read from
@@ -206,7 +252,7 @@ public class InteractionGraph {
 			Map.Entry<DomElement, ArrayList<InteractionEdge>> pairs = (Map.Entry<DomElement, ArrayList<InteractionEdge>>)it.next();
 			DomElement e = pairs.getKey();
 			ArrayList<InteractionEdge> sortedAccesses = pairs.getValue();
-			
+			/****
 			System.out.println("========================== DOM Element: " + e.getStrId());
 			for (int i = 0; i < sortedAccesses.size(); i ++) {
 				InteractionEdge access = sortedAccesses.get(i);
@@ -216,7 +262,7 @@ public class InteractionGraph {
 					System.out.print("<R, " + access.getOutput().getStrId() + "> ");
 			}
 			System.out.println();
-			
+			****/
 //			it.remove();
 		}
 
@@ -616,8 +662,24 @@ public class InteractionGraph {
 		for (Function f : functionsByName.values()) {
 			ArrayList<String> paths = new ArrayList<String>();
 			findAllPaths(f, f.getStrId(), paths);
-			for (String st : paths)
-				System.out.println(st);
+			
+			int maxPathLength = 0;
+			String maxPath = "";
+			for (String path : paths) {
+//				System.out.println(path);
+				StringTokenizer tkn = new StringTokenizer(path, ",");
+				int nodeCounter = 0;
+				while (tkn.hasMoreTokens()) {
+					nodeCounter ++;
+					tkn.nextToken();
+				}
+				if (nodeCounter > maxPathLength) {
+					maxPathLength = nodeCounter;
+					maxPath = path;
+				}
+//				System.out.println("has " + nodeCounter + " nodes");
+			}
+			System.out.println(maxPathLength + ") max path: " + maxPath);
 			System.out.println("-----------------");
 			resetVisitedFlags();
 		}

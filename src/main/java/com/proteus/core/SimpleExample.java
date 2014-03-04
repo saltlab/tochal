@@ -66,6 +66,32 @@ public class SimpleExample {
 //	private static final String URL = "http://localhost:8080/whiteboard/"; // with cheat. doesn't work after a while. error in app? 
 //	private static final String URL = "http://localhost:8080/SonaReader/"; //  
 	// TODO CHECK UFO
+//	private static final String URL = "http://arcade.christianmontoya.com/tunnel/";
+//	private static final String URL = "http://localhost:8080/tunnel/";
+//	private static final String URL = "http://www.cccontheweb.org/peggame.htm";	
+//	private static final String URL = "http://localhost:8080/peggame/peggame.htm";
+//	private static final String URL = "http://www.themaninblue.com/experiment/BunnyHunt/";
+//	private static final String URL = "http://localhost:8080/BunnyHunt/";
+//	private static final String URL = "http://files.wymeditor.org/wymeditor-0.5/examples/01-basic.html"; //  
+//	private static final String URL = "http://www.narrowdesign.com/";
+//	private static final String URL = "http://localhost:8080/jointlondon/";
+//	private static final String URL = "http://localhost:8080/canopy/";
+//	private static final String URL = "http://localhost:8080/wymeditor-0.5/examples/01-basic.html";
+//	private static final String URL = "http://localhost:8080/607/";
+	
+// GitHub Trending
+//	private static final String URL = "http://localhost:8080/grafana-1.4.0/index.html"; //  
+//	private static final String URL = "http://raphaelcruzeiro.github.io/jquery-notebook/";
+//	private static final String URL = "http://localhost:8080/notebook-demo/";
+//	private static final String URL = "http://holloway.github.io/doctored/";
+//	private static final String URL = "http://localhost:8080/doctored/";
+	
+	
+// Alexa Top Sites
+//	private static final String URL = "http://www.google.com"; // does not attach
+//	private static final String URL = "http://www.facebook.com";
+//	private static final String URL = "http://www.youtube.com";
+//	private static final String URL = "http://www.yahoo.com";
 	
 
 //	private static final String URL = "http://localhost:8080/study_application/index.html";
