@@ -19,6 +19,7 @@ import com.proteus.core.interactiongraph.node.DomElement;
 import com.proteus.core.interactiongraph.node.Function;
 import com.proteus.core.interactiongraph.node.InteractionNode;
 import com.proteus.core.interactiongraph.node.XmlHttpRequest;
+import com.proteus.stats.Statistics;
 
 public class InteractionGraph {
 	// InteractionGraph is a singleton
@@ -71,36 +72,61 @@ public class InteractionGraph {
 	// TODO TODO TODO TODO TODO
 	protected void findTopologicalGraphCharacteristics() {
 		System.out.println("DOM element input sizes");
-		int avgDomInputSize = 0;
+		double []domInputSizes = new double[domElementsById.values().size()];
+		int counter = 0;
 		for (DomElement el : domElementsById.values()) {
 			System.out.print(el.getInput().size() + ", ");
-			avgDomInputSize += el.getInput().size();
+			domInputSizes[counter ++] = el.getInput().size();
 		}
-		System.out.println("AVG: " + (double)avgDomInputSize / domElementsById.values().size());
+		System.out.println();
+		System.out.println("SIZE: " + domElementsById.size());
+		System.out.println("AVG: " + Statistics.getMean(domInputSizes));
+		System.out.println("MED: " + Statistics.getMedian(domInputSizes));
+		System.out.println("VAR: " + Statistics.getVariance(domInputSizes));
+		System.out.println("STD-DEV: " + Statistics.getStdDev(domInputSizes));
 		
 		System.out.println("DOM element output sizes");
-		int avgDomOutputSize = 0;
+		counter = 0;
+		double []domOutputSizes = new double[domElementsById.values().size()];
 		for (DomElement el : domElementsById.values()) {
 			System.out.print(el.getOutput().size() + ", ");
-			avgDomOutputSize += el.getOutput().size();
+			domOutputSizes[counter ++] = el.getOutput().size();
 		}
-		System.out.println("AVG: " + (double)avgDomOutputSize / domElementsById.values().size());
-		
+		System.out.println();
+		System.out.println("SIZE: " + domElementsById.size());
+		System.out.println("AVG: " + Statistics.getMean(domOutputSizes));
+		System.out.println("MED: " + Statistics.getMedian(domOutputSizes));
+		System.out.println("VAR: " + Statistics.getVariance(domOutputSizes));
+		System.out.println("STD-DEV: " + Statistics.getStdDev(domOutputSizes));
+
 		System.out.println("Function input sizes");
-		int avgFuncInputSize = 0;
+		counter = 0;
+		double []functionInputSizes = new double[functionsByName.values().size()];
 		for (Function f : functionsByName.values()) {
 			System.out.print(f.getInput().size() + ", ");
-			avgFuncInputSize += f.getInput().size();
+			functionInputSizes[counter ++] = f.getInput().size();
 		}
-		System.out.println("AVG: " + (double)avgFuncInputSize / functionsByName.values().size());
+		System.out.println();
+		System.out.println("SIZE: " + functionsByName.size());
+		System.out.println("AVG: " + Statistics.getMean(functionInputSizes));
+		System.out.println("MED: " + Statistics.getMedian(functionInputSizes));
+		System.out.println("VAR: " + Statistics.getVariance(functionInputSizes));
+		System.out.println("STD-DEV: " + Statistics.getStdDev(functionInputSizes));
 		
 		System.out.println("Function output sizes");
-		int avgFuncOutputSize = 0;
+		counter = 0;
+		double []functionOutputSizes = new double[functionsByName.values().size()];
 		for (Function f : functionsByName.values()) {
 			System.out.print(f.getOutput().size() + ", ");
-			avgFuncOutputSize += f.getOutput().size();
+			functionOutputSizes[counter ++] = f.getOutput().size();
 		}
-		System.out.println("AVG: " + (double)avgFuncOutputSize / functionsByName.values().size());
+		System.out.println();
+		System.out.println("SIZE: " + functionsByName.size());
+		System.out.println("AVG: " + Statistics.getMean(functionOutputSizes));
+		System.out.println("MED: " + Statistics.getMedian(functionOutputSizes));
+		System.out.println("VAR: " + Statistics.getVariance(functionOutputSizes));
+		System.out.println("STD-DEV: " + Statistics.getStdDev(functionOutputSizes));
+
 	}
 	
 	// TODO TODO TODO
