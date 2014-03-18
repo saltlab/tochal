@@ -127,7 +127,7 @@ public class SimpleExample {
 			
 			s.setFileNameToAttach("/domAccessWrapper.js");
 			s.setFileNameToAttach("/domAccessWrapper_send.js");
-//			s.setFileNameToAttach("/xhrAccessWrapper.js");
+			s.setFileNameToAttach("/xhrAccessWrapper.js");
 
 
 			// Interface for Ast traversal

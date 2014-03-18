@@ -196,10 +196,10 @@ public class InteractionGraph {
 	public void handleDomRelations(String domRelations) {
 		extractDomRelations(domRelations);
 		
-		
+		/***
 		for (InteractionEdge e : edges)
 			System.out.println(e.getStrId());
-
+		***/
 		
 		// Answering the motivating challenge, we want to see if this is a real problem.
 		// We want to see if in fact, there are nodes that are written to, and read from

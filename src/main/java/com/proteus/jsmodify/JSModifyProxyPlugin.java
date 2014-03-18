@@ -329,7 +329,6 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 			return response;
 		}		
 
-		// TODO ************************
 		if (request.getURL().toString().contains("?XHRACCESSLOG")) {
 			String rawResponse = new String(request.getContent());
 			
