@@ -23,6 +23,7 @@ import org.owasp.webscarab.plugin.proxy.Proxy;
 
 import com.crawljax.util.Helper;
 import com.proteus.core.configuration.ProxyConfiguration;
+import com.proteus.core.staticanalysis.CallGraphAnalyzer;
 import com.proteus.instrument.FunctionTrace;
 import com.proteus.jsmodify.JSExecutionTracer;
 import com.proteus.jsmodify.JSModifyProxyPlugin;
@@ -124,11 +125,11 @@ public class SimpleExample {
 			// Add necessary files from resources
 
 //			s.setFileNameToAttach("/temp.js");
-			
+/*			
 			s.setFileNameToAttach("/domAccessWrapper.js");
 			s.setFileNameToAttach("/domAccessWrapper_send.js");
 			s.setFileNameToAttach("/xhrAccessWrapper.js");
-
+*/
 
 			// Interface for Ast traversal
 			JSModifyProxyPlugin p = new JSModifyProxyPlugin(s);
@@ -207,7 +208,8 @@ public class SimpleExample {
 				}
 			}
 
-			tracer.postCrawling();
+			CallGraphAnalyzer callGraphAnalyzer = new CallGraphAnalyzer();
+			tracer.postCrawling(callGraphAnalyzer);
 
 		} catch (Exception e) {
 			e.printStackTrace();

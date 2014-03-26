@@ -18,7 +18,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.json.JSONArray;
@@ -28,6 +30,11 @@ import org.json.JSONObject;
 import com.crawljax.util.Helper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.proteus.core.interactiongraph.InteractionGraph;
+import com.proteus.core.staticanalysis.CallGraphAnalyzer;
+
+import com.ibm.wala.ipa.callgraph.CGNode;
+import com.ibm.wala.util.graph.Graph;
+
 
 /**
  * Reads an instrumentation array from the webbrowser and saves the contents in a JSON trace file.
@@ -145,13 +152,29 @@ public class JSExecutionTracer {
 		return result;
 	}
 
-	public static void postCrawling() {
+	public static void postCrawling(CallGraphAnalyzer callGraphAnalyzer) {
 		
 		// TODO 
 		
 		InteractionGraph.getInstance().handleGraphAfterTermination();
 
-
+		System.out.println("********************************");
+		System.out.println("********************************");
+		Set<String> keys = JSModifyProxyPlugin.JSCodeMultiMap.keySet(); 
+		for (String key : keys) {
+			System.out.println("key: " + key);
+			System.out.println(JSModifyProxyPlugin.JSCodeMultiMap.get(key).size());
+			
+			Iterator<String> itr = JSModifyProxyPlugin.JSCodeMultiMap.get(key).iterator();
+			while (itr.hasNext()) {
+				Graph<CGNode> callGraph = callGraphAnalyzer.getCallGraph(itr.next(), key);
+				System.out.println("<><><><> " + callGraph.getNumberOfNodes());
+			}
+			
+			System.out.println("------------");
+//			System.out.println("values: " + JSModifyProxyPlugin.JSCodeMultiMap.get(key));
+		}
+		
 		/*
 		try {
 			// Add closing bracket

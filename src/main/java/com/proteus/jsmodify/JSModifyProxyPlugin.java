@@ -1,6 +1,7 @@
 package com.proteus.jsmodify;
 
 import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.crawljax.util.Helper;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.proteus.core.interactiongraph.InteractionGraph;
 
 /**
@@ -37,6 +40,8 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 
 	private static String outputFolder = "";
 	private static String jsFilename = "";
+	
+	public static Multimap<String, String> JSCodeMultiMap = ArrayListMultimap.create(); // TODO TODO TODO
 
 	/**
 	 * Construct without patterns.
@@ -51,6 +56,7 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 		modifier = modify;
 
 		outputFolder = Helper.addFolderSlashIfNeeded("clematis-output") + "js_snapshot";
+		
 	}
 
 	/**
@@ -80,6 +86,11 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 
 		excludeFilenamePatterns.add(".*toolbar.js?.*");
 		excludeFilenamePatterns.add(".*jquery*.js?.*");
+		
+		
+		excludeFilenamePatterns.add(".*domAccessWrapper.js");
+		excludeFilenamePatterns.add(".*domAccessWrapper_send.js");
+		excludeFilenamePatterns.add(".*xhrAccessWrapper.js");
 
 		// excludeFilenamePatterns.add(".*http://localhost:8888/phormer331/index.phpscript1?.*"); //
 		// todo ???????
@@ -117,7 +128,7 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 	 *            Name of the current scope (filename mostly)
 	 * @return The modified JavaScript
 	 */
-	private synchronized String modifyJS(String input, String scopename) {
+	private synchronized String modifyJS(String input, String scopename, String originalUrl) {
 
 		System.out.println("<<<<");
 		System.out.println("Scope: " + scopename);
@@ -125,17 +136,35 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 		/***************/
 		scopeNameForExternalUse = scopename; // todo todo todo todo
 		/***************/
-
+		
 		if (!shouldModify(scopename)) {
 			System.out.println("^ should not modify");
 			System.out.println(">>>>");
 			return input;
 		}
+
+		if (!shouldModify(originalUrl)) {
+			System.out.println("^ should not modify");
+			System.out.println(">>>>");
+			return input;
+		}
+
+		System.out.println("///////////////////////////////////////////////");
+		System.out.println("///////////////////////////////////////////////");
+		System.out.println("///////////////////////////////////////////////");
+		JSModifyProxyPlugin.JSCodeMultiMap.put(originalUrl, input); // TODO TODO TODO TODO TODO
+		System.out.println(scopename);
+		System.out.println("///////////////////////////////////////////////");
+//		System.out.println(input);
+		System.out.println("///////////////////////////////////////////////");
+		System.out.println("///////////////////////////////////////////////");
+
 		try {
 
 			// Save original JavaScript files/nodes
 			Helper.directoryCheck(getOutputFolder());
 			setFileName(scopename);
+		
 			PrintStream output = new PrintStream(getOutputFolder() + getFilename());
 //			System.out.println("MOEEEEE" + getOutputFolder() + getFilename());
 			PrintStream oldOut = System.out;
@@ -273,7 +302,7 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 	 * @return The modified response.
 	 */
 	private Response createResponse(Response response, Request request) {
-		System.out.println("~~~~~~~~~ request begin ~~~~~~~~~");
+//		System.out.println("~~~~~~~~~ request begin ~~~~~~~~~");
 		if (request == null) {
 			System.err.println("JSModifyProxyPlugin::createResponse: request is null");
 			return response;
@@ -291,10 +320,10 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 			System.err.println("JSModifyProxyPlugin::createResponse: response is null");
 			return response;
 		}
-		System.out.println("~~~~~~~~~ request end ~~~~~~~~~");
-		System.out.println("~~~~~~~~~ response begin ~~~~~~~~~");
+//		System.out.println("~~~~~~~~~ request end ~~~~~~~~~");
+//		System.out.println("~~~~~~~~~ response begin ~~~~~~~~~");
 		System.out.println(response.getStatus());
-		System.out.println("~~~~~~~~~ response end ~~~~~~~~~");
+//		System.out.println("~~~~~~~~~ response end ~~~~~~~~~");
 		String type = response.getHeader("Content-Type");
 /*
 		if (request.getURL().toString().contains("?beginrecord")) {
@@ -343,9 +372,15 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 
 		if (type != null && type.contains("javascript")) {
 
+			// TODO TODO TODO TODO add it here as well as the html
+/////			JSModifyProxyPlugin.JSCodeMultiMap.put("saba1 + " + request.getURL(), new String(response.getContent()));
+			// TODO TODO TODO TODO
+
 			/* instrument the code if possible */
 			response.setContent(modifyJS(new String(response.getContent()),
-			        request.getURL().toString()).getBytes());
+			        request.getURL().toString(), request.getURL().toString()).getBytes());
+			
+			
 		} else if (type != null && type.contains("html")) {
 			try {
 				Document dom = Helper.getDocument(new String(response.getContent()));
@@ -360,8 +395,19 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 						String content = nodes.item(i).getTextContent();
 
 						if (content.length() > 0) {
-							String js = modifyJS(content, request.getURL() + "script" + i);
-							System.out.println(js);
+							// TODO TODO TODO TODO
+							// TODO TODO TODO TODO
+///////////							JSModifyProxyPlugin.JSCodeMultiMap.put("saba2 + " + request.getURL(), content);
+							// TODO TODO TODO TODO
+							// TODO TODO TODO TODO
+							
+							
+							String js = modifyJS(content, request.getURL() + "script" + i, request.getURL().toString());
+							// TODO TODO TODO
+							// TODO TODO TODO
+							System.out.println(js); // TODO TODO TODO
+							// TODO TODO TODO
+							// TODO TODO TODO
 							nodes.item(i).setTextContent(js);
 							System.out.println(nodes.item(i).getTextContent());
 							continue;
@@ -374,7 +420,7 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 					        .getTextContent().toLowerCase().contains("javascript"))) {
 						String content = nodes.item(i).getTextContent();
 						if (content.length() > 0) {
-							String js = modifyJS(content, request.getURL() + "script" + i);
+							String js = modifyJS(content, request.getURL() + "script" + i, request.getURL().toString());
 							nodes.item(i).setTextContent(js);
 						}
 
