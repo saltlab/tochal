@@ -207,21 +207,6 @@ public class FunctionTrace extends AstInstrumenter {
 				return iscNode;
 			}
 		}
-		/*******************/
-		/////// TODO JUST A HACK FOR RUNNING THE EXPERIMENT. MUST BE REMOVED AFTER
-//		if (baseUrl.equals("http://localhost:8888/files/phorm.js"))
-		// TODO todo todo 
-		/**************************************
-		if (baseUrl.equals("http://localhost:8888/phormer331/"))
-			return iscNode;
-			
-	/////// TODO JUST A HACK FOR RUNNING THE EXPERIMENT. MUST BE REMOVED AFTER
-		if (baseUrl.contains("skeleton.js") || baseUrl.contains("help.js") || baseUrl.contains("upload.js"))
-			return iscNode;
-			**************************************/
-		/*******************/
-		// Add wrapper functions to top of JS node
-		iscNode.addChildToFront(jsLoggingFunctions());
 
 		// Return new instrumented node/code
 		return iscNode;
@@ -292,7 +277,7 @@ public class FunctionTrace extends AstInstrumenter {
 	}
 
 	private void handleFunction(FunctionNode node) {
-		/*****************
+
 		// Store information on function declarations
 		AstNode parent = node.getParent();
 		String name = node.getName();
@@ -360,7 +345,7 @@ public class FunctionTrace extends AstInstrumenter {
 		AstNode endingNode = parse(endingPOI.toString());
 		node.getBody().addChildToFront(beginningNode);
 		node.getBody().addChildToBack(endingNode);
-		*****************/
+
 	}
 
 	private void updateAllLineNo(AstNode body) {
@@ -390,7 +375,7 @@ public class FunctionTrace extends AstInstrumenter {
 	}
 
 	private void handleFunctionCall(FunctionCall node) {
-		/*****************
+
 		// Store information on function calls
 		AstNode target = node.getTarget();
 		String targetBody = target.toSource();
@@ -451,19 +436,17 @@ public class FunctionTrace extends AstInstrumenter {
 		else {
 			System.out.println("NEW TARGET NULL +++ " + node.getTarget());
 		}
-		*****************/
 	}
 
 	private void handleReturn(ReturnStatement node) {
 		// return statements
 
-		/*****************
 		int lineNo = node.getLineno()+1;
 		AstNode newRV;
 
 		if (node.getReturnValue() != null) {
 			// Wrap return value
-			newRV = parse("RSW("+ node.getReturnValue().toSource() + ", '" + node.getReturnValue().toSource()+ "' ," + lineNo +");");
+			newRV = parse("RSW("+ node.getReturnValue().toSource() + ", '" + node.getReturnValue().toSource().replace("'", "\\'")+ "' ," + lineNo +");");
 //			newRV = parse("RSW("+ node.getReturnValue().toSource() + ", '" + 'a' + "' ," + lineNo +");");
 //			newRV = parse("RSW("+ node.getReturnValue().toSource() + ", \"val\" ," + lineNo +");");
 			newRV.setLineno(node.getReturnValue().getLineno());
@@ -476,7 +459,5 @@ public class FunctionTrace extends AstInstrumenter {
 
 		updateAllLineNo(newRV);
 		node.setReturnValue(newRV);
-		
-		*****************/
 	}
 }

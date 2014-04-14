@@ -6,12 +6,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 import java.util.StringTokenizer;
 
+import com.proteus.core.interactiongraph.edge.CallFunction;
 import com.proteus.core.interactiongraph.edge.InteractionEdge;
 import com.proteus.core.interactiongraph.edge.OpenXhr;
 import com.proteus.core.interactiongraph.edge.ReadAccess;
 import com.proteus.core.interactiongraph.edge.ReceiveXhrResponse;
+import com.proteus.core.interactiongraph.edge.ReturnFunction;
 import com.proteus.core.interactiongraph.edge.SendXhrRead;
 import com.proteus.core.interactiongraph.edge.SendXhrWrite;
 import com.proteus.core.interactiongraph.edge.WriteAccess;
@@ -19,6 +22,11 @@ import com.proteus.core.interactiongraph.node.DomElement;
 import com.proteus.core.interactiongraph.node.Function;
 import com.proteus.core.interactiongraph.node.InteractionNode;
 import com.proteus.core.interactiongraph.node.XmlHttpRequest;
+import com.proteus.core.trace.FunctionCall;
+import com.proteus.core.trace.FunctionEnter;
+import com.proteus.core.trace.FunctionExit;
+import com.proteus.core.trace.FunctionReturnStatement;
+import com.proteus.core.trace.TraceObject;
 import com.proteus.stats.Statistics;
 
 public class InteractionGraph {
@@ -386,7 +394,7 @@ public class InteractionGraph {
 		ArrayList<InteractionEdge> domAccessTypeObjects = new ArrayList<InteractionEdge>();
 		for (int i = 0; i < accessTypes.size(); i ++) {
 			String accessType = accessTypes.get(i);
-			String accessTypeClassName = "com.proteus.core.interactiongraph.edge." + accessType;
+			String accessTypeClassName = "com.clematis.core.interactiongraph.edge." + accessType;
 			try {
 				InteractionEdge domAccess = (InteractionEdge) Class.forName(accessTypeClassName).newInstance(); ///////
 ////////////*************+++				edges.add(domAccess); // TODO TODO TODO
@@ -792,5 +800,104 @@ public class InteractionGraph {
 		}
 		*/
 	}
+	
+	public void handleDynamicCallGraph(Collection<TraceObject> functionTraces) {
+		Stack<Function> functions = new Stack<Function>();
+		Stack<TraceObject> functionTraceStack = new Stack<TraceObject>(); // TODO
+		
+		Iterator<TraceObject> itr = functionTraces.iterator();
+		while (itr.hasNext()) {
+			TraceObject functionTrace = itr.next();
+
+			// TODO FunctionCall is ignored on purpose since it refers to system functions ??????
+			if (functionTrace instanceof FunctionEnter) {
+				FunctionEnter functionEnter = (FunctionEnter) functionTrace;
+				String name = functionEnter.getTargetFunction();
+				String scope = functionEnter.getScopeName();
+				
+				Function f;
+				
+				// TODO TODO TODO TODO
+				// TODO TODO TODO TODO
+				// MAKE THE NAMING STYLES THE SAME - FOR UNDEFINED FUNCTION NAMES IN FUNCTION TRACE ****************
+				// TODO TODO TODO TODO
+				// TODO TODO TODO TODO
+				if (functionsByName.containsKey(name)) {
+					f = functionsByName.get(name);
+				}
+				else {
+					f = new Function(name);
+					f.setScopeName(scope);
+					
+					// TODO TODO TODO
+					// TODO TODO TODO
+					functionsByName.put(name, f);
+					// TODO TODO TODO
+					// TODO TODO TODO
+				}
+				
+				functions.push(f);
+				functionTraceStack.push(functionEnter);
+				// TODO TODO TODO TODO
+				// TODO TODO TODO TODO
+			}
+//			else if (functionTrace instanceof FunctionExit) {
+//				String name = ((FunctionExit) functionTrace).getTargetFunction();
+//				String scope = ((FunctionExit) functionTrace).getScopeName();			
+//			}
+			// same treatment for FunctionExit and FunctionReturnStatement
+			else if (functionTrace instanceof FunctionExit) {
+				if (functions.empty()) {
+					System.err.println("ERROR, INTERACTIONGRAPH::HANDLEDYNAMICCALLGRAPH, FUNCTION STACK EMPTP");
+					continue; // TODO
+				}
+				
+				Function terminatedFunction = functions.pop();
+				FunctionEnter terminatedTrace = (FunctionEnter)functionTraceStack.pop();
+				if (!functions.empty()) {
+					Function headFunction = functions.peek();
+					FunctionEnter headTrace = (FunctionEnter)functionTraceStack.peek();
+					
+					if (terminatedTrace.getArgs() != null) {
+						CallFunction callAccess = new CallFunction();
+						callAccess.setInput(headFunction);
+						callAccess.setOutput(terminatedFunction);
+						headFunction.addOutput(callAccess);
+						terminatedFunction.addInput(callAccess);
+					}
+				}
+				// TODO
+			}
+			else if (functionTrace instanceof FunctionReturnStatement) {
+				if (functions.empty()) {
+					System.err.println("ERROR, INTERACTIONGRAPH::HANDLEDYNAMICCALLGRAPH, FUNCTION STACK EMPTP");
+					continue; // TODO
+				}
+
+				Function terminatedFunction = functions.pop();
+				FunctionEnter terminatedTrace = (FunctionEnter)functionTraceStack.pop();
+				if (!functions.empty()) {
+					Function headFunction = functions.peek();
+					FunctionEnter headTrace = (FunctionEnter)functionTraceStack.peek();
+					
+					if (terminatedTrace.getArgs() != null) {
+						CallFunction callAccess = new CallFunction();
+						callAccess.setInput(headFunction);
+						callAccess.setOutput(terminatedFunction);
+						headFunction.addOutput(callAccess);
+						terminatedFunction.addInput(callAccess);
+					}
+					
+					ReturnFunction returnAccess = new ReturnFunction();
+					returnAccess.setInput(terminatedFunction);
+					returnAccess.setOutput(headFunction);
+					headFunction.addInput(returnAccess);
+					terminatedFunction.addOutput(returnAccess);
+				}
+				// TODO
+			}
+		}
+	}
 
 }
+

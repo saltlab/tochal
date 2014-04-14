@@ -6,8 +6,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 import com.google.common.collect.ImmutableList;
-
 import com.proteus.core.interactiongraph.edge.InteractionEdge;
+
 
 
 public class InteractionNode {

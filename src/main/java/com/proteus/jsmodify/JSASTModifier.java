@@ -1,5 +1,7 @@
 package com.proteus.jsmodify;
 
+import java.util.ArrayList;
+
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstNode;
@@ -61,9 +63,7 @@ public abstract class JSASTModifier implements NodeVisitor {
 	public AstNode parse(String code) {
 		Parser p = new Parser(compilerEnvirons, null);
 		return p.parse(code, null, 0);
-
 	}
-
 	
 	/**
 	 * Find out the function name of a certain node and return "anonymous" if it's an anonymous
@@ -175,5 +175,10 @@ public abstract class JSASTModifier implements NodeVisitor {
 	 * This method is called before the AST is going to be traversed.
 	 */
 	public abstract void start(String node);
+	
+	public abstract ArrayList<String> getFilesToPrepend();
+	/*****
+	public abstract ArrayList<String> getToolbarFiles();
+	*****/
 }
 

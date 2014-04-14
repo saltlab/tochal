@@ -1,20 +1,15 @@
 package com.proteus.core;
 
 import java.io.File;
-import java.util.Arrays;
 
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.owasp.webscarab.model.Preferences;
@@ -30,92 +25,47 @@ import com.proteus.jsmodify.JSModifyProxyPlugin;
 
 public class SimpleExample {
 
-//	private static final String URL = "http://localhost:8080/same-game/same-game.html";
-	// private static final String URL = "http://localhost:8080/example_webapplication/index.html";
+	public static final String SERVER_PREFIX2 = "--url";
+	public static final String SERVER_PREFIX1 = "--u";
 
-//	private static final String URL = "http://localhost:8080/study_application/index.html";
-//	private static final String URL = "http://localhost:8080/wymeditor/";
-	
-	
-//	private static final String URL = "http://www.live.com";
-//	private static final String URL = "http://www.qq.com";
-//	private static final String URL = "http://www.linkedin.com";
-//	private static final String URL = "http://www.twitter.com";
-//	private static final String URL = "http://www.taobao.com";
-//	private static final String URL = "http://www.blogspot.com";
-//	private static final String URL = "http://www.sina.com.cn";
-	
-	//	private static final String URL = "http://localhost:8888/phormer331/index.php";
-	
-	//////////////// PROTEUS
-	private static final String URL = "http://localhost:8080/same-game/same-game.html"; // works
-//	private static final String URL = "http://arcade.christianmontoya.com/tunnel/"; // works somehow, no dynamic paths
-//	private static final String URL = "http://10k.aneventapart.com/2/Uploads/657/"; // GhostBusters
-//	private static final String URL = "http://localhost:8080/GhostBusters/index-cheat.html"; // GhostBusters, works WITH CHEATING in instrumentation!
-//	private static final String URL = "http://localhost:8080/GhostBusters/index.html"; // GhostBusters, does not instrument
-//	private static final String URL = "http://www.cccontheweb.org/peggame.htm"; // Peg -> does not work
-//	private static final String URL = "http://localhost:8080/peggame/peggame.htm"; // Peg -> WITH CHEAT
-//	private static final String URL = "http://www.themaninblue.com/experiment/BunnyHunt/"; // BunnyHunt -> does not work 
-//	private static final String URL = "http://localhost:8080/jquery-tabs/demo/"; // works WITH CHEAT
-//	private static final String URL = "http://www.narrowdesign.com/"; // does not work!
-//	private static final String URL = "http://www.jointlondon.com/"; // does not work. does not instrument
-//	private static final String URL = "http://localhost:8080/canopy/"; // works a little with cheat. exception. no results
-//	private static final String URL = "http://localhost:8080/simplecart-js/test/"; // with cheat! ???
-//	private static final String URL = "http://localhost:8080/Listo/"; // with cheat!
-//	private static final String URL = "http://localhost:8080/SunCalc/"; // with cheat! but results : 0.
-//	private static final String URL = "http://localhost:8080/mojule/"; // with cheat!
-//	private static final String URL = "http://localhost:8080/whiteboard/"; // with cheat. doesn't work after a while. error in app? 
-//	private static final String URL = "http://localhost:8080/SonaReader/"; //  
-	// TODO CHECK UFO
-//	private static final String URL = "http://arcade.christianmontoya.com/tunnel/";
-//	private static final String URL = "http://localhost:8080/tunnel/";
-//	private static final String URL = "http://www.cccontheweb.org/peggame.htm";	
-//	private static final String URL = "http://localhost:8080/peggame/peggame.htm";
-//	private static final String URL = "http://www.themaninblue.com/experiment/BunnyHunt/";
-//	private static final String URL = "http://localhost:8080/BunnyHunt/";
-//	private static final String URL = "http://files.wymeditor.org/wymeditor-0.5/examples/01-basic.html"; //  
-//	private static final String URL = "http://www.narrowdesign.com/";
-//	private static final String URL = "http://localhost:8080/jointlondon/";
-//	private static final String URL = "http://localhost:8080/canopy/";
-//	private static final String URL = "http://localhost:8080/wymeditor-0.5/examples/01-basic.html";
-//	private static final String URL = "http://localhost:8080/607/";
-	
-// GitHub Trending
-//	private static final String URL = "http://localhost:8080/grafana-1.4.0/index.html"; //  
-//	private static final String URL = "http://raphaelcruzeiro.github.io/jquery-notebook/";
-//	private static final String URL = "http://localhost:8080/notebook-demo/";
-//	private static final String URL = "http://holloway.github.io/doctored/";
-//	private static final String URL = "http://localhost:8080/doctored/";
-	
-	
-// Alexa Top Sites
-//	private static final String URL = "http://www.google.com"; // does not attach
-//	private static final String URL = "http://www.facebook.com";
-//	private static final String URL = "http://www.youtube.com";
-//	private static final String URL = "http://www.yahoo.com";
-	
+	private static boolean urlProvided = false;
+	private static String URL = "";
 
-//	private static final String URL = "http://localhost:8080/study_application/index.html";
-	
+	// "http://localhost:8888/phormer331/index.php";
+	// "http://www.themaninblue.com/experiment/BunnyHunt/";
+
 	private static String outputFolder = "";
 	private static WebDriver driver;
 
 	public static void main(String[] args) {
 		try {
 
+			// Iterate through arguments
+			for (String arg : args) {
+				// If previous argument was url flag, this argument should be the application url
+				if (urlProvided == true) {
+					URL = arg;
+					break;
+				}
+				parse(arg);
+			}
+
+			if (urlProvided == false) {
+				System.err.println("Invalid arguments. Please provide URL for target application as argument (E.g. --url http://localhost:8888/phormer331/index.php)");
+				throw new IllegalArgumentException();
+			}
+
 			outputFolder = Helper.addFolderSlashIfNeeded("clematis-output");
 
 			JSExecutionTracer tracer = new JSExecutionTracer("function.trace");
-			/*************************
 			tracer.setOutputFolder(outputFolder + "ftrace");
+
 			// config.addPlugin(tracer);
 			tracer.preCrawling();
-			*************************/
 
 			// Create a new instance of the firefox driver
-//////////////			FirefoxProfile profile = new FirefoxProfile();
-//			ChromeDriverService profile = new ChromeDriverService(null, 0, null, null); // TODO 
-			
+/*****			FirefoxProfile profile = new FirefoxProfile();
+*****/
 			// Instantiate proxy components
 			ProxyConfiguration prox = new ProxyConfiguration();
 
@@ -124,12 +74,22 @@ public class SimpleExample {
 
 			// Add necessary files from resources
 
-//			s.setFileNameToAttach("/temp.js");
-/*			
+			s.setFileNameToAttach("/esprima.js");
+			s.setFileNameToAttach("/esmorph.js");
+			s.setFileNameToAttach("/jsonml-dom.js");
+			s.setFileNameToAttach("/addvariable.js");
+			
+//			s.setFileNameToAttach("/asyncLogger.js");
+//			s.setFileNameToAttach("/applicationView.js");
+//			s.setFileNameToAttach("/instrumentDOMEvents.js");
+//			s.setFileNameToAttach("/domMutations.js");
+//			s.setFileNameToAttach("/mutation_summary.js");
+//			s.instrumentDOMModifications();
+			
 			s.setFileNameToAttach("/domAccessWrapper.js");
 			s.setFileNameToAttach("/domAccessWrapper_send.js");
-			s.setFileNameToAttach("/xhrAccessWrapper.js");
-*/
+//////////////////			s.setFileNameToAttach("/xhrAccessWrapper.js");
+
 
 			// Interface for Ast traversal
 			JSModifyProxyPlugin p = new JSModifyProxyPlugin(s);
@@ -151,46 +111,41 @@ public class SimpleExample {
 			proxy.run();
 
 			if (prox != null) {
-				// TODO
-//				profile.setPreference("network.proxy.http", prox.getHostname());
-//				profile.setPreference("network.proxy.http_port", prox.getPort());
-//				profile.setPreference("network.proxy.type", prox.getType().toInt());
-				/* use proxy for everything, including localhost */
-//				profile.setPreference("network.proxy.no_proxies_on", "");
+				/*****
+				profile.setPreference("network.proxy.http", prox.getHostname());
+				profile.setPreference("network.proxy.http_port", prox.getPort());
+				profile.setPreference("network.proxy.type", prox.getType().toInt());
+				// use proxy for everything, including localhost
+				profile.setPreference("network.proxy.no_proxies_on", "");
+				*****/
 			}
 
-			/*
-			 * For enabling Firebug with Clematis Replace '...' with the appropriate path to your
-			 * Firebug installation
-			 */
-			// File file = new
-			// File("/Users/.../Library/Application Support/Firefox/Profiles/zga73n4v.default/extensions/firebug@software.joehewitt.com.xpi");
-/*		
-			File file = new File("/Users/Saba/Library/Application Support/Firefox/Profiles/b0dzzwrl.default/extensions/firebug@software.joehewitt.com.xpi");
-			profile.addExtension(file);
-			profile.setPreference("extensions.firebug.currentVersion", "1.8.1"); // Avoid startup
-*/			// screen
-
-			System.setProperty("webdriver.chrome.driver", "lib/chromedriver"); // TODO
-		
-			
-//			driver = new FirefoxDriver(profile); // TODO
-//			driver = new RemoteWebDriver(DesiredCapabilities.chrome());
+/*****			driver = new FirefoxDriver(profile);
+			WebDriverWait wait = new WebDriverWait(driver, 10);
+*****/
+			System.setProperty("webdriver.chrome.driver", "lib/chromedriver");
 			
 			ChromeOptions optionsChrome = new ChromeOptions();
-		
+			
 			optionsChrome.addArguments("--proxy-server=http://"
-			+ prox.getHostname() + ":"
-			+ prox.getPort());
+					+ prox.getHostname() + ":"
+					+ prox.getPort());
 			
 			driver = new ChromeDriver(optionsChrome);
 			
 			WebDriverWait wait = new WebDriverWait(driver, 10);
+			
 			boolean sessionOver = false;
 
-			// Use WebDriver to visit specified URL
-			driver.get(URL);
-
+/*****			try {
+*****/				// Use WebDriver to visit specified URL
+				driver.get(URL);
+/*****			} catch (WebDriverException e) {
+				System.err.println("Error reaching application, please ensure URL is valid.");
+				e.printStackTrace();
+				System.exit(1);
+			}
+*****/
 			while (!sessionOver) {
 				// Wait until the user/tester has closed the browser
 
@@ -235,7 +190,6 @@ public class SimpleExample {
 	public static boolean isAlertPresent()
 	{
 		// Selenium bug where all alerts must be closed before
-		// driver.execute(String) can be executed
 		try {
 			driver.switchTo().alert();
 			return true;
@@ -247,4 +201,15 @@ public class SimpleExample {
 	public static String getOutputFolder() {
 		return Helper.addFolderSlashIfNeeded(outputFolder);
 	}
+
+	private static void parse(String arg) throws IllegalArgumentException {
+		if (arg.equals(SERVER_PREFIX1) || arg.equals(SERVER_PREFIX2)) {
+			urlProvided = true;
+		}
+	}
+
+	private boolean checkOptions() {
+		return urlProvided;
+	}
+
 }
