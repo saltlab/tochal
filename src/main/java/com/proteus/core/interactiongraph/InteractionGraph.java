@@ -394,7 +394,7 @@ public class InteractionGraph {
 		ArrayList<InteractionEdge> domAccessTypeObjects = new ArrayList<InteractionEdge>();
 		for (int i = 0; i < accessTypes.size(); i ++) {
 			String accessType = accessTypes.get(i);
-			String accessTypeClassName = "com.clematis.core.interactiongraph.edge." + accessType;
+			String accessTypeClassName = "com.proteus.core.interactiongraph.edge." + accessType;
 			try {
 				InteractionEdge domAccess = (InteractionEdge) Class.forName(accessTypeClassName).newInstance(); ///////
 ////////////*************+++				edges.add(domAccess); // TODO TODO TODO

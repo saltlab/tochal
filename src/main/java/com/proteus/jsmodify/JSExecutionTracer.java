@@ -748,21 +748,21 @@ public class JSExecutionTracer {
                     // instead of 'if's
                     if (mType.contains("FUNCTION_CALL")) {
                         buffer.getJSONObject(i).put("@class",
-                                "com.clematis.core.trace.FunctionCall");
+                                "com.proteus.core.trace.FunctionCall");
                         JSONLabel = "\"FunctionTrace\":";
                     } else if (mType.contains("FUNCTION_ENTER")) {
                         buffer.getJSONObject(i).put("@class",
-                                "com.clematis.core.trace.FunctionEnter");
+                                "com.proteus.core.trace.FunctionEnter");
                         JSONLabel = "\"FunctionTrace\":";
                     } else if (mType.contains("FUNCTION_EXIT")) {
                         buffer.getJSONObject(i).put("@class",
-                                "com.clematis.core.trace.FunctionExit");
+                                "com.proteus.core.trace.FunctionExit");
                         JSONLabel = "\"FunctionTrace\":";
                     } else if (mType.contains("RETURN_STATEMENT")) {
                         buffer.getJSONObject(i).put("@class",
-                                "com.clematis.core.trace.FunctionReturnStatement");
+                                "com.proteus.core.trace.FunctionReturnStatement");
                         JSONLabel = "\"FunctionTrace\":";
-                    } else if (mType.contains("DOM_EVENT")) {
+                    }/* else if (mType.contains("DOM_EVENT")) {
                         buffer.getJSONObject(i).put("@class",
                                 "com.clematis.core.trace.DOMEventTrace");
                         JSONLabel = "\"DOMEventTrace\":";
@@ -795,6 +795,7 @@ public class JSExecutionTracer {
                                 "com.clematis.core.trace.XMLHttpRequestResponse");
                         JSONLabel = "\"XHRTrace\":";
                     }
+                    */
                     // messageType obsolete
                     buffer.getJSONObject(i).remove("messageType");
                 }
