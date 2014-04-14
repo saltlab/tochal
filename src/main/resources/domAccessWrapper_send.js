@@ -1,10 +1,10 @@
-window.xhr = new XMLHttpRequest();
+//////////////////////window.xhr = new XMLHttpRequest();
 
 
-window.buffer = new Array();
+window.buffer_dom = new Array();
 
-function send(value) {
-	window.buffer.push(value);
+function send_dom(value) {
+	window.buffer_dom.push(value);
 }
 /*
 function sendReally() {
@@ -77,7 +77,7 @@ function sendXhrLog() {
     	window.xhr.open('POST', document.location.href + '?XHRACCESSLOG', false);
 //    	window.xhr.send('['+(window.buffer).toString()+']');
     	window.xhr.send((window.buffer).toString());
-    	window.buffer = new Array();
+    	window.buffer_dom = new Array();
     }
 
 }

@@ -14,7 +14,7 @@ logger.logXHROpen = function(xhr, method, callerName) {
 //	console.log(" + Async: ", async);
 
 //    send(JSON.stringify({messageType: "XHR_OPEN", timeStamp: date, id: xhr.id, methodType: method, url: url, async: async, counter: traceCounter++}));
-  send(JSON.stringify({messageType: "XHR_OpenAccess", id: xhr.id, accessFunction: callerName}));
+  send_dom(JSON.stringify({messageType: "XHR_OpenAccess", id: xhr.id, accessFunction: callerName}));
 };
 
 /**
@@ -28,7 +28,7 @@ logger.logXHRSend = function(xhr, callerName) {
 //	console.log(" + Message (POST):", str);
 
 //    send(JSON.stringify({messageType: "XHR_SEND", timeStamp: date, id: xhr.id, message: str, counter: traceCounter++}));
-	  send(JSON.stringify({messageType: "XHR_SendAccess", id: xhr.id, accessFunction: callerName}));
+	  send_dom(JSON.stringify({messageType: "XHR_SendAccess", id: xhr.id, accessFunction: callerName}));
 };
 
 /**
@@ -44,7 +44,7 @@ logger.logXHRResponse = function(xhr, callerName) {
 //	console.log(" + XHR response headers: ", xhr.getAllResponseHeaders());
 //	console.log(" + XHR response: ", xhr.response);
 
-	send(JSON.stringify({messageType: "XHR_ResponseAccess", id: xhr.id, accessFunction: callerName}));
+	send_dom(JSON.stringify({messageType: "XHR_ResponseAccess", id: xhr.id, accessFunction: callerName}));
 
 /*    if (xhr.onreadystatechange != null) {
     	send(JSON.stringify({messageType: "XHR_RESPONSE", id: xhr.id, callbackFunction: xhr.onreadystatechange.name, accessFunction: callerName}));

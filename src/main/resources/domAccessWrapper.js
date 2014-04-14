@@ -16,14 +16,17 @@ var ACCESS_TYPE_ENUM = {
 	APPENDCHILD			:	"AppendChild",
 	REMOVECHILD			:	"RemoveChild"
 };
+
+// Moved getCallerName to a separate file
+
 /**********************
- GET THE FILE NAME
- AND THE LINE NUMBER
- OF THE CALLER FUNCTION
+GET THE FILE NAME
+AND THE LINE NUMBER
+OF THE CALLER FUNCTION
 **********************/
-// BEGIN
+//BEGIN
 function getErrorObject(){
-    try { throw Error('') } catch(err) { return err; }
+   try { throw Error('') } catch(err) { return err; }
 }
 
 /**********
@@ -31,8 +34,8 @@ FOR FIREFOX
 **********/
 function getStackTrace(e) {
 return e.stack.replace(/(?:\n@:0)?\s+$/m, '')
-                .replace(/^(?:\((\S*)\))?@/gm, '{anonymous}($1)@')
-                .split('\n');
+               .replace(/^(?:\((\S*)\))?@/gm, '{anonymous}($1)@')
+               .split('\n');
 }
 
 function getCallerFunctionName(argumens) {
@@ -69,7 +72,9 @@ function getCallerFunctionName(argumens) {
 	
 	return callerName;
 }
-// END
+//END
+
+
 /*********************
 **					**
 **  QUERY SELECTOR	**
