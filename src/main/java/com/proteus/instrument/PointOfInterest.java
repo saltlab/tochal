@@ -63,12 +63,13 @@ public class PointOfInterest {
 
 	public String getClassName() { return "Entry"; }
 
-	public String toString() {
+	public String toString() {	
 		switch (this.type) {
 		case org.mozilla.javascript.Token.FUNCTION: 
 			if (this.getEnd() == -1) {
 				// Function Beginning				
-				String code = "send(JSON.stringify({messageType:\"FUNCTION_ENTER\", timeStamp: Date.now(), targetFunction:\""+getName()+"\", lineNo:"+getLineNo()+", args: [";	
+//				String code = "send(JSON.stringify({messageType:\"FUNCTION_ENTER\", timeStamp: Date.now(), targetFunction:\""+getName()+"\", lineNo:"+getLineNo()+", args: [";	
+				String code = "send(JSON.stringify({messageType:\"FUNCTION_ENTER\", timeStamp: Date.now(), targetFunction: getCallerFunctionName(arguments), lineNo:"+getLineNo()+", args: [";	
 				String vars = new String();
 				for (String s : arguments) {
 					vars += "{\""+s+"\":"+s+"},";
@@ -79,12 +80,14 @@ public class PointOfInterest {
 					code += vars + "], scopeName: \""+getScopeName()+"\", counter:traceCounter++}));";
 				} else {
 					/* no arguments to instrument here */
-					return "send(JSON.stringify({messageType: \"FUNCTION_ENTER\", timeStamp: Date.now(), targetFunction: \""+getName()+"\",lineNo: "+getLineNo()+", scopeName: \""+getScopeName()+"\", counter:traceCounter++}));";	
+//					return "send(JSON.stringify({messageType: \"FUNCTION_ENTER\", timeStamp: Date.now(), targetFunction: \""+getName()+"\",lineNo: "+getLineNo()+", scopeName: \""+getScopeName()+"\", counter:traceCounter++}));";	
+					return "send(JSON.stringify({messageType: \"FUNCTION_ENTER\", timeStamp: Date.now(), targetFunction: getCallerFunctionName(arguments), lineNo: "+getLineNo()+", scopeName: \""+getScopeName()+"\", counter:traceCounter++}));";	
 				}
 				return code;	
 			} else if (this.getEnd() == -2) {
 				// Function End
-				return "send(JSON.stringify({messageType: \"FUNCTION_EXIT\", timeStamp: Date.now(), targetFunction: \""+getName()+"\",lineNo: "+getLineNo()+", scopeName: \""+getScopeName()+"\", counter:traceCounter++}));";	
+//				return "send(JSON.stringify({messageType: \"FUNCTION_EXIT\", timeStamp: Date.now(), targetFunction: \""+getName()+"\",lineNo: "+getLineNo()+", scopeName: \""+getScopeName()+"\", counter:traceCounter++}));";	
+				return "send(JSON.stringify({messageType: \"FUNCTION_EXIT\", timeStamp: Date.now(), targetFunction: getCallerFunctionName(arguments), lineNo: "+getLineNo()+", scopeName: \""+getScopeName()+"\", counter:traceCounter++}));";	
 			} else {
 				// General Function
 				return "";

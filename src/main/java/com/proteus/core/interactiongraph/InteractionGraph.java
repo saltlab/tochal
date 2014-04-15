@@ -805,6 +805,8 @@ public class InteractionGraph {
 		Stack<Function> functions = new Stack<Function>();
 		Stack<TraceObject> functionTraceStack = new Stack<TraceObject>(); // TODO
 		
+		ArrayList<Function> functionsInDynamicCallGraph = new ArrayList<Function>(); // temp, only to print the results
+		
 		Iterator<TraceObject> itr = functionTraces.iterator();
 		while (itr.hasNext()) {
 			TraceObject functionTrace = itr.next();
@@ -836,6 +838,8 @@ public class InteractionGraph {
 					// TODO TODO TODO
 				}
 				
+				functionsInDynamicCallGraph.add(f);
+				
 				functions.push(f);
 				functionTraceStack.push(functionEnter);
 				// TODO TODO TODO TODO
@@ -859,6 +863,8 @@ public class InteractionGraph {
 					FunctionEnter headTrace = (FunctionEnter)functionTraceStack.peek();
 					
 					if (terminatedTrace.getArgs() != null) {
+						// TODO TODO CHECK IF THE ACCESS DOES NOT ALREADY EXIST
+
 						CallFunction callAccess = new CallFunction();
 						callAccess.setInput(headFunction);
 						callAccess.setOutput(terminatedFunction);
@@ -881,6 +887,8 @@ public class InteractionGraph {
 					FunctionEnter headTrace = (FunctionEnter)functionTraceStack.peek();
 					
 					if (terminatedTrace.getArgs() != null) {
+						// TODO TODO CHECK IF THE ACCESS DOES NOT ALREADY EXIST
+						
 						CallFunction callAccess = new CallFunction();
 						callAccess.setInput(headFunction);
 						callAccess.setOutput(terminatedFunction);
@@ -888,6 +896,8 @@ public class InteractionGraph {
 						terminatedFunction.addInput(callAccess);
 					}
 					
+					// TODO TODO CHECK IF THE ACCESS DOES NOT ALREADY EXIST
+
 					ReturnFunction returnAccess = new ReturnFunction();
 					returnAccess.setInput(terminatedFunction);
 					returnAccess.setOutput(headFunction);
@@ -897,6 +907,11 @@ public class InteractionGraph {
 				// TODO
 			}
 		}
+		
+		System.out.println("&&&&&&&&&&&&&&&&&&&");
+		for (Function f : functionsInDynamicCallGraph)
+			System.out.print(f.getStrId() + " -- ");
+		System.out.println();
 	}
 
 }
