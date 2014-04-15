@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 
-/*****
+
 import com.ibm.wala.cast.js.ipa.callgraph.JSCallGraphUtil;
 import com.ibm.wala.cast.js.rhino.test.HTMLCGBuilder;
 import com.ibm.wala.cast.js.rhino.test.HTMLCGBuilder.CGBuilderResult;
@@ -46,9 +46,21 @@ import com.ibm.wala.util.WalaException;
 import com.ibm.wala.util.graph.Graph;
 import com.ibm.wala.util.intset.IntSet;
 import com.ibm.wala.cast.js.test.*;
-*****/
+
 public class CallGraphAnalyzer {
 	static int i = 0;
+	
+	public static void main(String []args) {
+//		String script = "function AAA(){} function BBB(){} function CCC(){AAA();} function DDD(){CCC();} function EEE(){BBB(); CCC();}";
+		String script = "function AAA(){} function BBB(){AAA();} BBB();";
+		
+		CallGraphAnalyzer analyzer = new CallGraphAnalyzer();
+		Graph<CGNode> callGraph = analyzer.getCallGraph(script, "name");
+		System.out.println("##########################");
+		System.out.println(callGraph.toString());
+		System.out.println("##########################");
+	}
+	
 /*****	
 	public static void main(String []args) {
 		CallGraphAnalyzer analyzer = new CallGraphAnalyzer();
@@ -115,19 +127,8 @@ public class CallGraphAnalyzer {
 		
 	}
 *****/
-	/*****
+	
 	public Graph<CGNode> getCallGraph(String script, String name) {
-		return null;
-		
-		
-		// TODO TODO TODO TODO
-		// TODO TODO TODO TODO
-		// TODO TODO TODO TODO
-		// TODO TODO TODO TODO
-		// TODO TODO TODO TODO
-		// TODO TODO TODO TODO
-		
-		/***********************************
 		CallGraph callGraph = null;
 		Graph<CGNode> prunedGraph = null;
 		PrintWriter writer;
@@ -237,10 +238,9 @@ public class CallGraphAnalyzer {
 		}
 
 		return prunedGraph;
-		*//*****
+		
 	}
-*****/
-	/*****
+
 	public static <T> Graph<T> pruneGraph(Graph<T> g, Filter<T> f)
 			throws WalaException {
 		Collection<T> slice = GraphSlicer.slice(g, f);
@@ -258,7 +258,7 @@ public class CallGraphAnalyzer {
 				else
 					return true;
 				*/
-				/**//*****
+				/**/
 				if (!n.toString().contains("hello_world")
 						&& !n.toString().contains("alert")
 						&& !n.toString().contains("getElementById")
@@ -279,12 +279,12 @@ public class CallGraphAnalyzer {
 					}
 					return true;
 				}
-				/**//*****
+				/**/
 			} else {
 				return false;
 			}
 		}
-		*****/
+		
 		/*
 		@Override
 		public boolean accepts(CGNode o) {
@@ -315,7 +315,7 @@ public class CallGraphAnalyzer {
 			}
 		}
 		*/
-	/*****
+	
 	}
-	*****/
+
 }
