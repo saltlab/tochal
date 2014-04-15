@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Clematis Story</title>
+  <script src="javascripts/jquery-1.9.1.js"></script>
+  <script type="text/javascript" src="javascripts/prettify.js"></script>
+  <script type="text/javascript" src="javascripts/jquery.scrollTo.min.js"></script>
+  <!-- UML Library for Sequence Diagrams -->
+  <script type="text/javascript" src="javascripts/UDCore.js"></script>
+  <script type="text/javascript" src="javascripts/UDModules.js"></script>
+  <script type="text/javascript" src="javascripts/clematisClasses.js"></script>
+  <!-- jQuery Etc. -->
+  <script type="text/javascript" src="javascripts/jquery.rest.min.js"></script>
+  <script type="text/javascript" src="javascripts/jquery-ui-1.10.3.custom.js"></script>
+  <script type="text/javascript" src="javascripts/script.js"></script>
+  <script type="text/javascript" src="javascripts/jquery.jsPlumb-1.5.5-min.js"></script>
+  <script type="text/javascript" src="javascripts/fisheye-all.js"></script>
+  <script type="text/javascript" src="javascripts/semantic_zoom.js"></script>
+  <script type="text/javascript" src="javascripts/jquery.jqdock.js"></script>
+  <link type="text/css" rel="stylesheet" href="CSS/style.css">
+  <script type="text/javascript" src="javascripts/jquery.tipsy.js"></script>
+  <script type="text/javascript" src="javascripts/jquery.kinetic.js"></script>
+  <script type="text/javascript" src="javascripts/jquery.mousewheel.min.js"></script>
+  <script type="text/javascript" src="javascripts/jquery.smoothdivscroll-1.3-min.js"></script>
+  <!--script type="text/javascript" src="javascripts/jquery.smoothDivScroll-1.3.js"></script-->
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="CSS/tipsy.css">
+  <link rel="stylesheet" type="text/css" href="CSS/style2.css">
+  <link rel="stylesheet" type="text/css" href="CSS/jquery-ui-1.10.3.custom.css">
+  <link rel="stylesheet" type="text/css" href="CSS/moeCSS.css">
+  <link rel="stylesheet" type="text/css" href="CSS/smoothDivScroll.css">
+  <link type="text/css" rel="stylesheet" href="CSS/UDStyle.css" media="screen" />
+  <link type="text/css" rel="stylesheet" href="CSS/episodeStyle.css" media="screen" />
+  <link type="text/css" rel="stylesheet" href="CSS/prettify.css" />
+  <link rel="stylesheet" type="text/css" href="flatui/css/bootstrap.css">
+  <!-- Flat UI -->
+  <link rel="stylesheet" type="text/css" href="flatui/css/flat-ui.css">  
+  <script type="text/javascript" src="flatui/javascripts/jquery.ui.touch-punch.min.js"></script>    
+  <script type="text/javascript" src="flatui/javascripts/jquery.tagsinput.min.js"></script>
+  <script type="text/javascript" src="flatui/javascripts/jquery.placeholder.js"></script>
+  <script type="text/javascript" src="flatui/javascripts/bootstrap-switch.min.js"></script>
+  <script type="text/javascript" src="flatui/javascripts/application.js"></script>
+  <script type="text/javascript" src="flatui/javascripts/bootstrap-select.js"></script>
+  <script type="text/javascript" src="flatui/javascripts/bootstrap.min.js"></script>
+</head>
+<body >
+
+<script type="text/javascript">
+  var signalMutation=false;
+  var signalMutation2=false;
+  var signalActor=false;
+  var tableExtras=document.createElement('table');
+  var row=document.createElement('tr');
+  var first_column=document.createElement('td');
+  var second_column=document.createElement('td');
+  var third_column=document.createElement('td');
+
+  first_column.id='first_column';
+  second_column.id='second_column';
+  second_column.setAttribute('class','code_column');
+  var div=document.createElement('div');
+  var pre=document.createElement('pre');
+  var code=document.createElement('code');
+
+  div.id='filename_div';
+  pre.id='code_pre';
+  pre.setAttribute('class','prettyprint lang-java');
+  code.id='code_code';
+  code.setAttribute('class','language-java');
+  pre.appendChild(code);
+  second_column.appendChild(div);
+  second_column.appendChild(pre);
+
+  third_column.id='third_column';
+  third_column.appendChild(document.createElement('div'));
+
+  row.appendChild(first_column);
+  row.appendChild(second_column);
+  row.appendChild(third_column);
+  tableExtras.appendChild(row);
+</script>
+
+<script type="text/javascript">  
+  var result;
+  $.ajax({
+    type: 'GET',
+    url: 'http://localhost:8080/rest/clematis-api/allEpisodes/story/sequenceDiagram2' ,
+    dataType: "text",
+    async: false,
+    success: function sequenceDiagram(data) {
+      result=data;
+      eval(result);  
+    }
+  });
+</script> 
+
+<script>
+  var episodeTraces = new Array();
+  var width = 1169;
+  var height = 400;
+  var initialX = 0;
+  var initialY = 0;
+  var episodeCounter = allEpisodes.length;//5;
+  var lifeLinesByEpisode = new Array();
+  var messagesByEpisode = new Array();
+  var mutationsByEpisode = new Array();
+  var lastMutationDisplay = -1;
+
+  first_column.style.width = window.innerWidth/3;
+  third_column.style.width = window.innerWidth/3;
+  code.style.width = window.innerWidth/3;
+  div.style.width = window.innerWidth/3;
+  second_column.style.width = window.innerWidth/3;
+
+  $("#first_column").prepend("DOM/Timing/XHR Event Info.");
+  $("#second_column").prepend("JavaScript Source Code");
+  $("#third_column").prepend("DOM Mutation Information");
+</script>
+<script type="text/javascript" src="javascripts/sequence-interact.js"></script>
+<script type="text/javascript" src="javascripts/sequence.js"></script>
+<script type="text/javascript" src="javascripts/highlight.js"></script>
+<script>
+
+storyTable.appendChild(storyTableRow);
+
+for (var k = 0; k < episodeTraces.length; k++) {
+    episodeTraces[k].draw();
+    episodeTraces[k].interaction(true);
+}
+
+for (var m = 0; m < lifeLinesByEpisode.length; m++) {
+    var episodeComponents = allEpisodes[m].getComponents();
+    for (var n = 0; n < episodeComponents.length; n++) {
+        lifeLinesByEpisode[m][n] = episodeComponents[n];
+    }
+}
+
+for (var m = 0; m < mutationsByEpisode.length; m++) {
+    for (var j = 0; j < allEpisodes[m].getMutations().length; j++) {
+        mutationsByEpisode[m][j] = allEpisodes[m].getMutations()[j].getMutationObject();
+    }
+}
+
+function printDOMMutation(e) {
+    var splitId = this.id.split("_");
+    var episodeNumber = splitId[2];
+
+    if (episodeNumber == lastMutationDisplay) return;
+
+    lastMutationDisplay = episodeNumber;
+
+    document.getElementById('third_column').innerHTML = '';
+
+    $("#third_column").prepend("DOM Mutation Information for episode " + episodeNumber + ":");
+
+    for (var j = 0; j < allEpisodes[episodeNumber].getMutations().length; j++) {
+        signalMutation = true;
+        var jjson = mutationsByEpisode[episodeNumber][j];
+        document.getElementById('third_column').appendChild(document.createElement('pre')).innerHTML = syntaxHighlight(JSON.stringify(jjson, undefined, 4));
+    }
+
+    if (signalMutation == true) {
+        signalMutation = false;
+        $(document.getElementById('elem2Mutation')).effect("highlight", {}, 2000);
+        //var temp=document.getElementById('anchor3').innerHTML;
+        //document.getElementById('anchor3').innerHTML=temp+"\nMutation Present";
+    }
+    if (allEpisodes[episodeNumber].getMutations().length < 1) {
+        document.getElementById('third_column').appendChild(document.createElement('pre')).innerHTML = "N/A";
+    }
+    $("#third_column").effect("highlight", {}, 2000);
+}
+
+function printDOMMutation2(i) {
+    //var splitId = this.id.split("_");
+    var episodeNumber = i;
+
+    if (episodeNumber == lastMutationDisplay) return;
+
+    lastMutationDisplay = episodeNumber;
+
+    third_column.innerHTML = '';
+
+    $("#third_column").prepend("DOM Mutation Information for episode " + episodeNumber + ":");
+
+    for (var j = 0; j < allEpisodes[episodeNumber].getMutations().length; j++) {
+        signalMutation = true;
+        var jjson = mutationsByEpisode[episodeNumber][j];
+        third_column.appendChild(document.createElement('pre')).innerHTML = syntaxHighlight(JSON.stringify(jjson, undefined, 4));
+    }
+
+    if (signalMutation == true) {
+        signalMutation = false;
+        $(document.getElementById('elem2Mutation')).effect("highlight", {}, 2000);
+        //var temp=document.getElementById('anchor3').innerHTML;
+        //document.getElementById('anchor3').innerHTML=temp+"\nMutation Present";
+    }
+    if (allEpisodes[episodeNumber].getMutations().length < 1) {
+        third_column.appendChild(document.createElement('pre')).innerHTML = "N/A";
+    }
+    $("#third_column").effect("highlight", {}, 2000);
+}
+
+function viewEpisodeInfo() {
+    // todo info about episode / set timeouts and xhrs / the callbacks and the links
+}
+
+function viewDetailedCode(lifeline) {
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 /* && xmlhttp.status==200*/ ) {
+            var codeToPrint = xmlhttp.responseText.replace("<", "&lt", "gi");
+            codeToPrint = codeToPrint.replace(">", "&gt", "gi");
+            document.getElementById('code_code').innerHTML = codeToPrint;
+
+            document.getElementById('code_pre').className = "prettyprint lang-js codeWrapper";
+            prettyPrint();
+
+            $('#code_pre')._scrollable(); // When scrolling the window
+
+            var numberOfLines = $("#code_code").find('span').filter(':contains("\n")').size();
+            numberOfLines += $("#code_code").find('span').filter(':contains("\n\n")').size();
+            numberOfLines += $("#code_code").find('span').filter(':contains("\n\n\n")').size();
+            numberOfLines += $("#code_code").find('span').filter(':contains("\n\n\n\n")').size();
+
+            var lineOfInterest = $("#code_code").contents().filter(function () {
+                if (this.previousSibling != null) {
+                    if (lifeline.getName().substring(0, lifeline.getName().indexOf('(')) === 'anonymous') {
+                        return this.textContent.contains('function');
+                    } else {
+                        return this.textContent.contains(lifeline.getName().substring(0, lifeline.getName().indexOf('(')))
+                                   && (this.previousSibling.textContent.contains('function') 
+                                   || this.previousSibling.textContent.contains('var')
+                                   || this.previousSibling.textContent.contains('.'));
+                    }
+                }
+            });
+
+            function findLineNumber(element) {
+                var endOfLineNodes = $("#code_code").find('span').filter(':contains("\n")');
+                var indexOfOurLineEnd = endOfLineNodes.index($(element).nextAll().filter(':contains("\n")')[0]);
+                var count = 0;
+
+                for (var t = 0; t < indexOfOurLineEnd; t++) {
+                    count += endOfLineNodes.get(t).innerHTML.split(/[\n]/g).length - 1;
+                }
+                return count + 1;
+            }
+
+            var distance = 999;
+            for (var k = 0; k < lineOfInterest.length; k++) {
+                if (Math.abs(lifeline.getLineNo() - findLineNumber(lineOfInterest[k])) < distance) {
+                    distance = Math.abs(lifeline.getLineNo() - findLineNumber(lineOfInterest[k]));
+                    var indexOfReal = k;
+                }
+            }
+
+
+
+
+            $('#code_pre').scrollTo(lineOfInterest[indexOfReal]);
+            $('#code_pre').scrollLeft('30px');
+            $(lineOfInterest[indexOfReal]).effect("highlight", {}, 8000);
+
+            document.getElementById('filename_div').innerHTML = '<strong>' + lifeline.getFileName() + '</strong>';
+            document.getElementById('second_column').width = 200;
+            document.getElementById('code_code').width = 200;
+            document.getElementById('code_pre').width = window.innerWidth / 11;
+
+        }
+    }
+    xmlhttp.open("GET", lifeline.getFileName(), true);
+    xmlhttp.send();
+}
+
+function viewEventInformation(lifeline) {
+    if (lifeline instanceof DOMEventTrace) {
+        var jjson = lifeline.getTargetElement();
+        first_column.innerHTML = '';
+        $("#first_column").prepend("DOM Event Target");
+        first_column.appendChild(document.createElement('pre')).innerHTML = syntaxHighlight(JSON.stringify(jjson, undefined, 4));
+    } else if (lifeline instanceof TimingTrace) {
+        var jjson = {
+            "delay": lifeline.getDelay(),
+            "callback": lifeline.getCallbackFunction(),
+            "TID": lifeline.getTimeoutId()
+        };
+        first_column.innerHTML = '';
+        $("#first_column").prepend("Timing Event Information:");
+        first_column.appendChild(document.createElement('pre')).innerHTML = syntaxHighlight(JSON.stringify(jjson, undefined, 4));
+    } else if (lifeline instanceof XHREvent) {
+        var jjson = {
+            "XHR ID": lifeline.getXHRId(),
+            "URL": lifeline.getUrl(),
+            "Method Type": lifeline.getMethodType(),
+            "Async": lifeline.isAsync(),
+            "Message": lifeline.getMessage(),
+            "Callback function": lifeline.getCallbackFunction(),
+            "Response": lifeline.getResponse()
+        };
+        first_column.innerHTML = '';
+        $("#first_column").prepend("XHR Event Information:");
+        first_column.appendChild(document.createElement('pre')).innerHTML = syntaxHighlight(JSON.stringify(jjson, undefined, 4));
+    }
+    $("#first_column").effect("highlight", {}, 2000);
+}
+
+</script>
+<script type="text/javascript" src="javascripts/fisheyeZoom.js"></script>
+</body>
+</html>

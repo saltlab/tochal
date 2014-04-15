@@ -77,6 +77,9 @@ public class SimpleExample {
 			s.setFileNameToAttach("/esprima.js");
 			s.setFileNameToAttach("/esmorph.js");
 			s.setFileNameToAttach("/jsonml-dom.js");
+			
+			s.setFileNameToAttach("/functionNaming.js");
+			
 			s.setFileNameToAttach("/addvariable.js");
 			
 //			s.setFileNameToAttach("/asyncLogger.js");

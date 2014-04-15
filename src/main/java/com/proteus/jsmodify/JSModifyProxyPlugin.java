@@ -179,7 +179,6 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 
 
 		try {
-
 			// Save original JavaScript files/nodes
 			Helper.directoryCheck(getOutputFolder());
 			setFileName(scopename);
@@ -388,15 +387,16 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 		if (request.getURL().toString().contains("?thisisafunctiontracingcall")) {
 			String rawResponse = new String(request.getContent());
 			JSExecutionTracer.addPoint(rawResponse);
+			
 			return response;
 		}
 		if (request.getURL().toString().contains("?DOMACCESSLOG")) {
 			String rawResponse = new String(request.getContent());
 
-			System.err.println("++++++++++++++++++++++++++++++++++++++++");
+/*			System.err.println("++++++++++++++++++++++++++++++++++++++++");
 			System.err.println("DOMACCESSLOG");
 			System.err.println(rawResponse);
-
+*/
 			// DomAccessHandler.getInstance().makeAccessRelations(rawResponse);
 			// DomAccessHandler.getInstance().handleDomRelations(rawResponse);
 
@@ -407,11 +407,11 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 
 		if (request.getURL().toString().contains("?XHRACCESSLOG")) {
 			String rawResponse = new String(request.getContent());
-
+/*
 			System.err.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 			System.err.println("XHRACCESSLOG");
 			System.err.println(rawResponse);
-
+*/
 			InteractionGraph.getInstance().handleXhrRelations(rawResponse);
 
 			return response;
