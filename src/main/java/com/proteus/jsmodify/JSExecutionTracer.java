@@ -253,6 +253,8 @@ public class JSExecutionTracer {
 				// TODO TODO TODO TODO
 				// TODO TODO TODO TODO
 				// TODO TODO TODO TODO
+				System.out.println("///////////////////////////////////////////////");
+				System.out.println(itr.next());
 				/*****
 				Graph<CGNode> callGraph = callGraphAnalyzer.getCallGraph(itr.next(), key);
 				System.out.println("<><><><> " + callGraph.getNumberOfNodes());
