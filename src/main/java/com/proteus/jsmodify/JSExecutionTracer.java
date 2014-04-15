@@ -51,6 +51,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.TreeMultimap;
 import com.proteus.core.interactiongraph.InteractionGraph;
 import com.proteus.core.staticanalysis.CallGraphAnalyzer;
+import com.proteus.core.staticanalysis.TestWala;
 import com.proteus.core.trace.DOMEventTrace;
 import com.proteus.core.trace.TimingTrace;
 import com.proteus.core.trace.TraceObject;
@@ -240,6 +241,8 @@ public class JSExecutionTracer {
 			System.out.println("key: " + key);
 			System.out.println(JSModifyProxyPlugin.JSCodeMultiMap.get(key).size());
 			
+			String fileScript = "";
+			
 			Iterator<String> itr = JSModifyProxyPlugin.JSCodeMultiMap.get(key).iterator();
 			while (itr.hasNext()) {
 				// TODO TODO TODO TODO
@@ -254,7 +257,11 @@ public class JSExecutionTracer {
 				// TODO TODO TODO TODO
 				// TODO TODO TODO TODO
 				System.out.println("///////////////////////////////////////////////");
-				System.out.println(itr.next());
+				System.out.println("KEY: " + key);
+				System.out.println("///////////////////////////////////////////////");
+				fileScript = fileScript + " \n " + itr.next();
+//				System.out.println(itr.next());
+//				TestWala.getCallGraph(itr.next());
 				/*****
 				Graph<CGNode> callGraph = callGraphAnalyzer.getCallGraph(itr.next(), key);
 				System.out.println("<><><><> " + callGraph.getNumberOfNodes());
@@ -274,6 +281,10 @@ public class JSExecutionTracer {
 				// TODO TODO TODO TODO TODO TODO TODO TODO 
 				// TODO TODO TODO TODO TODO TODO TODO TODO 
 			}
+			
+			if (!fileScript.isEmpty())
+				TestWala.getCallGraph(fileScript);
+
 			
 			System.out.println("------------");
 //			System.out.println("values: " + JSModifyProxyPlugin.JSCodeMultiMap.get(key));
