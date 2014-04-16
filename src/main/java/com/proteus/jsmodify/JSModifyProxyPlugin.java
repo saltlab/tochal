@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -38,6 +40,8 @@ import com.proteus.instrument.AstInstrumenter;
 import com.proteus.jsmodify.JSModifyProxyPlugin;
 import com.sun.jersey.core.header.HttpDateFormat;
 /////////////import com.yahoo.platform.yui.compressor.*;
+
+import flex.messaging.util.URLEncoder;
 
 /**
  * The JSInstrument proxy plugin used to add instrumentation code to JavaScript
@@ -547,6 +551,49 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 				e.printStackTrace();
 			}
 		}
+		
+		System.out.println("////////////////////////===========//////////////");
+/*		System.out.println(request.getURL());
+		try {
+			System.out.println(URLEncoder.encode(request.getURL().toString(), "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+*/		
+		// TODO TODO TODO TODO
+		// TODO TODO TODO TODO
+		// TODO TODO TODO TODO
+		// TODO TODO TODO TODO
+		// start
+		
+		String tempFileName = "";
+		try {
+			tempFileName = URLEncoder.encode(request.getURL().toString(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		try {
+			PrintWriter writer = new PrintWriter("tempJsFiles/" + tempFileName, "UTF-8");
+			writer.print(new String(response.getContent()));
+			writer.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// end
+		// TODO TODO TODO TODO
+		// TODO TODO TODO TODO
+		// TODO TODO TODO TODO
+		// TODO TODO TODO TODO
+		// TODO TODO TODO TODO
+		
+		System.out.println("////////////////////////===========//////////////");
 		/* return the response to the webbrowser */
 		return response;
 	}
