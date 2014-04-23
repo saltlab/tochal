@@ -154,6 +154,10 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 	 * @return The modified JavaScript
 	 */
 	public synchronized String modifyJS(String input, String scopename, String originalUrl) {
+		
+//		System.out.println("111#######################################");
+//		System.out.println(input);
+//		System.out.println("222#######################################");
 
 		System.out.println("<<<<");
 		System.out.println("Scope: " + scopename);

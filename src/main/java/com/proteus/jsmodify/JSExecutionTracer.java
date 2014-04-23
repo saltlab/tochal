@@ -282,8 +282,11 @@ public class JSExecutionTracer {
 				// TODO TODO TODO TODO TODO TODO TODO TODO 
 			}
 			
-			if (!fileScript.isEmpty())
-				TestWala.getCallGraph(fileScript);
+			if (!fileScript.isEmpty()) {
+//				TestWala.getCallGraph(fileScript);
+				////////////////////// TODO removed this to complete dynamic part
+//////////////////////////////////				TestWala.getCallGraphAndSlicer(fileScript); // TODO TODO TODO
+			}
 
 			
 			System.out.println("------------");

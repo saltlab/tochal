@@ -52,6 +52,11 @@ public class InteractionGraph {
 	public static InteractionGraph getInstance() {
 		return INSTANCE;
 	}
+	
+	// TODO
+	public HashMap<String, Function> getFunctions() {
+		return this.functionsByName;
+	}
 
 	// TODO this method will be accessed from outside to traverse the graph and
 	// find info about dynamic paths
@@ -81,6 +86,42 @@ public class InteractionGraph {
 		findPathsBetweenFunctionPairs();
 
 		findTopologicalGraphCharacteristics();
+		
+		// TODO
+		findFunctionDynamicCallInformation();
+	}
+	
+	protected void findFunctionDynamicCallInformation() {
+		int numOfFunctions = functionsByName.size();
+		int numOfFunctionsWOArgs = 0;
+		
+		// all functions and all their arguments during execution
+		for (Iterator<Function> itr = functionsByName.values().iterator(); itr.hasNext(); ) {
+			Function f = itr.next();
+			System.out.println("------------------------ Function: " + f.getStrId());
+//			for (String args : f.getArgsOverTime())
+//				System.out.println(args);
+			if (f.getArgsOverTime().isEmpty()) {
+				numOfFunctionsWOArgs ++;
+			}
+			else {
+				boolean allArgsEmpty = true;
+				for (String args : f.getArgsOverTime()) {
+					if (!args.isEmpty() && !args.equals("[]")) {
+						allArgsEmpty = false;
+					}
+				}
+				if (allArgsEmpty) { 
+					numOfFunctionsWOArgs ++;
+				}
+				else
+					System.out.println(f.getArgsOverTime());
+
+			}
+		}
+
+		System.out.println("numOfFunctions: " + numOfFunctions);
+		System.out.println("numOfFunctionsWOArgs: " + numOfFunctionsWOArgs);
 	}
 
 	// TODO TODO TODO TODO TODO
@@ -880,6 +921,7 @@ public class InteractionGraph {
 				FunctionEnter functionEnter = (FunctionEnter) functionTrace;
 				String name = functionEnter.getTargetFunction();
 				String scope = functionEnter.getScopeName();
+				String args = functionEnter.getArgs(); // TODO
 
 				Function f;
 
@@ -901,6 +943,9 @@ public class InteractionGraph {
 					// TODO TODO TODO
 					// TODO TODO TODO
 				}
+				
+
+				f.addArgs(args); // TODO
 
 				functions.push(f);
 				functionTraceStack.push(functionEnter);

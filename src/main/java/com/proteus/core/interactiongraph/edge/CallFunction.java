@@ -7,5 +7,17 @@ package com.proteus.core.interactiongraph.edge;
  *
  */
 public class CallFunction extends WriteAccess {
+	private boolean isStatic;
+	
+	public CallFunction() {
+		this.isStatic = false;
+	}
 
+	public boolean isStatic() {
+		return isStatic;
+	}
+
+	public void setStatic(boolean isStatic) {
+		this.isStatic = isStatic;
+	}
 }

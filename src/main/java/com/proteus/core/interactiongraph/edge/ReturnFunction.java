@@ -7,5 +7,18 @@ package com.proteus.core.interactiongraph.edge;
  *
  */
 public class ReturnFunction extends ReadAccess {
+	private boolean isStatic;
+	
+	public ReturnFunction() {
+		this.isStatic = false;
+	}
+
+	public boolean isStatic() {
+		return isStatic;
+	}
+
+	public void setStatic(boolean isStatic) {
+		this.isStatic = isStatic;
+	}
 
 }
