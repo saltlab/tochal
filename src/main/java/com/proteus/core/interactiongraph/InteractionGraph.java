@@ -95,11 +95,12 @@ public class InteractionGraph {
 		int numOfFunctions = functionsByName.size();
 		int numOfFunctionsWOArgs = 0;
 		int numOfFunctionsWithDiffArity = 0;
+		int numOfRetValMismatches = 0;
 		
 		// all functions and all their arguments during execution
 		for (Iterator<Function> itr = functionsByName.values().iterator(); itr.hasNext(); ) {
 			Function f = itr.next();
-			System.out.println("------------------------ Function: " + f.getStrId());
+			System.out.println("--Function: " + f.getStrId());
 //			for (String args : f.getArgsOverTime())
 //				System.out.println(args);
 			if (f.getArgsOverTime().isEmpty()) {
@@ -135,9 +136,26 @@ public class InteractionGraph {
 			}
 		}
 
+
+		// all functions and all their return values during execution
+		for (Iterator<Function> itr = functionsByName.values().iterator(); itr.hasNext(); ) {
+			Function f = itr.next();
+			System.out.println("--Function: " + f.getStrId());
+//			System.out.println(f.getReturnValues());
+			if (!f.getReturnValues().isEmpty() && f.isCalledWOReturnValue()) {
+				System.out.println("RETURN VALUE MISMATCH");
+				numOfRetValMismatches ++;
+			}
+		}
+		
+		
 		System.out.println("numOfFunctions: " + numOfFunctions);
 		System.out.println("numOfFunctionsWOArgs: " + numOfFunctionsWOArgs);
 		System.out.println("numOfFunctionsWithDiffArity: " + numOfFunctionsWithDiffArity);
+		System.out.println("numOfRetValMismatches: " + numOfRetValMismatches);
+		
+
+	
 	}
 	
 	private int getNumOfArgs(String args) {
@@ -993,6 +1011,10 @@ public class InteractionGraph {
 				Function terminatedFunction = functions.pop();
 				FunctionEnter terminatedTrace = (FunctionEnter) functionTraceStack
 						.pop();
+				
+//				terminatedFunction.addReturnValue("__NO_RET__"); // TODO
+				terminatedFunction.setCalledWOReturnValue(true); // TODO
+				
 				if (!functions.empty()) {
 					Function headFunction = functions.peek();
 					FunctionEnter headTrace = (FunctionEnter) functionTraceStack
@@ -1020,10 +1042,15 @@ public class InteractionGraph {
 							.println("ERROR, INTERACTIONGRAPH::HANDLEDYNAMICCALLGRAPH, FUNCTION STACK EMPTP");
 					continue; // TODO
 				}
+				
+				FunctionReturnStatement returnStatement = (FunctionReturnStatement) functionTrace; // TODO				
 
 				Function terminatedFunction = functions.pop();
 				FunctionEnter terminatedTrace = (FunctionEnter) functionTraceStack
 						.pop();
+				
+				terminatedFunction.addReturnValue(returnStatement.getValue()); // TODO
+				
 				if (!functions.empty()) {
 					Function headFunction = functions.peek();
 					FunctionEnter headTrace = (FunctionEnter) functionTraceStack

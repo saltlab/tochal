@@ -6,6 +6,8 @@ public class Function extends InteractionNode {
 //	private String name;
 	private String fileName, scopeName;
 	private ArrayList<String> argsOverTime;
+	private ArrayList<String> returnValuesOverTime;
+	private boolean calledWOReturnValue;
 	
 	public Function(String functionName) {
 		super(functionName);
@@ -13,6 +15,8 @@ public class Function extends InteractionNode {
 		scopeName = "";
 //		this.name = name;
 		argsOverTime = new ArrayList<String>();
+		returnValuesOverTime = new ArrayList<String>();
+		calledWOReturnValue = false;
 	}
 
 	public String getFileName() {
@@ -38,6 +42,23 @@ public class Function extends InteractionNode {
 	public ArrayList<String> getArgsOverTime() {
 		return this.argsOverTime;
 	}
+	
+	public void addReturnValue(String value) {
+		this.returnValuesOverTime.add(value);
+	}
+	
+	public ArrayList<String> getReturnValues() {
+		return this.returnValuesOverTime;
+	}
+
+	public boolean isCalledWOReturnValue() {
+		return calledWOReturnValue;
+	}
+
+	public void setCalledWOReturnValue(boolean calledWOReturnValue) {
+		this.calledWOReturnValue = calledWOReturnValue;
+	}
+	
 	
 /*
 	public String getName() {
