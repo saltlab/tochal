@@ -94,6 +94,7 @@ public class InteractionGraph {
 	protected void findFunctionDynamicCallInformation() {
 		int numOfFunctions = functionsByName.size();
 		int numOfFunctionsWOArgs = 0;
+		int numOfFunctionsWithDiffArity = 0;
 		
 		// all functions and all their arguments during execution
 		for (Iterator<Function> itr = functionsByName.values().iterator(); itr.hasNext(); ) {
@@ -106,22 +107,47 @@ public class InteractionGraph {
 			}
 			else {
 				boolean allArgsEmpty = true;
+				int prevNumOfArgs = 0, currNumOfArgs = 0;
+				boolean allArgsArityMatch = true;
+				if (f.getArgsOverTime().size() > 0) {
+					prevNumOfArgs = getNumOfArgs(f.getArgsOverTime().get(0));
+					currNumOfArgs = prevNumOfArgs;
+				}
 				for (String args : f.getArgsOverTime()) {
 					if (!args.isEmpty() && !args.equals("[]")) {
 						allArgsEmpty = false;
+						currNumOfArgs = getNumOfArgs(args);
+						if (currNumOfArgs != prevNumOfArgs)
+							allArgsArityMatch = false;
+						prevNumOfArgs = currNumOfArgs;
 					}
 				}
 				if (allArgsEmpty) { 
 					numOfFunctionsWOArgs ++;
 				}
-				else
+				else { // Function has arguments
 					System.out.println(f.getArgsOverTime());
+					System.out.println("args match? " + (allArgsArityMatch ? "yes" : "no"));
+					if (!allArgsArityMatch)
+						numOfFunctionsWithDiffArity ++;
+				}
 
 			}
 		}
 
 		System.out.println("numOfFunctions: " + numOfFunctions);
 		System.out.println("numOfFunctionsWOArgs: " + numOfFunctionsWOArgs);
+		System.out.println("numOfFunctionsWithDiffArity: " + numOfFunctionsWithDiffArity);
+	}
+	
+	private int getNumOfArgs(String args) {
+		int numOfArgs = 0;
+		StringTokenizer tokenizer = new StringTokenizer(args, "{");
+		while (tokenizer.hasMoreTokens()) {
+			tokenizer.nextToken();
+			numOfArgs ++;
+		}
+		return numOfArgs;
 	}
 
 	// TODO TODO TODO TODO TODO
