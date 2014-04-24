@@ -79,5 +79,4 @@ public class DOMEventTrace extends TraceObject/* implements EpisodeSource */{
 		this.strId = strId;
 	}
 	
-	
 }

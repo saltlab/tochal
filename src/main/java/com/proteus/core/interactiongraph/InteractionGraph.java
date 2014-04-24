@@ -22,6 +22,7 @@ import com.proteus.core.interactiongraph.node.DomElement;
 import com.proteus.core.interactiongraph.node.Function;
 import com.proteus.core.interactiongraph.node.InteractionNode;
 import com.proteus.core.interactiongraph.node.XmlHttpRequest;
+import com.proteus.core.trace.DOMEventTrace;
 import com.proteus.core.trace.FunctionCall;
 import com.proteus.core.trace.FunctionEnter;
 import com.proteus.core.trace.FunctionExit;
@@ -1023,6 +1024,16 @@ public class InteractionGraph {
 		 * counter, path + next.getStrId(), allCounters, allPaths);
 		 * next.setVisited(true); } } }
 		 */
+	}
+	
+
+	public void handleDomEvents(Collection<TraceObject> domEventTraces) {
+		System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+		System.out.println("SIZE: " + domEventTraces.size());
+		for (TraceObject o : domEventTraces) {
+			System.out.println(((com.proteus.core.trace.DOMEventTrace)o).getStrId());
+		}
+		System.out.println("%%%%%%%");
 	}
 
 	public void handleDynamicCallGraph(Collection<TraceObject> functionTraces) {

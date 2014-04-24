@@ -4,6 +4,7 @@ var dom_logger = {}
  * Prints the information related to a DOM event on the console
  */
 dom_logger.logDOMEvent = function(type, targetEl, callback) {
+	console.log("=====");
 
 //	if (!recordingInProgress || type.contains("mouse") || (targetEl.id && targetEl.id.contains('Button'))) {
 /*	if (type.contains("mouse") || (targetEl.id && targetEl.id.contains('Button'))) {
@@ -18,33 +19,35 @@ dom_logger.logDOMEvent = function(type, targetEl, callback) {
 */
 
 	jml = JsonML.fromHTML(arguments[1]);
+	/*
 	window.console.log('DOM callback');
 	window.console.log('type: ' + type);
 	window.console.log('callback: ' + callback);
 	window.console.log('targetEl: ' + targetEl);
-	
+	*/
 	////
 	if (targetEl == window) {
-		console.warn("window object ***");
+		console.warn("instrumentDOMElements::dom_logger.logDOMEvent window object ***");
 		return;
 	}
 	if (targetEl.getAttribute == null) {
-		console.warn("Get attribute not defined on element");
+		console.warn("instrumentDOMElements::dom_logger.logDOMEvent Get attribute not defined on element");
 		return;
 	}
 	if (targetEl == null) {
 		console.warn("instrumentDOMEvents::dom_logger.logDOMEvent -> targetEl is NULL");
 		return;
 	}
-	var id = getAttribute_original.call(targetEl, "id");
+	var strId = getAttribute_original.call(targetEl, "id");
 //	var id = arguments[1].getAttribute("id");
-	if (id == null) {
-		id = generateRandomUniqueId();
-		setAttribute_original.call(targetEl, "id", id);
+	if (strId == null) {
+		strId = generateRandomUniqueId();
+		setAttribute_original.call(targetEl, "id", strId);
 	}
-	console.log('id: ' + id)
+//	console.log('id: ' + id)
 	////
 	
+	console.log('DOM EVENT. id: ' + strId, ', type: ' + type);
 
 	if (jml) {
 		jml = JSON.stringify(jml);
@@ -53,8 +56,8 @@ dom_logger.logDOMEvent = function(type, targetEl, callback) {
 			timeStamp : date,
 			eventType : arguments[0],
 			eventHandler : callback.name,
+			strId : strId,
 			targetElement : jml,
-			strId : id,
 			counter : traceCounter++
 		}));
 
