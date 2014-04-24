@@ -60,11 +60,14 @@ public class Function extends InteractionNode {
 	}
 	
 	public String getStrId() {
-		if (strId.indexOf(':') != strId.lastIndexOf(':')) {
-			if (strId.lastIndexOf(':') > 0)
-				return strId.substring(0, strId.lastIndexOf(':'));
+		String newStrId = this.strId;
+		if (newStrId.startsWith("null+"))
+			newStrId = strId.substring(5);
+		if (newStrId.indexOf(':') != newStrId.lastIndexOf(':')) {
+			if (newStrId.lastIndexOf(':') > 0)
+				return newStrId.substring(0, newStrId.lastIndexOf(':'));
 		}
-		return strId;
+		return newStrId;
 	}
 	
 /*

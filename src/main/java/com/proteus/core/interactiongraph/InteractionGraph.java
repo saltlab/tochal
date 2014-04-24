@@ -53,7 +53,7 @@ public class InteractionGraph {
 	public static InteractionGraph getInstance() {
 		return INSTANCE;
 	}
-	
+
 	// TODO
 	public HashMap<String, Function> getFunctions() {
 		return this.functionsByName;
@@ -87,24 +87,25 @@ public class InteractionGraph {
 		findPathsBetweenFunctionPairs();
 
 		findTopologicalGraphCharacteristics();
-		
+
 		// TODO
 		findFunctionDynamicCallInformation();
-		
+
 		findXHRInformation();
 	}
-	
+
 	protected void findFunctionDynamicCallInformation() {
 		matchStaticDynamicFunctionArities();
+		matchDynamicFunctionReturns();
 
-		System.out.println("+-+-+-");
-		for (Iterator<String> it = FunctionTrace.functionCodes.keySet().iterator(); it.hasNext(); ) {
-			String key = it.next();
-			System.out.println("key: " + key);
-			System.out.println("num of params: " + FunctionTrace.functionParamNum.get(key));
-			System.out.println("val: " + FunctionTrace.functionCodes.get(key));
-		}
-		
+		/*
+		 * System.out.println("+-+-+-"); for (Iterator<String> it =
+		 * FunctionTrace.functionCodes.keySet().iterator(); it.hasNext(); ) {
+		 * String key = it.next(); System.out.println("key: " + key);
+		 * System.out.println("num of params: " +
+		 * FunctionTrace.functionParamNum.get(key)); System.out.println("val: "
+		 * + FunctionTrace.functionCodes.get(key)); }
+		 */
 
 	}
 
@@ -113,97 +114,128 @@ public class InteractionGraph {
 		int numOfFunctionsWOArgs = 0;
 		int numOfFunctionsWithDiffArity = 0;
 		int numOfFunctionsWithDiffStaticArity = 0;
-		int numOfRetValMismatches = 0;
-		
+		int numOfStaticallyUndetectedFunctions = 0;
+
+		/*
+		 * System.out.println("---======"); for (Iterator<Function> itr =
+		 * functionsByName.values().iterator(); itr.hasNext(); ) { Function f =
+		 * itr.next(); System.out.println(f.getStrId()); }
+		 * System.out.println("======---");
+		 */
 		// all functions and all their arguments during execution
-		for (Iterator<Function> itr = functionsByName.values().iterator(); itr.hasNext(); ) {
+		for (Iterator<Function> itr = functionsByName.values().iterator(); itr
+				.hasNext();) {
 			Function f = itr.next();
-			
+
 			boolean staticDynamicArityMismatch = false; // TODO
-			int staticParamCount = FunctionTrace.functionParamNum.get(f.getStrId());
-////////////////////			System.out.println("--Function: " + f.getStrId());
-//			for (String args : f.getArgsOverTime())
-//				System.out.println(args);
-			if (f.getArgsOverTime().isEmpty()) {
-				numOfFunctionsWOArgs ++;
+
+			System.out.println("1");
+			System.out.println(f);
+			System.out.println("2");
+			System.out.println(f.getStrId());
+			System.out.println("3");
+			System.out.println(FunctionTrace.functionParamNum);
+			System.out.println("4");
+			System.out
+					.println(FunctionTrace.functionParamNum.get(f.getStrId()));
+
+			if (FunctionTrace.functionParamNum.get(f.getStrId()) != null) {
+				int staticParamCount = FunctionTrace.functionParamNum.get(f
+						.getStrId());
+				if (f.getArgsOverTime().isEmpty()) {
+					numOfFunctionsWOArgs++;
+				} else {
+					boolean allArgsEmpty = true;
+					int prevNumOfArgs = 0, currNumOfArgs = 0;
+					boolean allArgsArityMatch = true;
+					if (f.getArgsOverTime().size() > 0) {
+						prevNumOfArgs = getNumOfArgs(f.getArgsOverTime().get(0));
+						currNumOfArgs = prevNumOfArgs;
+					}
+					for (String args : f.getArgsOverTime()) {
+						if (!args.isEmpty() && !args.equals("[]")) {
+							allArgsEmpty = false;
+							currNumOfArgs = getNumOfArgs(args);
+							if (currNumOfArgs != prevNumOfArgs) {
+								allArgsArityMatch = false;
+								if (currNumOfArgs != staticParamCount)
+									staticDynamicArityMismatch = true;
+							}
+							prevNumOfArgs = currNumOfArgs;
+						}
+					}
+					if (allArgsEmpty) {
+						numOfFunctionsWOArgs++;
+					} else { // Function has arguments
+						System.out.println("--Function: " + f.getStrId());
+						System.out.println(f.getArgsOverTime());
+						System.out.println("args match? "
+								+ (allArgsArityMatch ? "yes" : "no"));
+						if (!allArgsArityMatch)
+							numOfFunctionsWithDiffArity++;
+
+						if (staticDynamicArityMismatch)
+							numOfFunctionsWithDiffStaticArity++;
+					}
+
+				}
 			}
 			else {
-				boolean allArgsEmpty = true;
-				int prevNumOfArgs = 0, currNumOfArgs = 0;
-				boolean allArgsArityMatch = true;
-				if (f.getArgsOverTime().size() > 0) {
-					prevNumOfArgs = getNumOfArgs(f.getArgsOverTime().get(0));
-					currNumOfArgs = prevNumOfArgs;
-				}
-				for (String args : f.getArgsOverTime()) {
-					if (!args.isEmpty() && !args.equals("[]")) {
-						allArgsEmpty = false;
-						currNumOfArgs = getNumOfArgs(args);
-						if (currNumOfArgs != prevNumOfArgs) {
-							allArgsArityMatch = false;
-							if (currNumOfArgs != staticParamCount)
-								staticDynamicArityMismatch = true;
-						}
-						prevNumOfArgs = currNumOfArgs;
-					}
-				}
-				if (allArgsEmpty) { 
-					numOfFunctionsWOArgs ++;
-				}
-				else { // Function has arguments
-					System.out.println("--Function: " + f.getStrId());
-					System.out.println(f.getArgsOverTime());
-					System.out.println("args match? " + (allArgsArityMatch ? "yes" : "no"));
-					if (!allArgsArityMatch)
-						numOfFunctionsWithDiffArity ++;
-					
-					if (staticDynamicArityMismatch)
-						numOfFunctionsWithDiffStaticArity ++;
-				}
-
+				System.out.println("FUNCTION NOT DETECTED STATICALLY!");
+				numOfStaticallyUndetectedFunctions ++;
 			}
 		}
 
-
-		// all functions and all their return values during execution
-		for (Iterator<Function> itr = functionsByName.values().iterator(); itr.hasNext(); ) {
-			Function f = itr.next();
-/////////////////			System.out.println("--Function: " + f.getStrId());
-//			System.out.println(f.getReturnValues());
-			if (!f.getReturnValues().isEmpty() && f.isCalledWOReturnValue()) {
-				System.out.println("RETURN VALUE MISMATCH");
-				numOfRetValMismatches ++;
-			}
-		}
-		
-		
 		System.out.println("numOfFunctions: " + numOfFunctions);
 		System.out.println("numOfFunctionsWOArgs: " + numOfFunctionsWOArgs);
-		System.out.println("numOfFunctionsWithDiffArity: " + numOfFunctionsWithDiffArity);
-		System.out.println("numOfFunctionsWithDiffStaticArity: " + numOfFunctionsWithDiffStaticArity);
-		System.out.println("numOfRetValMismatches: " + numOfRetValMismatches);
+		System.out.println("numOfFunctionsWithDiffArity: "
+				+ numOfFunctionsWithDiffArity);
+		System.out.println("numOfFunctionsWithDiffStaticArity: "
+				+ numOfFunctionsWithDiffStaticArity);
+		System.out.println("numOfStaticallyUndetectedFunctions: " + numOfStaticallyUndetectedFunctions);
 	}
-	
+
+	private void matchDynamicFunctionReturns() {
+		int numOfRetValMismatches = 0;
+
+		// all functions and all their return values during execution
+		for (Iterator<Function> itr = functionsByName.values().iterator(); itr
+				.hasNext();) {
+			Function f = itr.next();
+			// /////////////// System.out.println("--Function: " +
+			// f.getStrId());
+			// System.out.println(f.getReturnValues());
+			if (!f.getReturnValues().isEmpty() && f.isCalledWOReturnValue()) {
+				System.out.println("RETURN VALUE MISMATCH");
+				numOfRetValMismatches++;
+			}
+		}
+		System.out.println("numOfRetValMismatches: " + numOfRetValMismatches);
+
+	}
+
 	private int getNumOfArgs(String args) {
 		int numOfArgs = 0;
 		StringTokenizer tokenizer = new StringTokenizer(args, "{");
 		while (tokenizer.hasMoreTokens()) {
 			tokenizer.nextToken();
-			numOfArgs ++;
+			numOfArgs++;
 		}
 		return numOfArgs;
 	}
-	
+
 	protected void findXHRInformation() {
-		for (Iterator<XmlHttpRequest> itr = xhrsById.values().iterator(); itr.hasNext(); ) {
+		for (Iterator<XmlHttpRequest> itr = xhrsById.values().iterator(); itr
+				.hasNext();) {
 			XmlHttpRequest xhr = itr.next();
-			
+
 			ArrayList<InteractionEdge> inputs = xhr.getInput();
 			ArrayList<InteractionEdge> outputs = xhr.getOutput();
-			
-///////////////////////			System.out.println("xhr: " + xhr.getStrId() + ", # in: " + inputs.size() + ", # out: " + outputs.size());
+
+			// ///////////////////// System.out.println("xhr: " + xhr.getStrId()
+			// + ", # in: " + inputs.size() + ", # out: " + outputs.size());
 		}
-		
+
 	}
 
 	// TODO TODO TODO TODO TODO
@@ -521,7 +553,7 @@ public class InteractionGraph {
 	 * @param domRelations
 	 */
 	protected void extractDomRelations(String domRelations) {
-//		System.out.println("+++++++++++++++++++++");
+		// System.out.println("+++++++++++++++++++++");
 
 		String domElementId = "", accessTypeList = "", accessFunctionList = "";
 		ArrayList<String> accessTypes = new ArrayList<String>();
@@ -556,7 +588,7 @@ public class InteractionGraph {
 
 		// Extract string representations of accessTypes (interactionEdges)
 		tokenizer = new StringTokenizer(accessTypeList);
-////////////////		System.out.println("** " + accessTypeList);
+		// ////////////// System.out.println("** " + accessTypeList);
 		if (tokenizer.hasMoreTokens())
 			tokenizer.nextToken("@");
 		while (tokenizer.hasMoreTokens())
@@ -564,7 +596,7 @@ public class InteractionGraph {
 
 		// Extract string representations of functions
 		tokenizer = new StringTokenizer(accessFunctionList);
-////////////////		System.out.println("** " + accessFunctionList);
+		// ////////////// System.out.println("** " + accessFunctionList);
 		if (tokenizer.hasMoreTokens())
 			tokenizer.nextToken("@");
 		while (tokenizer.hasMoreTokens())
@@ -725,11 +757,10 @@ public class InteractionGraph {
 	protected void extractXhrRelations(String xhrRelations) {
 		String xhrAccessType = "", xhrObjId = "", xhrAccessFunction = "";
 		StringTokenizer tokenizer = new StringTokenizer(xhrRelations);
-		
+
 		System.out.println("==");
 		System.out.println("=>=>=>==== " + xhrRelations);
 		System.out.println("==");
-		
 
 		while (tokenizer.hasMoreTokens()) {
 			xhrAccessType = "";
@@ -752,11 +783,11 @@ public class InteractionGraph {
 				xhrAccessFunction = tokenizer.nextToken(":"); // ","accessFunction":
 			if (tokenizer.hasMoreTokens())
 				xhrAccessFunction = tokenizer.nextToken(":\"}"); // sendUserInfoToServer
-/*************************
-			System.out.println("xhrAccessType: " + xhrAccessType);
-			System.out.println("xhrObjId: " + xhrObjId);
-			System.out.println("xhrAccessFunction: " + xhrAccessFunction);
-*************************/
+			/*************************
+			 * System.out.println("xhrAccessType: " + xhrAccessType);
+			 * System.out.println("xhrObjId: " + xhrObjId);
+			 * System.out.println("xhrAccessFunction: " + xhrAccessFunction);
+			 *************************/
 			XmlHttpRequest xhr;
 			if (xhrsById.containsKey(xhrObjId))
 				xhr = xhrsById.get(xhrObjId);
@@ -806,9 +837,9 @@ public class InteractionGraph {
 				function.addInput(responseAccess);
 			}
 			/***
-			System.out.println("========");
-			System.out.println(xhrsById.toString());
-			***/
+			 * System.out.println("========");
+			 * System.out.println(xhrsById.toString());
+			 ***/
 		}
 
 	}
@@ -998,7 +1029,10 @@ public class InteractionGraph {
 		Stack<Function> functions = new Stack<Function>();
 		Stack<TraceObject> functionTraceStack = new Stack<TraceObject>(); // TODO
 
-		ArrayList<String> callGraphPairs = new ArrayList<String>(); // temp, only to print the results
+		ArrayList<String> callGraphPairs = new ArrayList<String>(); // temp,
+																	// only to
+																	// print the
+																	// results
 
 		Iterator<TraceObject> itr = functionTraces.iterator();
 		while (itr.hasNext()) {
@@ -1032,7 +1066,6 @@ public class InteractionGraph {
 					// TODO TODO TODO
 					// TODO TODO TODO
 				}
-				
 
 				f.addArgs(args); // TODO
 
@@ -1056,10 +1089,10 @@ public class InteractionGraph {
 				Function terminatedFunction = functions.pop();
 				FunctionEnter terminatedTrace = (FunctionEnter) functionTraceStack
 						.pop();
-				
-//				terminatedFunction.addReturnValue("__NO_RET__"); // TODO
+
+				// terminatedFunction.addReturnValue("__NO_RET__"); // TODO
 				terminatedFunction.setCalledWOReturnValue(true); // TODO
-				
+
 				if (!functions.empty()) {
 					Function headFunction = functions.peek();
 					FunctionEnter headTrace = (FunctionEnter) functionTraceStack
@@ -1074,8 +1107,9 @@ public class InteractionGraph {
 							callAccess.setOutput(terminatedFunction);
 							headFunction.addOutput(callAccess);
 							terminatedFunction.addInput(callAccess);
-							
-							callGraphPairs.add(headFunction.getStrId() + " -> " + terminatedFunction.getStrId()); // temp
+
+							callGraphPairs.add(headFunction.getStrId() + " -> "
+									+ terminatedFunction.getStrId()); // temp
 
 						}
 					}
@@ -1087,15 +1121,15 @@ public class InteractionGraph {
 							.println("ERROR, INTERACTIONGRAPH::HANDLEDYNAMICCALLGRAPH, FUNCTION STACK EMPTP");
 					continue; // TODO
 				}
-				
-				FunctionReturnStatement returnStatement = (FunctionReturnStatement) functionTrace; // TODO				
+
+				FunctionReturnStatement returnStatement = (FunctionReturnStatement) functionTrace; // TODO
 
 				Function terminatedFunction = functions.pop();
 				FunctionEnter terminatedTrace = (FunctionEnter) functionTraceStack
 						.pop();
-				
+
 				terminatedFunction.addReturnValue(returnStatement.getValue()); // TODO
-				
+
 				if (!functions.empty()) {
 					Function headFunction = functions.peek();
 					FunctionEnter headTrace = (FunctionEnter) functionTraceStack
@@ -1110,8 +1144,9 @@ public class InteractionGraph {
 							callAccess.setOutput(terminatedFunction);
 							headFunction.addOutput(callAccess);
 							terminatedFunction.addInput(callAccess);
-							
-							callGraphPairs.add(headFunction.getStrId() + " -> " + terminatedFunction.getStrId()); // temp
+
+							callGraphPairs.add(headFunction.getStrId() + " -> "
+									+ terminatedFunction.getStrId()); // temp
 
 						}
 					}
@@ -1124,8 +1159,9 @@ public class InteractionGraph {
 						returnAccess.setOutput(headFunction);
 						headFunction.addInput(returnAccess);
 						terminatedFunction.addOutput(returnAccess);
-						
-						callGraphPairs.add(terminatedFunction.getStrId() + " -> " + headFunction.getStrId()); // temp
+
+						callGraphPairs.add(terminatedFunction.getStrId()
+								+ " -> " + headFunction.getStrId()); // temp
 
 					}
 				}
