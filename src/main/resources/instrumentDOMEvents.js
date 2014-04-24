@@ -16,16 +16,37 @@ dom_logger.logDOMEvent = function(type, targetEl, callback) {
 /*	if (!recordStarted)
 		return;
 */
-	window.console.log('11111');
+
 	jml = JsonML.fromHTML(arguments[1]);
 	window.console.log('DOM callback');
-	window.console.log(type);
-	window.console.log(callback);
-	window.console.log('22222');
+	window.console.log('type: ' + type);
+	window.console.log('callback: ' + callback);
+	window.console.log('targetEl: ' + targetEl);
+	
+	////
+	if (targetEl == window) {
+		console.warn("window object ***");
+		return;
+	}
+	if (targetEl.getAttribute == null) {
+		console.warn("Get attribute not defined on element");
+		return;
+	}
+	if (targetEl == null) {
+		console.warn("instrumentDOMEvents::dom_logger.logDOMEvent -> targetEl is NULL");
+		return;
+	}
+	var id = getAttribute_original.call(targetEl, "id");
+//	var id = arguments[1].getAttribute("id");
+	if (id == null) {
+		id = generateRandomUniqueId();
+		setAttribute_original.call(targetEl, "id", id);
+	}
+	console.log('id: ' + id)
+	////
+	
 
 	if (jml) {
-		window.console.log('33333');
-
 		jml = JSON.stringify(jml);
 		send(JSON.stringify({
 			messageType : "DOM_EVENT",
@@ -33,9 +54,9 @@ dom_logger.logDOMEvent = function(type, targetEl, callback) {
 			eventType : arguments[0],
 			eventHandler : callback.name,
 			targetElement : jml,
+			strId : id,
 			counter : traceCounter++
 		}));
-		window.console.log('44444');
 
 	}
 //	checkValues();

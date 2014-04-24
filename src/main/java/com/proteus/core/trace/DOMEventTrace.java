@@ -8,6 +8,7 @@ public class DOMEventTrace extends TraceObject/* implements EpisodeSource */{
 	private String eventType;
 	private String eventHandler;
 	private JSONObject targetElement;
+	private String strId;
 
 	public DOMEventTrace() {
 		super();
@@ -69,4 +70,14 @@ public class DOMEventTrace extends TraceObject/* implements EpisodeSource */{
 			return "";
 		}
 	}
+
+	public String getStrId() {
+		return strId;
+	}
+
+	public void setStrId(String strId) {
+		this.strId = strId;
+	}
+	
+	
 }
