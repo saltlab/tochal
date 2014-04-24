@@ -89,6 +89,8 @@ public class InteractionGraph {
 		
 		// TODO
 		findFunctionDynamicCallInformation();
+		
+		findXHRInformation();
 	}
 	
 	protected void findFunctionDynamicCallInformation() {
@@ -100,7 +102,7 @@ public class InteractionGraph {
 		// all functions and all their arguments during execution
 		for (Iterator<Function> itr = functionsByName.values().iterator(); itr.hasNext(); ) {
 			Function f = itr.next();
-			System.out.println("--Function: " + f.getStrId());
+////////////////////			System.out.println("--Function: " + f.getStrId());
 //			for (String args : f.getArgsOverTime())
 //				System.out.println(args);
 			if (f.getArgsOverTime().isEmpty()) {
@@ -140,7 +142,7 @@ public class InteractionGraph {
 		// all functions and all their return values during execution
 		for (Iterator<Function> itr = functionsByName.values().iterator(); itr.hasNext(); ) {
 			Function f = itr.next();
-			System.out.println("--Function: " + f.getStrId());
+/////////////////			System.out.println("--Function: " + f.getStrId());
 //			System.out.println(f.getReturnValues());
 			if (!f.getReturnValues().isEmpty() && f.isCalledWOReturnValue()) {
 				System.out.println("RETURN VALUE MISMATCH");
@@ -166,6 +168,18 @@ public class InteractionGraph {
 			numOfArgs ++;
 		}
 		return numOfArgs;
+	}
+	
+	protected void findXHRInformation() {
+		for (Iterator<XmlHttpRequest> itr = xhrsById.values().iterator(); itr.hasNext(); ) {
+			XmlHttpRequest xhr = itr.next();
+			
+			ArrayList<InteractionEdge> inputs = xhr.getInput();
+			ArrayList<InteractionEdge> outputs = xhr.getOutput();
+			
+///////////////////////			System.out.println("xhr: " + xhr.getStrId() + ", # in: " + inputs.size() + ", # out: " + outputs.size());
+		}
+		
 	}
 
 	// TODO TODO TODO TODO TODO
@@ -483,7 +497,7 @@ public class InteractionGraph {
 	 * @param domRelations
 	 */
 	protected void extractDomRelations(String domRelations) {
-		System.out.println("+++++++++++++++++++++");
+//		System.out.println("+++++++++++++++++++++");
 
 		String domElementId = "", accessTypeList = "", accessFunctionList = "";
 		ArrayList<String> accessTypes = new ArrayList<String>();
@@ -518,7 +532,7 @@ public class InteractionGraph {
 
 		// Extract string representations of accessTypes (interactionEdges)
 		tokenizer = new StringTokenizer(accessTypeList);
-		System.out.println("** " + accessTypeList);
+////////////////		System.out.println("** " + accessTypeList);
 		if (tokenizer.hasMoreTokens())
 			tokenizer.nextToken("@");
 		while (tokenizer.hasMoreTokens())
@@ -526,7 +540,7 @@ public class InteractionGraph {
 
 		// Extract string representations of functions
 		tokenizer = new StringTokenizer(accessFunctionList);
-		System.out.println("** " + accessFunctionList);
+////////////////		System.out.println("** " + accessFunctionList);
 		if (tokenizer.hasMoreTokens())
 			tokenizer.nextToken("@");
 		while (tokenizer.hasMoreTokens())
@@ -678,6 +692,8 @@ public class InteractionGraph {
 	 * @param xhrRelations
 	 */
 	public void handleXhrRelations(String xhrRelations) {
+		System.err.println("################################");
+		System.err.println("################################");
 		extractXhrRelations(xhrRelations);
 		// TODO extractXhrJsPaths();
 	}
@@ -685,6 +701,11 @@ public class InteractionGraph {
 	protected void extractXhrRelations(String xhrRelations) {
 		String xhrAccessType = "", xhrObjId = "", xhrAccessFunction = "";
 		StringTokenizer tokenizer = new StringTokenizer(xhrRelations);
+		
+		System.out.println("==");
+		System.out.println("=>=>=>==== " + xhrRelations);
+		System.out.println("==");
+		
 
 		while (tokenizer.hasMoreTokens()) {
 			xhrAccessType = "";
@@ -707,11 +728,11 @@ public class InteractionGraph {
 				xhrAccessFunction = tokenizer.nextToken(":"); // ","accessFunction":
 			if (tokenizer.hasMoreTokens())
 				xhrAccessFunction = tokenizer.nextToken(":\"}"); // sendUserInfoToServer
-
+/*************************
 			System.out.println("xhrAccessType: " + xhrAccessType);
 			System.out.println("xhrObjId: " + xhrObjId);
 			System.out.println("xhrAccessFunction: " + xhrAccessFunction);
-
+*************************/
 			XmlHttpRequest xhr;
 			if (xhrsById.containsKey(xhrObjId))
 				xhr = xhrsById.get(xhrObjId);

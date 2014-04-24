@@ -5,11 +5,13 @@ var logger = {};
  * console
  */
 logger.logXHROpen = function(xhr, method, callerName) {
+	
 	console.log("------------------------------------");
 	console.log("XMLHTTPREQUEST: OPEN");
-
+/*
 	console.log(" + XHR ID: ", xhr.id);
 	console.log(" + Method: ", method);
+	*/
 //	console.log(" + URL: ", url);
 //	console.log(" + Async: ", async);
 
@@ -22,9 +24,11 @@ logger.logXHROpen = function(xhr, method, callerName) {
  * console
  */
 logger.logXHRSend = function(xhr, callerName) {
+	
 	console.log("------------------------------------");
 	console.log("XMLHTTPREQUEST: SEND");
-	console.log(" + XHR ID: ", xhr.id);
+/*	console.log(" + XHR ID: ", xhr.id);
+	*/
 //	console.log(" + Message (POST):", str);
 
 //    send(JSON.stringify({messageType: "XHR_SEND", timeStamp: date, id: xhr.id, message: str, counter: traceCounter++}));
@@ -36,11 +40,13 @@ logger.logXHRSend = function(xhr, callerName) {
  * executing the callback function on the console
  */
 logger.logXHRResponse = function(xhr, callerName) {
+	
 	console.log("------------------------------------");
 	console.log("XMLHTTPREQUEST: RESPONSE");
-
+/*
 	console.log(" + XHR ID: ", xhr.id);
 	console.log(" + XHR callback function: ", xhr.onreadystatechange);
+	*/
 //	console.log(" + XHR response headers: ", xhr.getAllResponseHeaders());
 //	console.log(" + XHR response: ", xhr.response);
 
@@ -83,12 +89,13 @@ XMLHttpRequest = function() {
 	var open_original = xhr.open;
 	xhr.open = function(method, url, async) {
 		var caller_open = arguments.callee.caller;
+		/*
 		console.log("caller OPEN : " + caller_open);
-		var callerName_open = "null";
+*/		var callerName_open = "null";
 		if (caller_open != null)
 			callerName_open = caller_open.name;
-		console.log("++++++++ " + callerName_open);
-		logger.logXHROpen(xhr, method, callerName_open);
+/*		console.log("++++++++ " + callerName_open);
+*/		logger.logXHROpen(xhr, method, callerName_open);
 		return open_original.apply(this, [ method, url, async ]);
 
 	}

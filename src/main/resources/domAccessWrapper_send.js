@@ -1,10 +1,12 @@
 //////////////////////window.xhr = new XMLHttpRequest();
 
 
-window.buffer_dom = new Array();
+//window.buffer_dom = new Array();
+var buffer_dom = new Array();
 
 function send_dom(value) {
-	window.buffer_dom.push(value);
+//	window.buffer_dom.push(value);
+	buffer_dom.push(value);
 }
 /*
 function sendReally() {
@@ -40,11 +42,11 @@ function sendDomElementAccesses() {
 	*/
 	
 //	var allElements = document.getElementsByTagName("*");
-	console.log("++");
+/*	console.log("++");
 	console.log(window.document);
-	var allElements = getElementsByTagName_original.call(window.document, "*"); /////??????????????????????????????
-	console.log(allElements.length);
-
+*/	var allElements = getElementsByTagName_original.call(window.document, "*"); /////??????????????????????????????
+/*	console.log(allElements.length);
+*/
 	for (var i = 0; i < allElements.length; i++) {
 //		console.log(i);
 		var element = allElements[i];
@@ -61,25 +63,33 @@ function sendDomElementAccesses() {
 		
     	window.xhr.open('POST', document.location.href + '?DOMACCESSLOG', false);
     	window.xhr.send(msg.toString());
-    	
+ /*   	
     	console.log(msg);
-
+*/
     	removeAttribute_original.call(element, ACCESS_TYPE_LABEL);
     	removeAttribute_original.call(element, ACCESS_FUNCTION_LABEL);
     	
 	}
-	console.log("============== " + window.buffer.length);
+//	console.log("============== " + window.buffer.length);
+	console.log("============== " + buffer_dom.length);
+	console.log("BUFFER DOM ++++++++++++++" + buffer_dom)
 	sendXhrLog();
 }
 
 function sendXhrLog() {
-    if (window.buffer.length > 0) { 
+	if (buffer_dom.length > 0) {
+		window.xhr.open('POST', document.location.href + '?XHRACCESSLOG', false)
+		window.xhr.send(buffer_dom.toString());
+		buffer_dom = new Array();
+	}
+	/*
+    if (window.buffer_dom.length > 0) { 
     	window.xhr.open('POST', document.location.href + '?XHRACCESSLOG', false);
 //    	window.xhr.send('['+(window.buffer).toString()+']');
-    	window.xhr.send((window.buffer).toString());
+    	window.xhr.send((window.buffer_dom).toString());
     	window.buffer_dom = new Array();
     }
-
+*/
 }
 
 setInterval(sendDomElementAccesses, 5000);

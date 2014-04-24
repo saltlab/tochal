@@ -74,12 +74,12 @@ public class TestWala {
 			CG = com.ibm.wala.cast.js.test.JSCallGraphBuilderUtil.makeScriptCG(
 					".", "hello_world0.js");
 			System.out.println(CG.getNumberOfNodes());
-			System.out.println(CG.toString());
+///////////////////////////			System.out.println(CG.toString());
 
 			Graph<CGNode> g = pruneGraph(CG, new ApplicationLoaderFilter());
 
 			System.out.println("=======================");
-			System.out.println(g.toString());
+///////////////////////////			System.out.println(g.toString());
 			System.out.println("=======================");
 			System.out.println(g.getNumberOfNodes());
 

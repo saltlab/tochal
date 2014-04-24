@@ -325,7 +325,7 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 		}
 
 		if (request != null && request.getURL() != null) {
-			System.out.println("Request URL:");
+			System.out.print("Request URL:");
 			System.out.println(request.getURL().toString());
 		}
 
@@ -415,6 +415,9 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 
 		if (request.getURL().toString().contains("?XHRACCESSLOG")) {
 			String rawResponse = new String(request.getContent());
+			System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> XHRACCESSLOG");
+			System.out.println(" >>>>> " + rawResponse);
+			System.out.println(">>>>>>>");
 /*
 			System.err.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 			System.err.println("XHRACCESSLOG");
