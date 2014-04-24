@@ -778,11 +778,11 @@ public class JSExecutionTracer {
                         buffer.getJSONObject(i).put("@class",
                                 "com.proteus.core.trace.FunctionReturnStatement");
                         JSONLabel = "\"FunctionTrace\":";
-                    }/* else if (mType.contains("DOM_EVENT")) {
+                    } else if (mType.contains("DOM_EVENT")) {
                         buffer.getJSONObject(i).put("@class",
                                 "com.clematis.core.trace.DOMEventTrace");
                         JSONLabel = "\"DOMEventTrace\":";
-                    } else if (mType.contains("DOM_MUTATION")) {
+                    }/* else if (mType.contains("DOM_MUTATION")) {
                         buffer.getJSONObject(i).put("@class",
                                 "com.clematis.core.trace.DOMMutationTrace");
                         JSONLabel = "\"DOMEventTrace\":";

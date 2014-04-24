@@ -84,7 +84,7 @@ public class SimpleExample {
 			
 //			s.setFileNameToAttach("/asyncLogger.js");
 //			s.setFileNameToAttach("/applicationView.js");
-//			s.setFileNameToAttach("/instrumentDOMEvents.js");
+			s.setFileNameToAttach("/instrumentDOMEvents.js");
 //			s.setFileNameToAttach("/domMutations.js");
 //			s.setFileNameToAttach("/mutation_summary.js");
 //			s.instrumentDOMModifications();
