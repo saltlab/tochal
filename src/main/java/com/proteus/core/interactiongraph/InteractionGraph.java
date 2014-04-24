@@ -95,14 +95,32 @@ public class InteractionGraph {
 	}
 	
 	protected void findFunctionDynamicCallInformation() {
+		matchStaticDynamicFunctionArities();
+
+		System.out.println("+-+-+-");
+		for (Iterator<String> it = FunctionTrace.functionCodes.keySet().iterator(); it.hasNext(); ) {
+			String key = it.next();
+			System.out.println("key: " + key);
+			System.out.println("num of params: " + FunctionTrace.functionParamNum.get(key));
+			System.out.println("val: " + FunctionTrace.functionCodes.get(key));
+		}
+		
+
+	}
+
+	private void matchStaticDynamicFunctionArities() {
 		int numOfFunctions = functionsByName.size();
 		int numOfFunctionsWOArgs = 0;
 		int numOfFunctionsWithDiffArity = 0;
+		int numOfFunctionsWithDiffStaticArity = 0;
 		int numOfRetValMismatches = 0;
 		
 		// all functions and all their arguments during execution
 		for (Iterator<Function> itr = functionsByName.values().iterator(); itr.hasNext(); ) {
 			Function f = itr.next();
+			
+			boolean staticDynamicArityMismatch = false; // TODO
+			int staticParamCount = FunctionTrace.functionParamNum.get(f.getStrId());
 ////////////////////			System.out.println("--Function: " + f.getStrId());
 //			for (String args : f.getArgsOverTime())
 //				System.out.println(args);
@@ -121,8 +139,11 @@ public class InteractionGraph {
 					if (!args.isEmpty() && !args.equals("[]")) {
 						allArgsEmpty = false;
 						currNumOfArgs = getNumOfArgs(args);
-						if (currNumOfArgs != prevNumOfArgs)
+						if (currNumOfArgs != prevNumOfArgs) {
 							allArgsArityMatch = false;
+							if (currNumOfArgs != staticParamCount)
+								staticDynamicArityMismatch = true;
+						}
 						prevNumOfArgs = currNumOfArgs;
 					}
 				}
@@ -135,6 +156,9 @@ public class InteractionGraph {
 					System.out.println("args match? " + (allArgsArityMatch ? "yes" : "no"));
 					if (!allArgsArityMatch)
 						numOfFunctionsWithDiffArity ++;
+					
+					if (staticDynamicArityMismatch)
+						numOfFunctionsWithDiffStaticArity ++;
 				}
 
 			}
@@ -156,18 +180,8 @@ public class InteractionGraph {
 		System.out.println("numOfFunctions: " + numOfFunctions);
 		System.out.println("numOfFunctionsWOArgs: " + numOfFunctionsWOArgs);
 		System.out.println("numOfFunctionsWithDiffArity: " + numOfFunctionsWithDiffArity);
+		System.out.println("numOfFunctionsWithDiffStaticArity: " + numOfFunctionsWithDiffStaticArity);
 		System.out.println("numOfRetValMismatches: " + numOfRetValMismatches);
-		
-
-		System.out.println("+-+-+-");
-		for (Iterator<String> it = FunctionTrace.functionCodes.keySet().iterator(); it.hasNext(); ) {
-			String key = it.next();
-			System.out.println("key: " + key);
-			System.out.println("num of params: " + FunctionTrace.functionParamNum.get(key));
-			System.out.println("val: " + FunctionTrace.functionCodes.get(key));
-		}
-		
-
 	}
 	
 	private int getNumOfArgs(String args) {
