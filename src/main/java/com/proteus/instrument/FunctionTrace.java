@@ -3,6 +3,7 @@ package com.proteus.instrument;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -24,6 +25,9 @@ import org.mozilla.javascript.ast.Symbol;
 import com.proteus.jsmodify.JSModifyProxyPlugin;
 
 public class FunctionTrace extends AstInstrumenter {
+	
+	public static HashMap<String, String> functionCodes = new HashMap<String, String>();
+	public static HashMap<String, Integer> functionParamNum = new HashMap<String, Integer>();
 
 	/**
 	 * This is used by the JavaScript node creation functions that follow.
@@ -338,7 +342,30 @@ public class FunctionTrace extends AstInstrumenter {
 				body,
 				hash,
 				getScopeName(),
-				arguments});		
+				arguments});	
+		
+		// TODO TODO TODO TODO
+		// TODO TODO TODO TODO
+		String functionName = name;
+		if (name == null || name.isEmpty()) {
+			String path = node.getSourceName();
+			StringTokenizer tokenizer = new StringTokenizer(path, "/");
+			String fileName = "";
+			while (tokenizer.hasMoreTokens()) {
+				fileName = tokenizer.nextToken();
+			}
+			if (fileName.isEmpty())
+				System.err.println("Error: file name empty. FunctionTrace::handleFunction");
+			if (fileName.indexOf(".html") > 0)
+				fileName = fileName.substring(0, fileName.indexOf(".html") + 5);
+			functionName = fileName + ":" + node.getLineno();
+			
+//			functionName = "NULL___" + node.getSourceName() + "___" + node.getLineno();
+		}
+		functionCodes.put(functionName, node.toSource());
+		functionParamNum.put(functionName, node.getParamCount());
+		// TODO TODO TODO TODO
+		// TODO TODO TODO TODO
 
 		AstNode beginningNode = parse(beginningPOI.toString());
 

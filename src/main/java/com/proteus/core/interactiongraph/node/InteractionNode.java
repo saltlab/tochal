@@ -11,10 +11,10 @@ import com.proteus.core.interactiongraph.edge.InteractionEdge;
 
 
 public class InteractionNode {
-	private ArrayList<InteractionEdge> input;
-	private ArrayList<InteractionEdge> output;
-	private String strId;
-	private boolean visited;
+	protected ArrayList<InteractionEdge> input;
+	protected ArrayList<InteractionEdge> output;
+	protected String strId;
+	protected boolean visited;
 		
 	// TODO more constructors?
 	public InteractionNode(String strId) {

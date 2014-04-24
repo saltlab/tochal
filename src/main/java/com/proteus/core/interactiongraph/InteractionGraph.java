@@ -27,6 +27,7 @@ import com.proteus.core.trace.FunctionEnter;
 import com.proteus.core.trace.FunctionExit;
 import com.proteus.core.trace.FunctionReturnStatement;
 import com.proteus.core.trace.TraceObject;
+import com.proteus.instrument.FunctionTrace;
 import com.proteus.stats.Statistics;
 
 public class InteractionGraph {
@@ -129,6 +130,7 @@ public class InteractionGraph {
 					numOfFunctionsWOArgs ++;
 				}
 				else { // Function has arguments
+					System.out.println("--Function: " + f.getStrId());
 					System.out.println(f.getArgsOverTime());
 					System.out.println("args match? " + (allArgsArityMatch ? "yes" : "no"));
 					if (!allArgsArityMatch)
@@ -157,7 +159,15 @@ public class InteractionGraph {
 		System.out.println("numOfRetValMismatches: " + numOfRetValMismatches);
 		
 
-	
+		System.out.println("+-+-+-");
+		for (Iterator<String> it = FunctionTrace.functionCodes.keySet().iterator(); it.hasNext(); ) {
+			String key = it.next();
+			System.out.println("key: " + key);
+			System.out.println("num of params: " + FunctionTrace.functionParamNum.get(key));
+			System.out.println("val: " + FunctionTrace.functionCodes.get(key));
+		}
+		
+
 	}
 	
 	private int getNumOfArgs(String args) {

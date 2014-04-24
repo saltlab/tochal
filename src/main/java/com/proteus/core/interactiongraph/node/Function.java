@@ -59,6 +59,13 @@ public class Function extends InteractionNode {
 		this.calledWOReturnValue = calledWOReturnValue;
 	}
 	
+	public String getStrId() {
+		if (strId.indexOf(':') != strId.lastIndexOf(':')) {
+			if (strId.lastIndexOf(':') > 0)
+				return strId.substring(0, strId.lastIndexOf(':'));
+		}
+		return strId;
+	}
 	
 /*
 	public String getName() {
