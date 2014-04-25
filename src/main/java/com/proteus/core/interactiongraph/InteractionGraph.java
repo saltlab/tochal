@@ -130,7 +130,7 @@ public class InteractionGraph {
 
 			boolean staticDynamicArityMismatch = false; // TODO
 
-			System.out.println("1");
+/*			System.out.println("1");
 			System.out.println(f);
 			System.out.println("2");
 			System.out.println(f.getStrId());
@@ -139,7 +139,7 @@ public class InteractionGraph {
 			System.out.println("4");
 			System.out
 					.println(FunctionTrace.functionParamNum.get(f.getStrId()));
-
+*/
 			if (FunctionTrace.functionParamNum.get(f.getStrId()) != null) {
 				int staticParamCount = FunctionTrace.functionParamNum.get(f
 						.getStrId());
@@ -168,11 +168,11 @@ public class InteractionGraph {
 					if (allArgsEmpty) {
 						numOfFunctionsWOArgs++;
 					} else { // Function has arguments
-						System.out.println("--Function: " + f.getStrId());
+/*						System.out.println("--Function: " + f.getStrId());
 						System.out.println(f.getArgsOverTime());
 						System.out.println("args match? "
 								+ (allArgsArityMatch ? "yes" : "no"));
-						if (!allArgsArityMatch)
+*/						if (!allArgsArityMatch)
 							numOfFunctionsWithDiffArity++;
 
 						if (staticDynamicArityMismatch)
@@ -226,16 +226,73 @@ public class InteractionGraph {
 	}
 
 	protected void findXHRInformation() {
+		int numOfXhrsWDiffInput = 0, numOfXhrsWDiffOutput = 0, numOfXhrsWDiffInOut = 0;
+		System.out.println("+++++++++++++++++++++++++++++++");
 		for (Iterator<XmlHttpRequest> itr = xhrsById.values().iterator(); itr
 				.hasNext();) {
 			XmlHttpRequest xhr = itr.next();
 
 			ArrayList<InteractionEdge> inputs = xhr.getInput();
 			ArrayList<InteractionEdge> outputs = xhr.getOutput();
+			
+			if (inputs.size() > 0) {
+				String prevInput = inputs.get(0).getInput().getStrId();
+				String currInput = prevInput;
+				for (InteractionEdge e : inputs) {
+					currInput = e.getInput().getStrId();
+					if (!currInput.equals(prevInput)) {
+						numOfXhrsWDiffInOut ++;
+						break;
+					}
+					prevInput = currInput;
+				}
+			}
 
+			if (outputs.size() > 0) {
+				String prevOutput = outputs.get(0).getOutput().getStrId();
+				String currOutput = prevOutput;
+				for (InteractionEdge e : outputs) {
+					currOutput = e.getOutput().getStrId();
+					if (!currOutput.equals(prevOutput)) {
+						numOfXhrsWDiffOutput ++;
+						break;
+					}
+					prevOutput = currOutput;
+				}
+			}
+			
+			ArrayList<InteractionEdge> allEdges = new ArrayList<InteractionEdge>(inputs);
+			allEdges.addAll(outputs);
+			if (allEdges.size() > 0) {
+				String prev = "", curr = "";
+				if (allEdges.get(0) instanceof ReadAccess) {
+					prev = allEdges.get(0).getOutput().getStrId();
+				}
+				else {
+					prev = allEdges.get(0).getInput().getStrId();
+				}
+				curr = prev;
+				for (InteractionEdge e : allEdges) {
+					if (e instanceof ReadAccess) {
+						curr = e.getOutput().getStrId();
+					}
+					else {
+						curr = e.getInput().getStrId();
+					}
+					if (!curr.equals(prev)) {
+						numOfXhrsWDiffInOut ++;
+						break;
+					}
+				}
+			}
 			// ///////////////////// System.out.println("xhr: " + xhr.getStrId()
 			// + ", # in: " + inputs.size() + ", # out: " + outputs.size());
 		}
+		
+		System.out.println("()()()()()()()()()()()");
+		System.out.println("numOfXhrsWDiffInput: " + numOfXhrsWDiffInput);
+		System.out.println("numOfXhrsWDiffOutput: " + numOfXhrsWDiffOutput);
+		System.out.println("numOfXhrsWDiffInOut: " + numOfXhrsWDiffInOut);
 
 	}
 
@@ -750,7 +807,6 @@ public class InteractionGraph {
 	 */
 	public void handleXhrRelations(String xhrRelations) {
 		System.err.println("################################");
-		System.err.println("################################");
 		extractXhrRelations(xhrRelations);
 		// TODO extractXhrJsPaths();
 	}
@@ -1028,12 +1084,21 @@ public class InteractionGraph {
 	
 
 	public void handleDomEvents(Collection<TraceObject> domEventTraces) {
-		System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-		System.out.println("SIZE: " + domEventTraces.size());
+		int numOfPropagations = 0;
+		System.out.println("%%%%%%%%%%%%");
+		System.out.println("# of DOM events: " + domEventTraces.size());
+		int prevCounter = -10;
 		for (TraceObject o : domEventTraces) {
-			System.out.println(((com.proteus.core.trace.DOMEventTrace)o).getStrId());
+			DOMEventTrace domEvent = (DOMEventTrace)o;
+			int currCounter = domEvent.getCounter();
+			if (currCounter - prevCounter == 1) {
+				System.out.println("PROPAGATION!");
+				numOfPropagations ++;
+			}
+			prevCounter = currCounter;
+//			System.out.println(((com.proteus.core.trace.DOMEventTrace)o).getStrId());
 		}
-		System.out.println("%%%%%%%");
+		System.out.println("%%%%%%%%%%%% num of propagations: " + numOfPropagations);
 	}
 
 	public void handleDynamicCallGraph(Collection<TraceObject> functionTraces) {

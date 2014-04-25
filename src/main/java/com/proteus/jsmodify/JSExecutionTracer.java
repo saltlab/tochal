@@ -226,11 +226,13 @@ public class JSExecutionTracer {
             /* close the output file */
             output.close();
 
-            extraxtTraceObjects();
+//            extraxtTraceObjects();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
+        extraxtTraceObjects(); // TODO
+
 		// TODO
 		InteractionGraph.getInstance().handleGraphAfterTermination();
 
@@ -311,15 +313,15 @@ public class JSExecutionTracer {
                             });
 /**
             Collection<TraceObject> timingTraces = traceMap.get("TimingTrace");
-            Collection<TraceObject> domEventTraces = traceMap
+**/            Collection<TraceObject> domEventTraces = traceMap
                     .get("DOMEventTrace");
-            Collection<TraceObject> XHRTraces = traceMap.get("XHRTrace");
+/**            Collection<TraceObject> XHRTraces = traceMap.get("XHRTrace");
 **/            Collection<TraceObject> functionTraces = traceMap
                     .get("FunctionTrace");
-            
 
 // TODO TODO TODO TODO TODO
 			InteractionGraph.getInstance().handleDynamicCallGraph(functionTraces);
+			InteractionGraph.getInstance().handleDomEvents(domEventTraces);
 // TODO TODO TODO TODO TODO
             
 ///////            createDynamicCallGraph(functionTraces);
@@ -780,7 +782,7 @@ public class JSExecutionTracer {
                         JSONLabel = "\"FunctionTrace\":";
                     } else if (mType.contains("DOM_EVENT")) {
                         buffer.getJSONObject(i).put("@class",
-                                "com.clematis.core.trace.DOMEventTrace");
+                                "com.proteus.core.trace.DOMEventTrace");
                         JSONLabel = "\"DOMEventTrace\":";
                     }/* else if (mType.contains("DOM_MUTATION")) {
                         buffer.getJSONObject(i).put("@class",
