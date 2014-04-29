@@ -1087,15 +1087,32 @@ public class InteractionGraph {
 		int numOfPropagations = 0;
 		System.out.println("%%%%%%%%%%%%");
 		System.out.println("# of DOM events: " + domEventTraces.size());
-		int prevCounter = -10;
+/*		
+		for (TraceObject o : domEventTraces){
+			DOMEventTrace domE = (DOMEventTrace)o;
+			System.out.println(domE.getStrId() + " -- " + domE.getTimeStamp());
+		}
+*/		
+//		int prevCounter = -10;
+		long prevTimestamp = -50;
+		boolean propagationOn = false;
 		for (TraceObject o : domEventTraces) {
 			DOMEventTrace domEvent = (DOMEventTrace)o;
-			int currCounter = domEvent.getCounter();
-			if (currCounter - prevCounter == 1) {
-				System.out.println("PROPAGATION!");
-				numOfPropagations ++;
+//			int currCounter = domEvent.getCounter();
+			long currTimestamp = domEvent.getTimeStamp();
+			if (currTimestamp - prevTimestamp < 20) {
+//			if (currCounter - prevCounter == 1) {
+//				if (propagationOn) {
+					System.out.println("PROPAGATION! " + currTimestamp);
+					numOfPropagations ++;
+//				}
+//				propagationOn = true;
 			}
-			prevCounter = currCounter;
+/*			else
+				propagationOn = false;
+				*/
+//			prevCounter = currCounter;
+			prevTimestamp = currTimestamp;
 //			System.out.println(((com.proteus.core.trace.DOMEventTrace)o).getStrId());
 		}
 		System.out.println("%%%%%%%%%%%% num of propagations: " + numOfPropagations);

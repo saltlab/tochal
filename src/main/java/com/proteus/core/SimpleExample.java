@@ -33,6 +33,9 @@ public class SimpleExample {
 
 	// "http://localhost:8888/phormer331/index.php";
 	// "http://www.themaninblue.com/experiment/BunnyHunt/";
+	
+	// http://localhost:8080/same-game/same-game.html
+	// http://localhost:8080/Listo/index.html
 
 	private static String outputFolder = "";
 	private static WebDriver driver;
