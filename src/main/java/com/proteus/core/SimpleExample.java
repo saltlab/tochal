@@ -35,7 +35,14 @@ public class SimpleExample {
 	// "http://www.themaninblue.com/experiment/BunnyHunt/";
 	
 	// http://localhost:8080/same-game/same-game.html
+	// http://localhost:8080/GhostBusters/index.html
+	// http://localhost:8080/simplecart-js/test/index.html
+	// http://localhost:8080/mojule/index.html
 	// http://localhost:8080/Listo/index.html
+	// http://localhost:8080/doctored/index.html
+	// http://localhost:8080/jointlondon/index.html
+	// http://localhost:8080/607/index.html
+	
 
 	private static String outputFolder = "";
 	private static WebDriver driver;
