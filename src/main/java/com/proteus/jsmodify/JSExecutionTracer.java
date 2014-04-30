@@ -106,6 +106,13 @@ public class JSExecutionTracer {
      *            The browser.
      */
     public static void preCrawling() {
+    	
+    	// TODO TODO TODO TODO TODO TODO 
+    	// TODO TODO TODO TODO TODO TODO 
+
+    	// TODO TODO TODO TODO TODO TODO 
+    	// TODO TODO TODO TODO TODO TODO 
+
         try {
             points = new JSONArray();
 

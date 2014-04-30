@@ -1,5 +1,6 @@
 package com.proteus.core.staticanalysis;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
@@ -27,18 +28,27 @@ import com.proteus.core.interactiongraph.node.Function;
 public class StaticAnalyzer {
 	public static void main(String[] args) {
 		StaticAnalyzer staticAnalyzer = new StaticAnalyzer();
-		staticAnalyzer.getCallGraph("", "");
+		staticAnalyzer.getCallGraph("hello_world.js", ".");
+		System.out.println("++++++++++++++++++++++++++++++");
+		staticAnalyzer.getCallGraph("hello_world.html", ".");
+
 	}
 
-	public Graph<CGNode> getCallGraph(String script, String name) {
+	public Graph<CGNode> getCallGraph(String fileName, String path) {
 		CallGraph callGraph = null;
 		Graph<CGNode> prunedGraph = null;
 		PrintWriter writer;
 
 		JSCallGraphUtil.setTranslatorFactory(new CAstRhinoTranslatorFactory());
 		try {
-			callGraph = JSCallGraphBuilderUtil.makeScriptCG(".",
-					"hello_world.js");
+			if (fileName.endsWith(".js"))
+				callGraph = JSCallGraphBuilderUtil.makeScriptCG(path,
+					fileName);
+			else if (fileName.endsWith(".html")) { // TODO THEN DON'T USE PATH, FILE NAME SHOULD CONTAIN PATH AS WELL
+				File file = new File(fileName);
+				callGraph = JSCallGraphBuilderUtil.makeHTMLCG(file.toURI().toURL());
+			}
+			
 			System.out
 					.println("----------------------------------------------");
 //			System.out.println(callGraph.toString());
@@ -134,6 +144,7 @@ public class StaticAnalyzer {
 					// TODO if has a return type
 					// OR
 					TypeReference returnType = next.getMethod().getReturnType();
+//					System.out.println("-=-= " + next.getMethod().getReturnType().getName());
 					if (returnType != null) {
 						/*
 						 * if (returnType.isArrayType() ||
@@ -150,19 +161,19 @@ public class StaticAnalyzer {
 							// TODO TODO TODO
 							// next returns to node with return type (relation
 							// from next to node)
-							System.err.println("return");
+							System.out.println("return");
 						}
 						if (returnType.isArrayType()) {
-							System.err.println("return 111");
+							System.out.println("return 111");
 						}
 						if (returnType.isClassType()) {
-							System.err.println("return 222");
+							System.out.println("return 222");
 						}
 						if (returnType.isPrimitiveType()) {
-							System.err.println("return 333");
+							System.out.println("return 333");
 						}
 						if (returnType.isReferenceType()) {
-							System.err.println("return 444");
+							System.out.println("return 444");
 						}
 					}
 				}
