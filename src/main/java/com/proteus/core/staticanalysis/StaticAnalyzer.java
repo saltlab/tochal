@@ -7,7 +7,10 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import com.ibm.wala.cast.js.ipa.callgraph.JSCallGraphUtil;
+import com.ibm.wala.cast.js.rhino.test.HTMLCGBuilder;
+import com.ibm.wala.cast.js.rhino.test.HTMLCGBuilder.CGBuilderResult;
 import com.ibm.wala.cast.js.test.JSCallGraphBuilderUtil;
+import com.ibm.wala.cast.js.test.JSCallGraphBuilderUtil.CGBuilderType;
 import com.ibm.wala.cast.js.translator.CAstRhinoTranslatorFactory;
 import com.ibm.wala.ipa.callgraph.CGNode;
 import com.ibm.wala.ipa.callgraph.CallGraph;
@@ -28,10 +31,34 @@ import com.proteus.core.interactiongraph.node.Function;
 public class StaticAnalyzer {
 	public static void main(String[] args) {
 		StaticAnalyzer staticAnalyzer = new StaticAnalyzer();
-		staticAnalyzer.getCallGraph("hello_world.js", ".");
-		System.out.println("++++++++++++++++++++++++++++++");
-		staticAnalyzer.getCallGraph("hello_world.html", ".");
+//		String path = "src/main/webapp/same-game/same-game.html";
+		String path = "src/main/webapp/temp.html";
+//		staticAnalyzer.getCallGraph("hello_world.js", ".");
+//		staticAnalyzer.getCallGraph("hello_world.html", "");
+//		staticAnalyzer.getCallGraph(path, "");
 
+		///		staticAnalyzer.getCallGraph("src/main/webapp/GhostBusters/index.html", "");
+		
+		////	staticAnalyzer.getCallGraph("same-game.js", "src/main/webapp/tempStaticAnalysis/same-game");
+//		staticAnalyzer.getCallGraph("index.js", "src/main/webapp/tempStaticAnalysis/GhostBusters");
+////		staticAnalyzer.getCallGraph("src/main/webapp/tempStaticAnalysis/GhostBusters/index.html", "");
+////		staticAnalyzer.getCallGraph("src/main/webapp/tempStaticAnalysis/mojule/index.html", "");
+////		staticAnalyzer.getCallGraph("functions.js", "src/main/webapp/tempStaticAnalysis/Listo");
+////		staticAnalyzer.getCallGraph("webserver.js", "src/main/webapp/tempStaticAnalysis/doctored");
+////		staticAnalyzer.getCallGraph("app-backup.js", "src/main/webapp/tempStaticAnalysis/doctored/doctored/js");
+////		staticAnalyzer.getCallGraph("app-linter-worker.js", "src/main/webapp/tempStaticAnalysis/doctored/doctored/js");
+////		staticAnalyzer.getCallGraph("app-linters.js", "src/main/webapp/tempStaticAnalysis/doctored/doctored/js");
+////		staticAnalyzer.getCallGraph("app-schemas.js", "src/main/webapp/tempStaticAnalysis/doctored/doctored/js");
+////		staticAnalyzer.getCallGraph("app-util.js", "src/main/webapp/tempStaticAnalysis/doctored/doctored/js");
+////		staticAnalyzer.getCallGraph("app.js", "src/main/webapp/tempStaticAnalysis/doctored/doctored/js");
+////		staticAnalyzer.getCallGraph("shims.js", "src/main/webapp/tempStaticAnalysis/doctored/doctored/js");
+		staticAnalyzer.getCallGraph("js.js", "src/main/webapp/tempStaticAnalysis/607");
+			
+		
+		System.out.println("++++++++++++++++++++++++++++++");
+
+		System.out.println(InteractionGraph.getInstance().getFunctions().size());
+		System.out.println(InteractionGraph.getInstance().getFunctions().values().toString());
 	}
 
 	public Graph<CGNode> getCallGraph(String fileName, String path) {
@@ -41,25 +68,35 @@ public class StaticAnalyzer {
 
 		JSCallGraphUtil.setTranslatorFactory(new CAstRhinoTranslatorFactory());
 		try {
-			if (fileName.endsWith(".js"))
+			if (fileName.endsWith(".js")) {
+				System.out.println(".js file");
 				callGraph = JSCallGraphBuilderUtil.makeScriptCG(path,
 					fileName);
+			}
 			else if (fileName.endsWith(".html")) { // TODO THEN DON'T USE PATH, FILE NAME SHOULD CONTAIN PATH AS WELL
+				System.out.println(".html file: " + fileName);
+				/*
 				File file = new File(fileName);
+				System.out.println(file.toURI().toURL());
 				callGraph = JSCallGraphBuilderUtil.makeHTMLCG(file.toURI().toURL());
+				*/
+				CGBuilderResult builderResult = HTMLCGBuilder.buildHTMLCG(fileName, 10000, CGBuilderType.ZERO_ONE_CFA); // TODO ????
+				callGraph = builderResult.builder.getCallGraph();
 			}
 			
 			System.out
 					.println("----------------------------------------------");
-//			System.out.println(callGraph.toString());
+			System.out.println(callGraph.toString());
+			System.out.println("===============================");
 			prunedGraph = pruneGraph(callGraph, new ApplicationLoaderFilter());
-			System.out.println(prunedGraph.getNumberOfNodes());
+			System.out.println("Num of nodes in pruned static call graph: " + prunedGraph.getNumberOfNodes());
 			System.out.println(prunedGraph.toString());
 			System.out.println("----------------------------------------------");
 	
 
 			for (Iterator<CGNode> it = prunedGraph.iterator(); it.hasNext();) {
 				CGNode node = it.next();
+				
 				String nodeName = node.getMethod().getSignature().substring(17);
 				int nodeEndIndex = nodeName.indexOf(".do()");
 				if (nodeEndIndex >= 0) {

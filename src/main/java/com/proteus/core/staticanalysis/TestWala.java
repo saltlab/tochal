@@ -1,5 +1,5 @@
 package com.proteus.core.staticanalysis;
-
+/***
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,7 +38,7 @@ import com.ibm.wala.viz.DotUtil;
 import com.ibm.wala.viz.NodeDecorator;
 import com.proteus.core.interactiongraph.InteractionGraph;
 import com.proteus.core.interactiongraph.node.Function;
-
+***/
 public class TestWala {
 	public static void main(String[] args) {
 		// TestWala walaTest = new TestWala();
@@ -47,10 +47,10 @@ public class TestWala {
 		// TestWala.getCallGraph(script);
 //		TestWala.getCallGraph_html_test();
 //		TestWala.getCallGraphAndSlicer(script);
-		TestWala.getgraphslicertemp(script);
-		
+/***		TestWala.getgraphslicertemp(script);
+	***/	
 	}
-
+/***
 	public static Graph<CGNode> getCallGraph(String script) {
 		CallGraph CG = null;
 		// use Rhino for parsing; change if you want to use a different parser
@@ -211,6 +211,7 @@ public class TestWala {
 								System.err.println("return");
 							}
 	*/
+	/***
 							if (returnType.isArrayType() || returnType.isPrimitiveType()) {
 								// TODO TODO TODO
 								// TODO TODO TODO
@@ -275,6 +276,7 @@ public class TestWala {
 								System.out.println(slice);
 								System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@");
 								*/
+	/***
 						}
 					}
 /******					
@@ -293,6 +295,7 @@ public class TestWala {
 						
 					}
 ********/					
+	/***
 					System.out.println("====");
 				}
 		        
@@ -571,11 +574,12 @@ public class TestWala {
 			 * o.toString().contains("preamble")) { return "getElementById"; }
 			 * return o.toString();
 			 */
+	/***
 			if (o.toString().length() > 200) {
 				return o.toString().substring(0, 197) + "...";
 			}
 			return o.toString();
 		}
 	}
-
+***/
 }

@@ -38,6 +38,9 @@ public class InteractionGraph {
 	private HashMap<String, Function> functionsByName;
 	private HashMap<String, DomElement> domElementsById;
 	private HashMap<String, XmlHttpRequest> xhrsById;
+	
+	private HashMap<String, Boolean> staticFunctions;
+	private HashMap<String, Boolean> dynamicFunctions;
 
 	private ArrayList<InteractionEdge> edges; // TODO
 
@@ -48,6 +51,17 @@ public class InteractionGraph {
 		xhrsById = new HashMap<String, XmlHttpRequest>();
 
 		edges = new ArrayList<InteractionEdge>();
+		
+		staticFunctions = new HashMap<String, Boolean>();
+		dynamicFunctions = new HashMap<String, Boolean>();
+	}
+	
+	public HashMap<String, Boolean> getStaticFunctions() {
+		return this.staticFunctions;
+	}
+	
+	public HashMap<String, Boolean> getDynamicFunctions() {
+		return this.dynamicFunctions;
 	}
 
 	// Get the instance of singleton InteractionGraph
@@ -1165,6 +1179,11 @@ public class InteractionGraph {
 				functions.push(f);
 				functionTraceStack.push(functionEnter);
 				// TODO TODO TODO TODO
+				// TODO TODO TODO TODO
+				
+				
+				// TODO TODO TODO TODO
+				InteractionGraph.getInstance().getDynamicFunctions().put(name, true);  //////////
 				// TODO TODO TODO TODO
 			}
 			// else if (functionTrace instanceof FunctionExit) {

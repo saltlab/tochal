@@ -22,6 +22,7 @@ import org.mozilla.javascript.ast.ReturnStatement;
 import org.mozilla.javascript.ast.Scope;
 import org.mozilla.javascript.ast.Symbol;
 
+import com.proteus.core.interactiongraph.InteractionGraph;
 import com.proteus.jsmodify.JSModifyProxyPlugin;
 
 public class FunctionTrace extends AstInstrumenter {
@@ -365,6 +366,12 @@ public class FunctionTrace extends AstInstrumenter {
 		functionCodes.put(functionName, node.toSource());
 		functionParamNum.put(functionName, node.getParamCount());
 		// TODO TODO TODO TODO
+		// TODO TODO TODO TODO
+		
+		
+		
+		// TODO TODO TODO TODO
+		InteractionGraph.getInstance().getStaticFunctions().put(functionName, true); ///////////
 		// TODO TODO TODO TODO
 
 		AstNode beginningNode = parse(beginningPOI.toString());

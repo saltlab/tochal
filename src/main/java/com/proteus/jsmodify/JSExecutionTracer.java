@@ -51,6 +51,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.TreeMultimap;
 import com.proteus.core.interactiongraph.InteractionGraph;
 import com.proteus.core.staticanalysis.CallGraphAnalyzer;
+import com.proteus.core.staticanalysis.StaticAnalyzer;
 import com.proteus.core.staticanalysis.TestWala;
 import com.proteus.core.trace.DOMEventTrace;
 import com.proteus.core.trace.TimingTrace;
@@ -105,11 +106,25 @@ public class JSExecutionTracer {
      * @param browser
      *            The browser.
      */
-    public static void preCrawling() {
+    public static void preCrawling(ArrayList<String> htmlPaths, ArrayList<String> jsPaths, ArrayList<String> jsFileNames) {
     	
     	// TODO TODO TODO TODO TODO TODO 
-    	// TODO TODO TODO TODO TODO TODO 
-
+    	// TODO TODO TODO TODO TODO TODO
+    	/*
+    	if (jsPaths.size() != jsFileNames.size()) {
+    		System.err.println("ERROR: JSEXECUTIONTRACER::PRECRAWLER -> not equal number of js paths and js file names");
+    		// return;
+    	}
+    	else {
+	    	StaticAnalyzer staticAnalyzer = new StaticAnalyzer();
+	    	for (String htmlPath : htmlPaths) {
+	    		staticAnalyzer.getCallGraph(htmlPath, "");
+	    	}
+	    	for (int i = 0; i < jsFileNames.size(); i ++) {
+	    		staticAnalyzer.getCallGraph(jsFileNames.get(i), jsPaths.get(i));
+	    	}
+    	}
+    	*/
     	// TODO TODO TODO TODO TODO TODO 
     	// TODO TODO TODO TODO TODO TODO 
 
@@ -245,6 +260,17 @@ public class JSExecutionTracer {
 
 		System.out.println("********************************");
 		System.out.println("********************************");
+		
+		// TODO TODO TODO TODO
+		System.out.println("+++++++++++++++++++++++");
+		System.out.println("DYNAMIC");
+		System.out.println(InteractionGraph.getInstance().getDynamicFunctions().keySet().toString());
+		System.out.println("++++++++++++++++STATIC");
+		System.out.println(InteractionGraph.getInstance().getStaticFunctions().keySet().toString());
+		System.out.println("+++++++++++++++++++++++");
+		// TODO TODO TODO TODO
+		
+		
 		Set<String> keys = JSModifyProxyPlugin.JSCodeMultiMap.keySet(); 
 		for (String key : keys) {
 			System.out.println("key: " + key);

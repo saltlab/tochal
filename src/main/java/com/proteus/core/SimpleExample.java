@@ -1,6 +1,7 @@
 package com.proteus.core;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.TimeoutException;
@@ -42,7 +43,26 @@ public class SimpleExample {
 	// http://localhost:8080/doctored/index.html
 	// http://localhost:8080/jointlondon/index.html
 	// http://localhost:8080/607/index.html
+
 	
+	
+	
+//	http://www.bing.com/
+//	http://www.blogger.com
+//	http://digg.com/
+//	http://www.ebay.ca/
+//	http://www.facebook.com/
+//	http://www.flickr.com
+//	https://www.google.com/maps/preview
+//	http://gmail.com	
+//	http://www.google.com
+//	http://imageshak.us/
+//	https://research.sun.com/projects/lively
+//	http://me.com
+//	https://twitter.com/
+//	http://www.wikipedia.org/
+//	http://wordpress.com/
+//	http://www.youtube.com/
 
 	private static String outputFolder = "";
 	private static WebDriver driver;
@@ -69,9 +89,19 @@ public class SimpleExample {
 
 			JSExecutionTracer tracer = new JSExecutionTracer("function.trace");
 			tracer.setOutputFolder(outputFolder + "ftrace");
+			
+			ArrayList<String> htmlFileNames = new ArrayList<String>();
+			ArrayList<String> jsFileNames = new ArrayList<String>();
+			ArrayList<String> jsPaths = new ArrayList<String>();
+		
+			// same-game
+//			htmlFileNames.add("src/main/webapp/same-game/same-game.html");
+			jsPaths.add("src/main/webapp/tempStaticAnalysis/same-game");
+			jsFileNames.add("same-game.js");
 
 			// config.addPlugin(tracer);
-			tracer.preCrawling();
+			tracer.preCrawling(htmlFileNames, jsPaths, jsFileNames);
+//			tracer.preCrawling();
 
 			// Create a new instance of the firefox driver
 /*****			FirefoxProfile profile = new FirefoxProfile();

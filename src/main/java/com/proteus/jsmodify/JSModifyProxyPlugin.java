@@ -159,9 +159,9 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 //		System.out.println(input);
 //		System.out.println("222#######################################");
 
-		System.out.println("<<<<");
+/***		System.out.println("<<<<");
 		System.out.println("Scope: " + scopename);
-
+***/
 		/***************/
 		scopeNameForExternalUse = scopename; // todo todo todo todo
 		/***************/
@@ -179,12 +179,12 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 			return input;
 		}
 		
+/***		System.out.println("///////////////////////////////////////////////");
 		System.out.println("///////////////////////////////////////////////");
+***/		JSModifyProxyPlugin.JSCodeMultiMap.put(originalUrl, input); // TODO TODO TODO TODO TODO
+/***		System.out.println(scopename);
 		System.out.println("///////////////////////////////////////////////");
-		JSModifyProxyPlugin.JSCodeMultiMap.put(originalUrl, input); // TODO TODO TODO TODO TODO
-		System.out.println(scopename);
-		System.out.println("///////////////////////////////////////////////");
-
+***/
 
 		try {
 			// Save original JavaScript files/nodes
@@ -325,9 +325,9 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 		}
 
 		if (request != null && request.getURL() != null) {
-			System.out.print("Request URL:");
+/***			System.out.print("Request URL:");
 			System.out.println(request.getURL().toString());
-		}
+***/		}
 
 		if (request.getURL() == null) {
 			System.err
@@ -415,9 +415,11 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 
 		if (request.getURL().toString().contains("?XHRACCESSLOG")) {
 			String rawResponse = new String(request.getContent());
+/***
 			System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> XHRACCESSLOG");
 			System.out.println(" >>>>> " + rawResponse);
 			System.out.println(">>>>>>>");
+			***/
 /*
 			System.err.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 			System.err.println("XHRACCESSLOG");
@@ -559,7 +561,9 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 			}
 		}
 		
+		/***
 		System.out.println("////////////////////////===========//////////////");
+		***/
 /*		System.out.println(request.getURL());
 		try {
 			System.out.println(URLEncoder.encode(request.getURL().toString(), "UTF-8"));
