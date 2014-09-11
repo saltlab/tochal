@@ -1,7 +1,7 @@
 Proteus
 =======
 
-Tool for Hybrid Change Impact Analysis in JavaScript Applications
+Tool for Hybrid Change Impact Analysis in JavaScript Applications.
 
 Performing change impact analysis on JavaScript applications is challenging due to features such as dynamic event-driven function calls, DOM-based operations, and asynchronous client/server communication. We propose a hybrid change impact analysis technique, named Tochal, that uses a combination of static and dynamic analysis to form a model of the system entities and their relations. The proposed approach incorporates a novel ranking algorithm for indicating the importance of each entity in the impact set.
 
