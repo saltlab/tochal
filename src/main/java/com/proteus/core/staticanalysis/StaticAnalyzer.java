@@ -31,31 +31,8 @@ import com.proteus.core.interactiongraph.node.Function;
 public class StaticAnalyzer {
 	public static void main(String[] args) {
 		StaticAnalyzer staticAnalyzer = new StaticAnalyzer();
-//		String path = "src/main/webapp/same-game/same-game.html";
 		String path = "src/main/webapp/temp.html";
-//		staticAnalyzer.getCallGraph("hello_world.js", ".");
-//		staticAnalyzer.getCallGraph("hello_world.html", "");
-//		staticAnalyzer.getCallGraph(path, "");
-
-		///		staticAnalyzer.getCallGraph("src/main/webapp/GhostBusters/index.html", "");
-		
-		////	staticAnalyzer.getCallGraph("same-game.js", "src/main/webapp/tempStaticAnalysis/same-game");
-//		staticAnalyzer.getCallGraph("index.js", "src/main/webapp/tempStaticAnalysis/GhostBusters");
-////		staticAnalyzer.getCallGraph("src/main/webapp/tempStaticAnalysis/GhostBusters/index.html", "");
-////		staticAnalyzer.getCallGraph("src/main/webapp/tempStaticAnalysis/mojule/index.html", "");
-////		staticAnalyzer.getCallGraph("functions.js", "src/main/webapp/tempStaticAnalysis/Listo");
-////		staticAnalyzer.getCallGraph("webserver.js", "src/main/webapp/tempStaticAnalysis/doctored");
-////		staticAnalyzer.getCallGraph("app-backup.js", "src/main/webapp/tempStaticAnalysis/doctored/doctored/js");
-////		staticAnalyzer.getCallGraph("app-linter-worker.js", "src/main/webapp/tempStaticAnalysis/doctored/doctored/js");
-////		staticAnalyzer.getCallGraph("app-linters.js", "src/main/webapp/tempStaticAnalysis/doctored/doctored/js");
-////		staticAnalyzer.getCallGraph("app-schemas.js", "src/main/webapp/tempStaticAnalysis/doctored/doctored/js");
-////		staticAnalyzer.getCallGraph("app-util.js", "src/main/webapp/tempStaticAnalysis/doctored/doctored/js");
-////		staticAnalyzer.getCallGraph("app.js", "src/main/webapp/tempStaticAnalysis/doctored/doctored/js");
-////		staticAnalyzer.getCallGraph("shims.js", "src/main/webapp/tempStaticAnalysis/doctored/doctored/js");
 		staticAnalyzer.getCallGraph("js.js", "src/main/webapp/tempStaticAnalysis/607");
-			
-		
-		System.out.println("++++++++++++++++++++++++++++++");
 
 		System.out.println(InteractionGraph.getInstance().getFunctions().size());
 		System.out.println(InteractionGraph.getInstance().getFunctions().values().toString());
@@ -73,25 +50,16 @@ public class StaticAnalyzer {
 				callGraph = JSCallGraphBuilderUtil.makeScriptCG(path,
 					fileName);
 			}
-			else if (fileName.endsWith(".html")) { // TODO THEN DON'T USE PATH, FILE NAME SHOULD CONTAIN PATH AS WELL
+			else if (fileName.endsWith(".html")) {
 				System.out.println(".html file: " + fileName);
-				/*
-				File file = new File(fileName);
-				System.out.println(file.toURI().toURL());
-				callGraph = JSCallGraphBuilderUtil.makeHTMLCG(file.toURI().toURL());
-				*/
 				CGBuilderResult builderResult = HTMLCGBuilder.buildHTMLCG(fileName, 10000, CGBuilderType.ZERO_ONE_CFA); // TODO ????
 				callGraph = builderResult.builder.getCallGraph();
 			}
 			
-			System.out
-					.println("----------------------------------------------");
 			System.out.println(callGraph.toString());
-			System.out.println("===============================");
 			prunedGraph = pruneGraph(callGraph, new ApplicationLoaderFilter());
 			System.out.println("Num of nodes in pruned static call graph: " + prunedGraph.getNumberOfNodes());
 			System.out.println(prunedGraph.toString());
-			System.out.println("----------------------------------------------");
 	
 
 			for (Iterator<CGNode> it = prunedGraph.iterator(); it.hasNext();) {
@@ -104,8 +72,6 @@ public class StaticAnalyzer {
 				}
 				System.out.println("name: " + nodeName);
 				
-				
-				// TODO TODO 
 				Function caller;
 				if (InteractionGraph.getInstance().getFunctions().containsKey(nodeName)) {
 					caller = InteractionGraph.getInstance().getFunctions().get(nodeName);
@@ -130,7 +96,7 @@ public class StaticAnalyzer {
 
 					if (next.getMethod().getNumberOfParameters() > 2) {
 						String nextName = next.getMethod().getSignature()
-								.substring(17); // TODO TODO TODO TODO
+								.substring(17);
 						int endIndex = nextName.indexOf(".do()");
 						System.out.println(endIndex);
 						if (endIndex >= 0) {
@@ -139,8 +105,6 @@ public class StaticAnalyzer {
 							System.err.println("CONNECTION FROM " + nodeName
 									+ " TO " + nextName);
 
-							// TODO move outside if??? what about other names?
-							// TODO TODO
 							Function callee;
 							if (InteractionGraph.getInstance().getFunctions().containsKey(nextName))
 								callee = InteractionGraph.getInstance().getFunctions().get(nextName);
@@ -148,7 +112,6 @@ public class StaticAnalyzer {
 								callee = new Function(nextName);
 								InteractionGraph.getInstance().getFunctions().put(nextName, callee);
 							}
-							// check if ca
 							
 							boolean accessExists = false;
 							for (InteractionEdge e : caller.getOutput()) {
@@ -165,37 +128,13 @@ public class StaticAnalyzer {
 								caller.addOutput(callAccess);
 								callee.addInput(callAccess);
 							}
-
-							// TODO TODO TODO TODO TODO
-
 						}
-						System.out.println("-=-=-=-=-=-" + nextName);
-						// TODO TODO TODO
-						// TODO TODO TODO
-						// node calls next with parameters (relation from node
-						// to next)
 						System.err.println("param");
 					}
-					// if (next.getMethod().getReturnType() != null &&
-					// next.getMethod().getReturnType().toString() != "") //
-					// TODO if has a return type
-					// OR
 					TypeReference returnType = next.getMethod().getReturnType();
-//					System.out.println("-=-= " + next.getMethod().getReturnType().getName());
 					if (returnType != null) {
-						/*
-						 * if (returnType.isArrayType() ||
-						 * returnType.isClassType() ||
-						 * returnType.isPrimitiveType() ||
-						 * returnType.isReferenceType()) { // TODO TODO TODO //
-						 * TODO TODO TODO // next returns to node with return
-						 * type (relation from next to node)
-						 * System.err.println("return"); }
-						 */
 						if (returnType.isArrayType()
 								|| returnType.isPrimitiveType()) {
-							// TODO TODO TODO
-							// TODO TODO TODO
 							// next returns to node with return type (relation
 							// from next to node)
 							System.out.println("return");
@@ -258,12 +197,12 @@ public class StaticAnalyzer {
 //					System.out.println("FILTER MAKE_NODE: " + n.toString());
 					return false;
 				} 
-				/****
+				/*
 				else if (!n.toString().toLowerCase()
 						.contains("__window_main__/")) {
 //					System.out.println("FILTER NO FUNCTION: " + n.toString());
 					return false;
-				}****/
+				}*/
 				if (n.toString().toLowerCase().contains("fakerootmethod"))
 					return false;
 

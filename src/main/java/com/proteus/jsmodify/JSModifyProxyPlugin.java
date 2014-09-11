@@ -154,14 +154,15 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 	 * @return The modified JavaScript
 	 */
 	public synchronized String modifyJS(String input, String scopename, String originalUrl) {
+		System.out.println("$$$$$ modifyJS");
 		
 //		System.out.println("111#######################################");
 //		System.out.println(input);
 //		System.out.println("222#######################################");
 
-/***		System.out.println("<<<<");
+		System.out.println("<<<<");
 		System.out.println("Scope: " + scopename);
-***/
+
 		/***************/
 		scopeNameForExternalUse = scopename; // todo todo todo todo
 		/***************/
@@ -394,6 +395,13 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 		}
 		if (request.getURL().toString().contains("?thisisafunctiontracingcall")) {
 			String rawResponse = new String(request.getContent());
+			
+			System.out.println("$$$$$$$$ thisisafunctiontracingcall");
+			System.out.println("$$ request: ");
+			System.out.println(request.getContent());
+			System.out.println("$$ response: ");
+			System.out.println(rawResponse);
+			
 			JSExecutionTracer.addPoint(rawResponse);
 			
 			return response;
@@ -433,6 +441,7 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 		// Intercept and instrument relevant files (JavaScript and HTML)
 		if (type != null && type.contains("javascript")) {
 			/* instrument the code if possible */
+			System.out.println("$$$$ javascript");
 			response.setContent(modifyJS(new String(response.getContent()),
 					request.getURL().toString(), request.getURL().toString()).getBytes());
 		} else if (type != null && type.contains("html")) {
@@ -444,6 +453,7 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 				NodeList nodes = dom.getElementsByTagName("script");
 
 				for (int i = 0; i < nodes.getLength(); i++) {
+					System.out.println("$$$$ script");
 					Node nType = nodes.item(i).getAttributes()
 							.getNamedItem("type");
 					/* instrument if this is a JavaScript node */
@@ -451,6 +461,7 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 							.getTextContent().toLowerCase()
 							.contains("javascript"))) {
 						String content = nodes.item(i).getTextContent();
+//						System.out.println("$$$ content: " + content);
 
 						if (content.length() > 0) {
 							String js = modifyJS(content, request.getURL()
@@ -459,6 +470,8 @@ public class JSModifyProxyPlugin extends ProxyPlugin {
 							continue;
 						}
 					}
+					else
+						System.out.println("$$$$$$$$$$$$$");
 					/*
 					 * also check for the less used language="javascript" type
 					 * tag

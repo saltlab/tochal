@@ -15,8 +15,8 @@ public class InteractionNode {
 	protected ArrayList<InteractionEdge> output;
 	protected String strId;
 	protected boolean visited;
+	protected double rank;
 		
-	// TODO more constructors?
 	public InteractionNode(String strId) {
 		input = new ArrayList<InteractionEdge>();
 		output = new ArrayList<InteractionEdge>();
@@ -25,9 +25,8 @@ public class InteractionNode {
 	}
 
 	public ArrayList<InteractionEdge> getInput() {
-		return new ArrayList<InteractionEdge>(Collections.unmodifiableList(this.input));
-		
-///////////////		return (ArrayList<InteractionEdge>) Collections.unmodifiableList(this.input);
+		return new ArrayList<InteractionEdge>(Collections.unmodifiableList(this.input));	
+//		return (ArrayList<InteractionEdge>) Collections.unmodifiableList(this.input);
 	}
 
 	public void setInput(ArrayList<InteractionEdge> input) {
@@ -36,10 +35,6 @@ public class InteractionNode {
 
 	public ArrayList<InteractionEdge> getOutput() {
 		return new ArrayList<InteractionEdge>(Collections.unmodifiableList(this.output));
-///////////////		return new ArrayList<InteractionEdge>(Collections.unmodifiableList(this.output));
-		
-//		return this.output; // TODO
-		
 //		ImmutableList<InteractionEdge> list = ImmutableList.copyOf(this.output);
 //		return (ArrayList<InteractionEdge>) Collections.unmodifiableList(this.output);
 //		return list;
@@ -71,5 +66,13 @@ public class InteractionNode {
 
 	public void setVisited(boolean visited) {
 		this.visited = visited;
+	}
+
+	public double getRank() {
+		return rank;
+	}
+
+	public void setRank(double rank) {
+		this.rank = rank;
 	}
 }

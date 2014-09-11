@@ -4,7 +4,6 @@ public class XmlHttpRequest extends InteractionNode {
 
 	public XmlHttpRequest(String xhrId) {
 		super(xhrId);
-		// TODO Auto-generated constructor stub
 	}
 
 }

@@ -64,6 +64,7 @@ function stopRecording() {
 
 // Function Call Wrapper
 function FCW() {
+	console.log("------- FCW --------");
 	var date = Date.now();
 	
     if (arguments.length == 2) {
@@ -78,6 +79,7 @@ function FCW() {
 
 // Return Statement Wrapper
 function RSW() {
+	console.log("------- RCW --------");
 
 	var date = Date.now();
 

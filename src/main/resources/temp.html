@@ -1,0 +1,112 @@
+
+<html>
+<head>
+<meta charset="UTF-8"></meta>
+		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+
+</head>
+
+	<body>
+
+		
+		<div id='div1'>hi1</div>
+		<div id='div2'>hi2</div>
+		<div id='div3'>hi3</div>
+		<div id='div4'>hi4</div>
+		<!--script src="temp.js"-->
+		<script>
+		function f2() {
+			console.log('f2');
+			return 2;
+		}
+		function f1() {
+			return f_wrapper(arguments, f2());
+		}
+		function f_wrapper(args, res) {
+			console.log('f_wrapper');
+			console.log('args: ', args);
+			console.log('res: ', res);
+			return res;
+		}
+//		console.log(f1());
+		
+//		console.log('+++');
+	//	f2();
+//		console.log('+++');
+		
+		function temp_func(args) {
+			console.log('===== temp =====');
+			console.log(args);
+		}
+		function FCW() {
+			console.log('+++++ FCW +++++');
+		}
+		
+		document.getElementById('div2').addEventListener('click', bar, false);
+		$('#div3').bind('click', foo1);
+	/*	
+					console.log('===', EventTarget);
+			console.log('===', '===', EventTarget.addEventListener);
+			
+		console.log('----------------');
+		console.log(Element);
+		console.log(Element.prototype);
+		console.log(Element.prototype.addEventListener);
+		console.log(Node);
+		console.log(Node.prototype);
+		console.log(Node.prototype.addEventListener);
+		console.log('----------------');
+		*/
+//			document.getElementById('myDiv').addEventListener('click', foo, true);
+			
+		/*	console.log('1. ', $('#myDiv'));
+			console.log('2. ', $('#myDiv').type);
+			console.log('3. ', $('#myDiv').prototype);
+			
+			console.log('4. ', document.getElementById('myDiv'));
+			console.log('5. ', document.getElementById('myDiv').type);
+			console.log('6. ', document.getElementById('myDiv').prototype);
+			*/
+	//		console.log('hey');
+		    function bar(x) {
+				console.log('bar');
+  /*                  console.log('bar begin');
+                    console.log('bar end');             
+    */        }
+            function foo() {
+				console.log('foo');
+      /*          console.log('foo begin');
+                    return bar();
+*/
+            }
+			function foo1() {
+				console.log('foo1');
+				return 2;
+			}
+			function foo2() {
+				if (2 == 3)
+					return 2;
+				else
+					return "hello";
+			}
+			function foo3() {
+				return x = foo4(2);
+			}
+			function foo4(a) {
+				return 6 == a * 3;
+			}
+			function foo5() {
+				console.log('foo5');
+				return;
+			}
+	//		console.log('ho');
+    //        foo();
+	//		foo1();
+			foo2();
+			foo3();
+			foo4();
+
+		</script>
+
+	</body>
+</html>

@@ -114,6 +114,7 @@ public class FunctionTrace extends AstInstrumenter {
 
 	@Override
 	public  boolean visit(AstNode node){
+//		System.out.println("$$$$$ functiontrace::visit");
 		int tt = node.getType();
 
 		if (tt == org.mozilla.javascript.Token.FUNCTION) {
@@ -282,6 +283,7 @@ public class FunctionTrace extends AstInstrumenter {
 	}
 
 	private void handleFunction(FunctionNode node) {
+		System.out.println("$$$$$ functiontrace::handlefunction");
 
 		// Store information on function declarations
 		AstNode parent = node.getParent();
@@ -369,7 +371,7 @@ public class FunctionTrace extends AstInstrumenter {
 		// TODO TODO TODO TODO
 		
 		
-		
+		System.out.println("$$$$ FUNCTION NAME: " + functionName);
 		// TODO TODO TODO TODO
 		InteractionGraph.getInstance().getStaticFunctions().put(functionName, true); ///////////
 		// TODO TODO TODO TODO

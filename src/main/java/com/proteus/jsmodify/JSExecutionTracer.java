@@ -339,9 +339,18 @@ public class JSExecutionTracer {
             // Register the module that serializes the Guava Multimap
             mapper.registerModule(new GuavaModule());
 
+            File traceFile = new File("clematis-output/ftrace/function.trace");
+//            File traceFile = new File("function-traces/same-game.function.trace");
+//            File traceFile = new File("function-traces/ghostbusters.function.trace");
+//            File traceFile = new File("function-traces/mojule.function.trace");
+//            File traceFile = new File("function-traces/listo.function.trace");
+//            File traceFile = new File("function-traces/doctored.function.trace");
+//            File traceFile = new File("function-traces/jointlondon.function.trace");
+//            File traceFile = new File("function-traces/607.space.mahjon.function.trace");
+            
             Multimap<String, TraceObject> traceMap = mapper
                     .<Multimap<String, TraceObject>> readValue(
-                            new File("clematis-output/ftrace/function.trace"),
+                            traceFile,
                             new TypeReference<TreeMultimap<String, TraceObject>>() {
                             });
 /**

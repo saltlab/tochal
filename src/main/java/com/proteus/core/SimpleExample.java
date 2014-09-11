@@ -43,9 +43,11 @@ public class SimpleExample {
 	// http://localhost:8080/doctored/index.html
 	// http://localhost:8080/jointlondon/index.html
 	// http://localhost:8080/607/index.html
-
-	
-	
+	// http://localhost:8080/bunnyHunt/index.html
+	// http://localhost:8080/peggame/peggame.html
+	// http://localhost:8080/SonaReader/index.html
+	// http://localhost:8080/tunnel/index.html
+	// http://localhost:8080/notebook-demo/index.html
 	
 //	http://www.bing.com/
 //	http://www.blogger.com
@@ -94,8 +96,6 @@ public class SimpleExample {
 			ArrayList<String> jsFileNames = new ArrayList<String>();
 			ArrayList<String> jsPaths = new ArrayList<String>();
 		
-			// same-game
-//			htmlFileNames.add("src/main/webapp/same-game/same-game.html");
 			jsPaths.add("src/main/webapp/tempStaticAnalysis/same-game");
 			jsFileNames.add("same-game.js");
 
@@ -104,8 +104,8 @@ public class SimpleExample {
 //			tracer.preCrawling();
 
 			// Create a new instance of the firefox driver
-/*****			FirefoxProfile profile = new FirefoxProfile();
-*****/
+/*			FirefoxProfile profile = new FirefoxProfile();
+*/
 			// Instantiate proxy components
 			ProxyConfiguration prox = new ProxyConfiguration();
 
@@ -117,19 +117,15 @@ public class SimpleExample {
 			s.setFileNameToAttach("/esprima.js");
 			s.setFileNameToAttach("/esmorph.js");
 			s.setFileNameToAttach("/jsonml-dom.js");
-			
 			s.setFileNameToAttach("/functionNaming.js");
-			
-			s.setFileNameToAttach("/addvariable.js");
-			
-//			s.setFileNameToAttach("/asyncLogger.js");
-//			s.setFileNameToAttach("/applicationView.js");
-//			s.setFileNameToAttach("/instrumentDOMEvents.js");
-//			s.setFileNameToAttach("/domMutations.js");
-//			s.setFileNameToAttach("/mutation_summary.js");
-//			s.instrumentDOMModifications();
-			
-			s.setFileNameToAttach("/domAccessWrapper.js");
+			s.setFileNameToAttach("/addvariable.js");			
+/*			s.setFileNameToAttach("/asyncLogger.js");
+			s.setFileNameToAttach("/applicationView.js");
+			s.setFileNameToAttach("/instrumentDOMEvents.js");
+			s.setFileNameToAttach("/domMutations.js");
+			s.setFileNameToAttach("/mutation_summary.js");
+			s.instrumentDOMModifications();		
+*/			s.setFileNameToAttach("/domAccessWrapper.js");
 			s.setFileNameToAttach("/domAccessWrapper_send.js");
 			s.setFileNameToAttach("/xhrAccessWrapper.js");
 			s.setFileNameToAttach("/instrumentDOMEvents.js");
@@ -153,20 +149,18 @@ public class SimpleExample {
 
 			/* start the proxy */
 			proxy.run();
-
+/*
 			if (prox != null) {
-				/*****
 				profile.setPreference("network.proxy.http", prox.getHostname());
 				profile.setPreference("network.proxy.http_port", prox.getPort());
 				profile.setPreference("network.proxy.type", prox.getType().toInt());
 				// use proxy for everything, including localhost
 				profile.setPreference("network.proxy.no_proxies_on", "");
-				*****/
 			}
 
-/*****			driver = new FirefoxDriver(profile);
+			driver = new FirefoxDriver(profile);
 			WebDriverWait wait = new WebDriverWait(driver, 10);
-*****/
+*/
 			System.setProperty("webdriver.chrome.driver", "lib/chromedriver");
 			
 			ChromeOptions optionsChrome = new ChromeOptions();
@@ -181,15 +175,18 @@ public class SimpleExample {
 			
 			boolean sessionOver = false;
 
-/*****			try {
-*****/				// Use WebDriver to visit specified URL
+			driver.get(URL);
+
+/*			try {
+ 				// Use WebDriver to visit specified URL
+
 				driver.get(URL);
-/*****			} catch (WebDriverException e) {
+			} catch (WebDriverException e) {
 				System.err.println("Error reaching application, please ensure URL is valid.");
 				e.printStackTrace();
 				System.exit(1);
 			}
-*****/
+*/
 			while (!sessionOver) {
 				// Wait until the user/tester has closed the browser
 

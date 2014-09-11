@@ -1,0 +1,42 @@
+{
+  "name": "Tochal",
+  "description": "Tochal interface",
+  "version": "2.0",
+  "permissions": [
+    "tabs", "activeTab", "<all_urls>"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_title": "Tochal"
+  },
+  "content_scripts" : [
+    {
+      "matches" : [ 
+         "http://*/*",
+         "https://*/*"
+      ],
+      "js" : [
+        "setup.js",
+        "func-inst/esprima.js",
+        "func-inst/estraverse.js",
+        "func-inst/escodegen.browser.js",
+        "func-inst/mutation-summary.js",
+        "func-inst/func-inst.js"
+      ],
+      "run_at" : "document_idle",
+      "all_frames" : false
+    }
+  ],
+  "web_accessible_resources": [
+    "log/log-funcs.js",
+    "log/dynamic-func-info.js",
+    "empirical/function-naming.js",
+    "empirical/injected-result-div.js",
+    "async-inst/xhr-inst.js",
+    "dom-inst/dom-inst.js"
+  ],
+  "manifest_version": 2
+}

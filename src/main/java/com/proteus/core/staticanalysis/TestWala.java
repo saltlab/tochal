@@ -74,12 +74,12 @@ public class TestWala {
 			CG = com.ibm.wala.cast.js.test.JSCallGraphBuilderUtil.makeScriptCG(
 					".", "hello_world0.js");
 			System.out.println(CG.getNumberOfNodes());
-///////////////////////////			System.out.println(CG.toString());
+//			System.out.println(CG.toString());
 
 			Graph<CGNode> g = pruneGraph(CG, new ApplicationLoaderFilter());
 
 			System.out.println("=======================");
-///////////////////////////			System.out.println(g.toString());
+//			System.out.println(g.toString());
 			System.out.println("=======================");
 			System.out.println(g.getNumberOfNodes());
 
@@ -174,29 +174,7 @@ public class TestWala {
 								else
 									callee = new Function(nextName);
 								
-								// check if ca
-								
-								// TODO TODO TODO TODO TODO
-								// TODO TODO TODO TODO TODO
-								//    WAS WORKING ON THIS PART LAST
-								// TODO TODO TODO TODO TODO
-								// TODO TODO TODO TODO TODO
-///////////////////////////////////								
-///////////////////////////////////								for (Interactio)
-///////////////////////////////////								///////////////////////////////////								
-///////////////////////////////////								///////////////////////////////////								
-///////////////////////////////////								///////////////////////////////////								
-								// TODO TODO TODO TODO TODO
-								// TODO TODO TODO TODO TODO
-								// TODO TODO TODO TODO TODO
-								// TODO TODO TODO TODO TODO
-								// TODO TODO TODO TODO TODO
-								// TODO TODO TODO TODO TODO
-								
 							}
-							System.out.println("-=-=-=-=-=-" + nextName);
-							// TODO TODO TODO
-							// TODO TODO TODO
 							// node calls next with parameters (relation from node to next)
 							System.err.println("param");
 						}
@@ -205,16 +183,12 @@ public class TestWala {
 						TypeReference returnType = next.getMethod().getReturnType();
 						if (returnType != null) {
 /*							if (returnType.isArrayType() || returnType.isClassType() || returnType.isPrimitiveType() || returnType.isReferenceType()) {
-								// TODO TODO TODO
-								// TODO TODO TODO
 								// next returns to node with return type (relation from next to node)
 								System.err.println("return");
 							}
 	*/
 	/***
 							if (returnType.isArrayType() || returnType.isPrimitiveType()) {
-								// TODO TODO TODO
-								// TODO TODO TODO
 								// next returns to node with return type (relation from next to node)
 								System.err.println("return");								
 							}
@@ -272,9 +246,7 @@ public class TestWala {
 	
 //								Collection<Statement> slice = Slicer.computeBackwardSlice(normalS, htmlCG, pointerAnalysis, DataDependenceOptions.NO_BASE_PTRS, ControlDependenceOptions.NONE);
 /*								Collection<Statement> slice = Slicer.computeForwardSlice(normalS, htmlCG, pointerAnalysis, DataDependenceOptions.NO_BASE_PTRS, ControlDependenceOptions.NONE);
-								System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@");
 								System.out.println(slice);
-								System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@");
 								*/
 	/***
 						}
@@ -289,9 +261,7 @@ public class TestWala {
 							System.err.println("statement is null");
 						
 //						Collection<Statement> slice = Slicer.computeForwardSlice(s, htmlCG, pointerAnalysis, DataDependenceOptions.NO_BASE_PTRS, ControlDependenceOptions.NONE);
-//						System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 //						System.out.println(slice);
-//						System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 						
 					}
 ********/					
@@ -379,9 +349,7 @@ public class TestWala {
 					Statement s = new com.ibm.wala.ipa.slicer.NormalStatement(node, i);
 					
 					Collection<Statement> slice = Slicer.computeForwardSlice(s, htmlCG, pointerAnalysis, DataDependenceOptions.NO_BASE_PTRS, ControlDependenceOptions.NONE);
-					System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 					System.out.println(slice);
-					System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 				}
 
 			}
@@ -448,9 +416,7 @@ public class TestWala {
 									pointerAnalysis,
 									DataDependenceOptions.NO_BASE_PTRS,
 									ControlDependenceOptions.NONE);
-					System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 					System.out.println(slice);
-					System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 				}
 
 			}
@@ -496,9 +462,7 @@ public class TestWala {
 
 			Graph<CGNode> g = pruneGraph(CG, new ApplicationLoaderFilter());
 
-			System.out.println("=======================");
 			System.out.println(g.toString());
-			System.out.println("=======================");
 			System.out.println(g.getNumberOfNodes());
 
 			DotUtil.writeDotFile(g, new JSLabeler(),
