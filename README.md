@@ -1,5 +1,5 @@
-Proteus
-=======
+Tochal
+======
 
 Tool for Hybrid Change Impact Analysis in JavaScript Applications.
 
